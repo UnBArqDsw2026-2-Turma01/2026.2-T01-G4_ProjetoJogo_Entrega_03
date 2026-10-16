@@ -159,39 +159,8 @@ INGREDIENTES = {
     ]),
 }
 
-# Baús do mundo (fechado e aberto), no estilo do baú da TinyPixel.
-_COR_BAU = {"k": "#59414d", "l": "#d9a07c", "s": "#c4886a", "R": "#b65a5e", "r": "#9e4a50",
-            "d": "#805762", "v": "#3a2630", "o": "#f0c060", "y": "#fff0a0"}
-_BASE_BAU = [
-    "kkkkkkkkkkkkkkkk",
-    "kddddddddddddddk",
-    "kddddddddddddddk",
-    "kkkkkkkkkkkkkkkk",
-    "klllllkkkklllllk",
-    "klllllkllklllllk",
-    "klrrrrkkkkrrrrlk",
-    "klrrrrrrrrrrrrlk",
-    "kssssssssssssssk",
-    ".kkkkkkkkkkkkkk.",
-]
-BAUS = {
-    "bau_fechado": (_COR_BAU, [
-        "kkk..kkkkkk..kkk",
-        "kllkkllllllkkllk",
-        "kllRRRRllRRRRllk",
-        "kllrrrrllrrrrllk",
-        "kllllllllllllllk",
-        "kssssssllssssssk",
-    ] + _BASE_BAU),
-    "bau_aberto": (_COR_BAU, [
-        ".kkkkkkkkkkkkkk.",
-        "kllllllllllllllk",
-        "kRRRRRRRRRRRRRRk",
-        "kkkkkkkkkkkkkkkk",
-        "kvvvvvvvvvvvvvvk",
-        "kvyovvvoyvvvoyvk",
-    ] + _BASE_BAU),
-}
+# Os baús (bau_fechado.png e bau_aberto.png) foram desenhados à parte, com apoio do Gemini,
+# e não são gerados por este script.
 
 # Frasco de poção: 'L' recebe a cor da poção, 'H' é o brilho dela.
 FRASCO = [
@@ -236,7 +205,7 @@ def main():
     SAIDA.mkdir(parents=True, exist_ok=True)
     dados = json.loads((RAIZ / "data" / "alquimia.json").read_text(encoding="utf-8"))
 
-    for id_ingrediente, (cores, mapa) in (INGREDIENTES | BAUS).items():
+    for id_ingrediente, (cores, mapa) in INGREDIENTES.items():
         paleta = {k: hex_rgba(v) for k, v in cores.items()}
         desenhar(mapa, paleta, SAIDA / f"{id_ingrediente}.png")
 

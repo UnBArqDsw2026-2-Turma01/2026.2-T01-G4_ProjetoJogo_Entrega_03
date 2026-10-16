@@ -8,8 +8,12 @@ bin/*.exp
 bin/*.pdb
 bin/~*
 export/
+tools/__pycache__/
 
 # Assets do TinyPixel: a licença proíbe redistribuir os arquivos do pack.
 # Rode tools/importar_tinypixel.py depois de baixar o pack.
 assets/ui/
-assets/mundo/
+assets/mundo/jogador/
+assets/mundo/galinha/
+assets/mundo/mapa.png
+assets/mundo/bau_fechado.png

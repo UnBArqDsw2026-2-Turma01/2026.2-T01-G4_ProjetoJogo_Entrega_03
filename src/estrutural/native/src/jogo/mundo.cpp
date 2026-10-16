@@ -58,6 +58,7 @@ void Mundo::_ready() {
 
 	espalharIngredientes();
 	colocarBaus();
+	colocarCenario();
 	soltarGalinhas();
 	criarHud();
 }
@@ -203,6 +204,57 @@ void Mundo::colocarBaus() {
 		bau->connect("aberto", callable_mp(this, &Mundo::aoAbrirBau));
 		entidades->add_child(bau);
 		baus.push_back(bau);
+	}
+}
+
+// Árvores, arbustos, matos e rochas (assets de tools/gerar_cenario.py). A posição
+// é a base da peça; só a base colide, então o jogador passa por trás das copas.
+void Mundo::colocarCenario() {
+	struct Base {
+		const char *tipo;
+		Vector2 colisao; // tamanho da área sólida na base (0 = não bloqueia)
+	};
+	const Base bases[] = {
+		{ "arvore_grande", Vector2(30, 14) },
+		{ "arvore_media", Vector2(24, 12) },
+		{ "arvore_alquimia", Vector2(24, 12) },
+		{ "pinheiro", Vector2(22, 12) },
+		{ "arbusto_verde", Vector2(36, 14) },
+		{ "arbusto_com_frutas", Vector2(36, 14) },
+		{ "rocha_musgo", Vector2(36, 16) },
+		{ "toco_de_arvore", Vector2(30, 14) },
+		{ "mato_alto", Vector2() },
+		{ "mato_com_flores", Vector2() },
+	};
+	const Array lista = mapa.get("cenario", Array());
+	for (int i = 0; i < lista.size(); i++) {
+		const Dictionary peca = lista[i];
+		const String tipo = peca["tipo"];
+		Vector2 colisao;
+		for (const Base &base : bases) {
+			if (tipo == base.tipo) {
+				colisao = base.colisao;
+			}
+		}
+
+		StaticBody2D *corpo = memnew(StaticBody2D);
+		corpo->set_position(vetor(peca["posicao"]));
+		const Ref<Texture2D> tex = textura(String("res://assets/mundo/cenario/") + tipo + ".png");
+		Sprite2D *sprite = memnew(Sprite2D);
+		sprite->set_texture(tex);
+		sprite->set_scale(Vector2(3, 3));
+		sprite->set_offset(Vector2(0, -tex->get_height() / 2.0f + 1.0f)); // base do desenho na origem
+		corpo->add_child(sprite);
+		if (colisao != Vector2()) {
+			CollisionShape2D *forma = memnew(CollisionShape2D);
+			Ref<RectangleShape2D> retangulo;
+			retangulo.instantiate();
+			retangulo->set_size(colisao);
+			forma->set_shape(retangulo);
+			forma->set_position(Vector2(0, -colisao.y / 2.0f));
+			corpo->add_child(forma);
+		}
+		entidades->add_child(corpo);
 	}
 }
 

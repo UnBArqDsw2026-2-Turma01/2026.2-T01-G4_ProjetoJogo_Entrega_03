@@ -22,6 +22,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 T = 48  # tamanho do tile
 M = 24  # tamanho do quarto de tile
 LARGURA, ALTURA = 80, 50
+COM_CENARIO = False  # árvores, arbustos e rochas desligados por enquanto
 
 random.seed(2026)
 
@@ -126,6 +127,11 @@ def manchas(quantidade, regiao, tamanho=(1.5, 3.0)):
     return celulas
 
 
+def vizinhas(celulas, raio):
+    """Células a até `raio` de distância (quadrada) de alguma célula do conjunto."""
+    return {(x + dx, y + dy) for (x, y) in celulas for dx in range(-raio, raio + 1) for dy in range(-raio, raio + 1)}
+
+
 def retangulos_de(celulas):
     """Agrupa células sólidas em retângulos (corridas horizontais)."""
     rets = []
@@ -202,6 +208,7 @@ def main(pasta_tinypixel):
         regiao["pontos"] = [centro(c) for c in random.sample(validas, min(len(validas), regiao["quantidade"] * 3))]
 
     baus = [
+        {"tipo": "antigo", "celula": (40, 23), "na_praca": True},  # ao lado do ponto de partida
         {"tipo": "antigo", "celula": (35, 21)},  # vila: perto do início
         {"tipo": "floresta", "celula": (46, 28)},  # vila
         {"tipo": "floresta", "celula": (9, 8)},
@@ -211,9 +218,51 @@ def main(pasta_tinypixel):
         {"tipo": "cacador", "celula": (8, 36)},
         {"tipo": "antigo", "celula": (77, 41)},
     ]
+    celulas_baus = {bau["celula"] for bau in baus}
     for bau in baus:
-        assert bau["celula"] not in proibidas, bau
+        assert bau.pop("na_praca", False) or bau["celula"] not in proibidas, bau
         bau["posicao"] = centro(bau.pop("celula"))
+
+    # Cenário (árvores, arbustos, matos e rochas de tools/gerar_cenario.py).
+    # Nada nasce em trilhas, água, cerca, praça, baús, pontos de ingrediente ou no início.
+    pontos_ingredientes = {(p[0] // T, p[1] // T) for r in regioes for p in r["pontos"]}
+    reservadas = proibidas | acampamento | celulas_baus | pontos_ingredientes | vizinhas({vila}, 2)
+    perto_de_trilha = vizinhas(caminhos | praca | cerca | lago, 1)
+    ocupadas = set()
+    cenario = []
+
+    def espalhar(tipo, quantidade, regiao, afastamento=1, longe_da_trilha=False):
+        if not COM_CENARIO:
+            return
+        candidatas = sorted(regiao - reservadas - ocupadas - (perto_de_trilha if longe_da_trilha else set()))
+        random.shuffle(candidatas)
+        for c in candidatas:
+            if quantidade == 0:
+                break
+            if vizinhas({c}, afastamento) & ocupadas:
+                continue
+            ocupadas.add(c)
+            x, y = centro(c)
+            cenario.append({"tipo": tipo, "posicao": [x + random.randint(-10, 10), y + random.randint(-6, 6)]})
+            quantidade -= 1
+
+    campos = tudo - floresta - pedreira - praia - lago
+    espalhar("arvore_alquimia", 5, roxas, 2, True)
+    espalhar("arvore_grande", 14, floresta, 2, True)
+    espalhar("arvore_media", 14, floresta, 2, True)
+    espalhar("pinheiro", 10, floresta, 2, True)
+    espalhar("arbusto_verde", 8, floresta)
+    espalhar("mato_alto", 10, floresta)
+    espalhar("rocha_musgo", 12, pedreira)
+    espalhar("mato_alto", 4, pedreira)
+    espalhar("mato_alto", 6, praia)
+    espalhar("arvore_media", 10, campos, 2, True)
+    espalhar("pinheiro", 4, campos, 2, True)
+    espalhar("arbusto_com_frutas", 10, campos)
+    espalhar("arbusto_verde", 8, campos)
+    espalhar("mato_com_flores", 16, campos)
+    espalhar("toco_de_arvore", 6, campos)
+    espalhar("rocha_musgo", 4, campos)
 
     galinhas_area = [(vila[0] - 6) * T, (vila[1] - 5) * T, 12 * T, 10 * T]
 
@@ -224,6 +273,7 @@ def main(pasta_tinypixel):
         "baus": baus,
         "regioes": regioes,
         "area_galinhas": galinhas_area,
+        "cenario": cenario,
     }
     (RAIZ / "data" / "mapa.json").write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
     print(f"Mapa {LARGURA}x{ALTURA} gerado em {saida_img}")

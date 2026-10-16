@@ -24,10 +24,10 @@ Atender à entrega mínima do foco: **um GoF Estrutural, com modelo, código e v
 |------|-----------|
 | Padrão | Facade (Fachada) |
 | Categoria | GoF Estrutural |
-| Intenção do padrão | Fornecer uma interface unificada para um conjunto de interfaces de um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar (GAMMA et al., 2000). |
+| Intenção do padrão | Fornecer uma interface unificada para um conjunto de interfaces de um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. |
 | Justificativa da escolha | O sistema de alquimia envolve seis classes que precisam colaborar em uma ordem precisa a cada mistura. O problema não é de interfaces incompatíveis (Adapter), de hierarquia parte-todo (Composite), de responsabilidades acrescentadas em tempo de execução (Decorator), de controle de acesso (Proxy), de economia de memória com muitos objetos (Flyweight) nem de duas dimensões que variam de forma independente (Bridge). É um problema de **complexidade de uso**, exatamente o que o Facade resolve (REFACTORING.GURU, 2026). |
 
-<p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Marcelo, 2026.</p>
 
 ### Contexto (Problema)
 
@@ -46,7 +46,7 @@ O `AlquimiaFacade` concentra essa orquestração. A UI chama apenas `combinar`, 
 
 ### Modelagem (Notação UML)
 
-A modelagem é estática, com um diagrama de classes centrado no Facade. As classes do subsistema exibem apenas os métodos que a fachada utiliza, e as classes de domínio aparecem somente como complemento, sem atributos, pois seu detalhamento não faz parte do padrão. O arquivo-fonte editável em PlantUML está na pasta [`assets`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/docs/Base/Relatórios/SubEquipe_02/assets).
+A modelagem é estática, com um diagrama de classes centrado no Facade. As classes do subsistema exibem apenas os métodos que a fachada utiliza, e as classes de domínio aparecem somente como complemento, sem atributos, pois seu detalhamento não faz parte do padrão.
 
 | Participante do padrão | Classe no modelo | Papel |
 |------------------------|------------------|-------|
@@ -54,13 +54,13 @@ A modelagem é estática, com um diagrama de classes centrado no Facade. As clas
 | Facade | `AlquimiaFacade` (C++, `godot::Node`) | Recebe os pedidos da UI e delega cada etapa da mistura ao subsistema, na ordem correta. |
 | Classes do subsistema | `Inventario`, `CatalogoDeIngredientes`, `TabelaDeReceitas`, `LivroDoAventureiro`, `CriadorDePocao`, `PersistenciaDoLivro` | Executam o trabalho real e não sabem da existência da fachada. |
 
-<p align="center">Tabela 2: Participantes do padrão Facade no sistema de alquimia. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 2: Participantes do padrão Facade no sistema de alquimia. Fonte: Marcelo, 2026.</p>
 
 #### Diagrama de Classes
 
 ![Diagrama de classes do Facade de alquimia](assets/facade_alquimia_classes.png)
 
-<p align="center">Figura 1: Diagrama de classes do padrão Facade aplicado ao sistema de alquimia. Fonte: Autores, 2026. <a href="assets/facade_alquimia_classes.puml">Fonte editável (PlantUML)</a>.</p>
+<p align="center">Figura 1: Diagrama de classes do padrão Facade aplicado ao sistema de alquimia. Fonte: Marcelo, 2026.</p>
 
 Pontos de destaque do modelo:
 
@@ -85,9 +85,8 @@ O padrão foi implementado na Godot Engine 4.7. Todo o código do jogo está em 
 | Subsistema | [`native/src/subsistema.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.h) e [`subsistema.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.cpp) |
 | Domínio (complemento) | [`native/src/dominio.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/dominio.h) e [`resultado_mistura.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/resultado_mistura.h) |
 | Dados (8 ingredientes e 36 receitas) | [`data/alquimia.json`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/data/alquimia.json) |
-| Teste automatizado | [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/tests/teste_facade.gd) |
 
-<p align="center">Tabela 3: Arquivos de código de cada participante do padrão. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 3: Arquivos de código de cada participante do padrão. Fonte: Marcelo, 2026.</p>
 
 **Facade: a fronteira com o Godot.** Do sistema de alquimia, só a `AlquimiaFacade` e o `ResultadoMistura` que ela devolve são registrados no motor. As seis classes do subsistema não são registradas. Os nós do jogo são registrados como `RUNTIME_CLASS`, que não executa dentro do editor:
 
@@ -213,11 +212,26 @@ O teste [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/202
 
 #### Jogo no navegador
 
-A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, fica disponível em [unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_03/jogo/](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_03/jogo/index.html). Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para a mochila.
+A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, roda direto nesta página. Clique em **Jogar** para iniciar e, depois, clique dentro do jogo antes de usar o teclado. Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para abrir a mochila e Esc para fechá-la.
+
+<div style="max-width:960px;margin:0 auto;">
+  <div style="position:relative;width:100%;padding-top:56.25%;background:#3b2a2a url('jogo/capa.jpg') center/cover no-repeat;border-radius:6px;overflow:hidden;">
+    <iframe data-src="jogo/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="Facade de alquimia em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <button type="button" onclick="var p=this.parentNode,j=p.querySelector('iframe');p.style.background='#000';j.src=j.dataset.src;j.style.display='block';this.remove();" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 40px;font-size:22px;font-weight:bold;color:#3b2a2a;background:#f3e6cf;border:3px solid #3b2a2a;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #3b2a2a;">&#9654; Jogar</button>
+  </div>
+</div>
+
+<p align="center">Jogo 1: Sistema de alquimia com o padrão Facade, em execução no navegador. Fonte: Marcelo, 2026. <a href="jogo/index.html" target="_blank">Abrir em tela cheia</a>.</p>
 
 #### Vídeo
 
-*A preencher: incorpore o vídeo que demonstra o código em execução, com legenda e link direto.* O modelo de incorporação está no [Artefato Padrão](/Guias/ArtefatoPadrao.md?id=modelo-de-vídeo-incorporado).
+Apresentação do padrão Facade: o problema, a modelagem UML, o código dos participantes e o jogo em execução.
+
+<div style="max-width:960px;margin:0 auto;">
+  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_02/assets/facade_alquimia_video.mp4"></video>
+</div>
+
+<p align="center">Vídeo 1: Padrão Facade aplicado ao sistema de alquimia, em execução. Fonte: Marcelo, 2026. <a href="Base/Relatórios/SubEquipe_02/assets/facade_alquimia_video.mp4" target="_blank">Link direto para o vídeo</a>.</p>
 
 ### Rastreabilidade
 
@@ -225,7 +239,6 @@ A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, fi
 |----------------------|---------------------|
 | [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica) | O `modulo_mistura_quimica` (bancada de 2 slots e matriz de reações) e o arquivo `livro_aventureiro.sav` em `user://` foram detalhados no Facade como `TabelaDeReceitas`, `LivroDoAventureiro` e `PersistenciaDoLivro`. |
 | [Ata Geral 04](/Atas/AtaGeral04.md) | Decisão do grupo que atribuiu o padrão estrutural ao Subgrupo 02. |
-| [Atas do Subgrupo 02](/Atas/SubEquipe_02.md) | *A preencher: decisões que originaram o artefato.* |
 
 <p align="center">Tabela 4: Elos com outros artefatos. Fonte: Autores, 2026.</p>
 
@@ -258,6 +271,7 @@ A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, fi
 
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
-| 1.0 | | | | |
+| 1.0 | 11/10/2026 | Criação da estrutura do artefato | Marcos Vinícius Gündel da Silva | |
+| 1.1 | 16/10/2026 | Escolha do padrão Facade, contexto do problema, modelagem UML (diagrama de classes), implementação em C++ (GDExtension) com explicação do código, rastreabilidade, versão web jogável e vídeo do padrão em execução | Marcelo de Araújo Lopes | |
 
 <p align="center">Tabela 6: Histórico de versão.</p>

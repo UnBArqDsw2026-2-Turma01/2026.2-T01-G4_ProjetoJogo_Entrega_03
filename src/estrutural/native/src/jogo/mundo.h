@@ -46,6 +46,7 @@ private:
 	void criarColisoes();
 	void espalharIngredientes();
 	void colocarBaus();
+	void colocarCenario();
 	void soltarGalinhas();
 	void criarHud();
 	void criarMinimapa(CanvasLayer *hud);
