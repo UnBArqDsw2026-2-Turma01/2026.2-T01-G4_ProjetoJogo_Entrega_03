@@ -29,4 +29,5 @@
     - [Ata 04: 06/10/2026](/Atas/AtaGeral04.md)
   - [Subgrupo 01](/Atas/SubEquipe_01.md)
   - [Subgrupo 02](/Atas/SubEquipe_02.md)
+    - [Ata 01: 16/10/2026](/Atas/AtaSub02_01.md)
   - [Subgrupo 03](/Atas/SubEquipe_03.md)
