@@ -4,7 +4,7 @@
 
 | Data | Horário de Início | Horário de Término | Local | Projeto | Redator |
 | :--: | :---------------: | :----------------: | :---: | :-----: | :-----: |
-| 16/10/2026 | 08:45 | 09:15 | Discord / Chat da Equipe | G4_ProjetoJogo | João Victor da Silva Batista de Farias |
+| 16/10/2026 | 08:45 | 09:15 | Whatsapp / Chat da Equipe | G4_ProjetoJogo | João Victor da Silva Batista de Farias |
 
 <p align="center">Tabela 1: Identificação da reunião. Fonte: Autores, 2026.</p>
 
@@ -55,7 +55,7 @@
 
 ## Próxima Reunião
 
-18/10/2026, às 20h00, via Discord, para consolidação dos vídeos de execução e revisão cruzada dos relatórios.
+18/10/2026 para consolidação dos vídeos de execução e revisão cruzada dos relatórios.
 
 ## Compromissos
 
