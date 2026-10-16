@@ -68,6 +68,193 @@ flowchart TD
 
 ---
 
+## Análise Crítica e Refatoração: O Padrão Composite como Fundação de UI para a Facade e o Produto Final
+
+### 1. Diagnóstico Arquitetural do Código Inicial
+
+Na primeira versão entregue para demonstrar o padrão Facade em ambiente web jogável ([`Facade.md`](Base/Relatórios/SubEquipe_02/Facade.md)), a classe [`MochilaUI`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.cpp) acumulou duas responsabilidades distintas:
+1. **Atuar como Cliente da Fachada (Client do Facade):** Delegar operações de mistura, leitura de inventário e consulta de receitas exclusivamente para o nó `AlquimiaFacade`.
+2. **Construção Imperativa e Gestão Visual de Controles (Apresentação):** Instanciar diretamente múltiplos nós concretos da Godot Engine (`memnew(TextureRect)`, `memnew(MarginContainer)`, `memnew(GridContainer)`, `memnew(VBoxContainer)`, `memnew(Button)`), controlando manualmente sua visibilidade, layout e callbacks.
+
+Sob a ótica de Engenharia de Software e dos Padrões GoF, esse acoplamento gerou três limitações:
+- **Violação do Princípio de Responsabilidade Única (SRP):** Mudanças na apresentação visual ou no tema da interface forçam alterações no mesmo arquivo que consome as regras da fachada.
+- **Incapacidade de Reutilização da Bancada de Alquimia:** A lógica e os controles da bancada ficaram confinados à cena da mochila. Se o jogo necessitar acionar a síntese rápida de poções durante uma batalha em turnos (no `BattleHUD`), o código da interface precisaria ser duplicado.
+- **Acoplamento Forte com a Engine:** Não é possível testar a hierarquia e o fluxo de eventos de tela de forma automatizada e isolada (modo *headless* sem carregar o runtime gráfico do Godot).
+
+### 2. A Solução: Composite como Infraestrutura de Apresentação
+
+A solução arquitetural definitiva da SubEquipe 02 estabelece que **toda a interface gráfica do jogo é construída como uma árvore de objetos do padrão Composite**, estruturada nas classes base [`UIComponent`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/composite/ui_component.hpp) e [`UIComposite`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/composite/ui_composite.hpp) sob responsabilidade de **João Victor**:
+
+```mermaid
+classDiagram
+    direction TB
+
+    class UIComponent {
+        <<abstract>>
+        #string m_id
+        #Vector2 m_position
+        #Vector2 m_size
+        #bool m_visible
+        +render()* void
+        +handleCommand(string cmd)* bool
+        +setVisible(bool visible) void
+    }
+
+    class UIComposite {
+        #vector~shared_ptr~UIComponent~~ m_children
+        +add(shared_ptr~UIComponent~ child) void
+        +remove(string id) bool
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class UIPanel {
+        #string m_title
+        +render() void
+    }
+
+    class UIButton {
+        #string m_label
+        #string m_actionCommand
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class UILabel {
+        #string m_text
+        +render() void
+    }
+
+    class MochilaComposite {
+        -AlquimiaFacade* m_facade
+        +montarInterface() void
+        +atualizarDados() void
+        +handleCommand(string cmd) bool
+    }
+
+    class BancadaPanel {
+        -string m_slotA
+        -string m_slotB
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class BattleHUD {
+        +setTurnActive(bool active) void
+        +handleCommand(string cmd) bool
+    }
+
+    class AlquimiaFacade {
+        +combinar(idA, idB) Ref~ResultadoMistura~
+        +listarInventario() Array
+        +consultarComposicao(id) Array
+    }
+
+    UIComponent <|-- UIComposite
+    UIComponent <|-- UIButton
+    UIComponent <|-- UILabel
+    UIComposite <|-- UIPanel
+    UIComposite <|-- MochilaComposite
+    UIComposite <|-- BattleHUD
+    UIPanel <|-- BancadaPanel
+
+    MochilaComposite *-- UIPanel : contém painel de inventário
+    MochilaComposite *-- BancadaPanel : aninha bancada
+    BattleHUD o-- BancadaPanel : reutiliza bancada em combate
+    BancadaPanel *-- UIButton : botão 'cmd_mix'
+
+    MochilaComposite --> AlquimiaFacade : consome via Autoload
+    BancadaPanel ..> AlquimiaFacade : dispara 'cmd_mix'
+```
+
+<p align="center">Figura 2: Arquitetura refatorada integrando o Composite como base de UI para a Facade e HUD. Fonte: Autores, 2026.</p>
+
+### 3. Decomposição Hierárquica da Mochila Refatorada
+
+Com a adoção do Composite, a tela da mochila passa a ser declarada e manipulada recursivamente como uma árvore uniforme:
+
+```
+MochilaComposite (UIComposite - Raiz da Tela)
+├── FundoPanel (UIPanel)
+├── InventarioPanel (UIPanel)
+│   ├── TituloMochila (UILabel - Folha)
+│   ├── GradeSlotsComposite (UIComposite)
+│   │   ├── SlotItem1 (UIButton - Folha, cmd: 'select_item_1')
+│   │   ├── SlotItem2 (UIButton - Folha, cmd: 'select_item_2')
+│   │   └── ...
+│   └── BtnFechar (UIButton - Folha, cmd: 'cmd_close')
+└── BancadaELivroComposite (UIComposite)
+    ├── BancadaPanel (UIPanel - Reutilizável no BattleHUD)
+    │   ├── SlotA (UIButton - Folha)
+    │   ├── OperadorLabel (UILabel - Folha, "+")
+    │   ├── SlotB (UIButton - Folha)
+    │   └── BtnMisturar (UIButton - Folha, cmd: 'cmd_mix')
+    └── LivroPanel (UIPanel)
+        ├── ContadorLabel (UILabel - Folha)
+        └── ListaReceitasComposite (UIComposite)
+```
+
+### 4. Ganhos de Engenharia para o Produto Final
+
+| Dimensão de Qualidade | Antes (UI Monolítica em `mochila_ui.cpp`) | Depois (UI Estruturada com GoF Composite) |
+|-----------------------|-------------------------------------------|--------------------------------------------|
+| **Reuso Inter-sistemas** | A bancada só existia dentro da mochila. Impossível usá-la no combate. | `BancadaPanel` é um `UIComponent` independente. Pode ser plugado no `BattleHUD` via `hud->add(bancadaPanel)` durante batalhas contra chefes. |
+| **Despacho de Eventos** | *Callbacks* imperativos amarrados diretamente aos botões concretos do Godot. | Comandos polimórficos (`handleCommand("cmd_mix")`) propagados recursivamente pela árvore até o destinatário. |
+| **Testabilidade** | Depende de inicialização gráfica completa do Godot e cenas `.tscn`. | Testável de forma 100% nativa e automatizada via console/CI (`make -C src/estrutural/composite run`). |
+| **Manutenibilidade** | Adicionar um novo painel exige dezenas de linhas de manipulação manual de containers. | Novos painéis e controles são adicionados dinamicamente via `container->add(novoComponente)`. |
+
+### 5. Exemplo de Código da Integração em C++
+
+O trecho conceitual a seguir ilustra como a `MochilaComposite` monta sua hierarquia e despacha o comando de mistura diretamente para a `AlquimiaFacade`:
+
+```cpp
+// mochila_composite.hpp — Camada de Apresentação baseada no Composite
+#include "ui_composite.hpp"
+#include "ui_panel.hpp"
+#include "ui_button.hpp"
+#include "ui_label.hpp"
+
+class MochilaComposite : public UIComposite {
+private:
+    AlquimiaFacade* m_facade; // Ponte com a camada de orquestração (GoF Facade)
+    std::shared_ptr<UIPanel> m_bancadaPanel;
+
+public:
+    MochilaComposite(AlquimiaFacade* facade) 
+        : UIComposite("MochilaComposite", {0, 0}, {1920, 1080}), m_facade(facade) {
+        montarEstrutura();
+    }
+
+    void montarEstrutura() {
+        // 1. Painel de Inventário
+        auto invPanel = std::make_shared<UIPanel>("InventarioPanel", "Mochila do Jogador", Vector2{40, 40}, Vector2{600, 800});
+        // Popula slots a partir de m_facade->listarInventario()...
+        add(invPanel);
+
+        // 2. Painel da Bancada (Componente reusável também no BattleHUD)
+        m_bancadaPanel = std::make_shared<UIPanel>("BancadaPanel", "Bancada de Alquimia", Vector2{680, 40}, Vector2{800, 400});
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblSlotA", "Slot 1: [Vazio]", Vector2{700, 100}));
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblPlus", "+", Vector2{850, 100}));
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblSlotB", "Slot 2: [Vazio]", Vector2{900, 100}));
+        m_bancadaPanel->add(std::make_shared<UIButton>("BtnMisturar", "Misturar Ingredientes", "cmd_mix", Vector2{700, 200}));
+        add(m_bancadaPanel);
+    }
+
+    bool handleCommand(const std::string& command) override {
+        if (command == "cmd_mix") {
+            // A árvore Composite consome o comando e delega a orquestração à Facade
+            std::cout << "[Composite -> Facade] Comando 'cmd_mix' interceptado! Acionando AlquimiaFacade...\n";
+            // auto resultado = m_facade->combinar(slotA, slotB);
+            return true;
+        }
+        // Propaga recursivamente para os demais filhos
+        return UIComposite::handleCommand(command);
+    }
+};
+```
+
+---
+
 ## Navegação pelos Artefatos Individuais
 
 Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e execuções práticas de cada padrão, acesse os artefatos dedicados:
@@ -124,5 +311,6 @@ Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 16/10/2026 | Estruturação da visão geral integrada dos 4 padrões estruturais em C++, arquitetura de integração e matriz de rastreabilidade | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
 | 1.1 | 16/10/2026 | Separação do padrão Facade para artefato dedicado (`Facade.md`) e consolidação da visão geral integrada | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.2 | 16/10/2026 | Adição da análise crítica de arquitetura e proposta de refatoração integrando o Composite como fundação de UI para a Facade e o produto final | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
 
 <p align="center">Tabela 4: Histórico de versão.</p>
