@@ -1,0 +1,115 @@
+@startuml facade_alquimia_classes
+title Facade: Sistema de Alquimia do G4_ProjetoJogo (Diagrama de Classes)
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor<<Facade>> #FFE8A3
+  BorderColor<<Facade>> #B8860B
+  BackgroundColor<<Complemento>> #EEEEEE
+  BorderColor<<Complemento>> #999999
+  FontColor<<Complemento>> #666666
+}
+hide empty members
+hide <<Complemento>> members
+
+class MochilaUI <<Client>> {
+  - bancada : String[2]
+  + colocarNaBancada(idItem : String) : void
+  + misturar() : void
+  - refazer(idReceita : String) : void
+  - atualizar() : void
+}
+
+class AlquimiaFacade <<Facade>> {
+  - inventario : Inventario
+  - catalogo : CatalogoDeIngredientes
+  - tabela : TabelaDeReceitas
+  - livro : LivroDoAventureiro
+  - criador : CriadorDePocao
+  - persistencia : PersistenciaDoLivro
+  + combinar(idA : String, idB : String) : Ref<ResultadoMistura>
+  + refazerReceita(idReceita : String) : Ref<ResultadoMistura>
+  + podeRefazer(idReceita : String) : bool
+  + listarReceitasDescobertas() : PackedStringArray
+  + consultarComposicao(idIngrediente : String) : Array
+  + listarIngredientes() : Array
+  + listarInventario() : Array
+  + descreverReceita(idReceita : String) : Dictionary
+  + coletarIngredientes(quantidade : int) : void
+  + esquecerLivro() : void
+  - executarMistura(receita : const Receita&) : Ref<ResultadoMistura>
+}
+
+package "Subsistema de Alquimia" {
+
+  class Inventario <<Subsystem>> {
+    + possui(idItem : String, quantidade : int) : bool
+    + remover(idItem : String, quantidade : int) : void
+    + adicionar(item : const Item&, quantidade : int) : void
+    + itens() : HashMap<String, int>
+  }
+
+  class CatalogoDeIngredientes <<Subsystem>> {
+    + buscar(idIngrediente : String) : const Ingrediente*
+    + todos() : HashMap<String, Ingrediente>
+  }
+
+  class TabelaDeReceitas <<Subsystem>> {
+    + buscar(idA : String, idB : String) : const Receita*
+    + buscarPorId(idReceita : String) : const Receita*
+  }
+
+  class LivroDoAventureiro <<Subsystem>> {
+    + registrarReceita(idReceita : String) : bool
+    + conheceReceita(idReceita : String) : bool
+    + revelarComposicao(idIngrediente : String) : bool
+    + composicaoRevelada(idIngrediente : String) : bool
+    + listarReceitas() : PackedStringArray
+    + esquecer() : void
+  }
+
+  class CriadorDePocao <<Subsystem>> {
+    + criar(receita : const Receita&) : Pocao
+    + modelo(idPocao : String) : const Pocao*
+  }
+
+  class PersistenciaDoLivro <<Subsystem>> {
+    + salvar(livro : const LivroDoAventureiro&) : Error
+    + carregar(livro : LivroDoAventureiro&) : Error
+  }
+}
+
+package "Domínio (complemento)" {
+  class ResultadoMistura <<Complemento>>
+  class Ingrediente <<Complemento>>
+  class Receita <<Complemento>>
+  class Pocao <<Complemento>>
+}
+
+MochilaUI --> AlquimiaFacade : usa somente
+AlquimiaFacade *--> "1" Inventario
+AlquimiaFacade *--> "1" CatalogoDeIngredientes
+AlquimiaFacade *--> "1" TabelaDeReceitas
+AlquimiaFacade *--> "1" LivroDoAventureiro
+AlquimiaFacade *--> "1" CriadorDePocao
+AlquimiaFacade *--> "1" PersistenciaDoLivro
+AlquimiaFacade ..> ResultadoMistura : <<create>>
+
+PersistenciaDoLivro ..> LivroDoAventureiro
+CatalogoDeIngredientes ..> Ingrediente
+TabelaDeReceitas ..> Receita
+CriadorDePocao ..> Pocao
+
+note right of AlquimiaFacade
+  Única classe registrada no Godot
+  via GDExtension (GDCLASS + _bind_methods),
+  carregada como Autoload.
+  A UI não conhece o subsistema.
+end note
+
+note bottom of TabelaDeReceitas
+  8 ingredientes, sem ordem e com
+  repetição (A+A) = 36 receitas.
+  A+B e B+A levam à mesma receita.
+end note
+@enduml
