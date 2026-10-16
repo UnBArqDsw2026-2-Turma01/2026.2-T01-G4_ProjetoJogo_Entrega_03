@@ -16,6 +16,8 @@
       - [2. IA Generativa](/Base/Relatórios/SubEquipe_01/IAGenerativa.md)
     - C · SubEquipe 02
       - [1. GoF Estrutural](/Base/Relatórios/SubEquipe_02/GoFEstrutural.md)
+        - [1.1 Composite (João Victor)](/Base/Relatórios/SubEquipe_02/Composite.md)
+        - [1.2 Decorator (Marcos Vinícius)](/Base/Relatórios/SubEquipe_02/Decorator.md)
       - [2. IA Generativa](/Base/Relatórios/SubEquipe_02/IAGenerativa.md)
     - O · SubEquipe 03
       - [1. GoF Comportamental](/Base/Relatórios/SubEquipe_03/GoFComportamental.md)
