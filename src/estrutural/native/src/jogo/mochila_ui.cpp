@@ -21,17 +21,21 @@ void MochilaUI::_ready() {
 }
 
 void MochilaUI::abrir() {
+	if (compositeUI) {
+		compositeUI->setVisible(true);
+	}
 	limparBancada();
 	resultado->set_text(u("Escolha dois itens da mochila e clique em Misturar."));
 	atualizar();
 }
 
-
-
 void MochilaUI::misturar() {
 	if (bancada[0].is_empty() || bancada[1].is_empty()) {
 		mostrarAviso(u("Coloque dois itens na bancada."));
 		return;
+	}
+	if (compositeUI) {
+		compositeUI->handleInput("cmd_mix");
 	}
 	const Ref<ResultadoMistura> r = fachada(this)->combinar(bancada[0], bancada[1]);
 	mostrarResultado(r);
@@ -50,6 +54,9 @@ void MochilaUI::refazer(const String &idReceita) {
 // --- Bancada ---
 
 void MochilaUI::colocarNaBancada(const String &idItem) {
+	if (compositeUI) {
+		compositeUI->getBancada()->colocarNaBancada(idItem.utf8().get_data());
+	}
 	for (String &espaco : bancada) {
 		if (espaco.is_empty()) {
 			espaco = idItem;
@@ -61,17 +68,26 @@ void MochilaUI::colocarNaBancada(const String &idItem) {
 }
 
 void MochilaUI::tirarDaBancada(int indice) {
+	if (compositeUI) {
+		compositeUI->getBancada()->tirarDaBancada(indice);
+	}
 	bancada[indice] = "";
 	atualizarBancada();
 }
 
 void MochilaUI::limparBancada() {
+	if (compositeUI) {
+		compositeUI->getBancada()->limpar();
+	}
 	bancada[0] = "";
 	bancada[1] = "";
 	atualizarBancada();
 }
 
 void MochilaUI::pedirFechar() {
+	if (compositeUI) {
+		compositeUI->handleInput("cmd_close");
+	}
 	emit_signal("fechar_pedido");
 }
 
@@ -176,6 +192,9 @@ String MochilaUI::formatarElementos(const Array &elementos) {
 // --- Construção da tela ---
 
 void MochilaUI::montarTela() {
+	// Inicializa a árvore de apresentação do GoF Composite
+	compositeUI = std::make_shared<G4UI::MochilaComposite>();
+
 	TextureRect *fundo = memnew(TextureRect);
 	fundo->set_texture(textura("res://assets/ui/board.png"));
 	fundo->set_stretch_mode(TextureRect::STRETCH_SCALE);
