@@ -1,0 +1,502 @@
+{
+ "ingredientes": [
+  {
+   "id": "erva_lunar",
+   "nome": "Erva Lunar",
+   "categoria": "ERVA",
+   "composicao": [
+    {
+     "simbolo": "C",
+     "nome": "Carbono",
+     "numero": 6
+    },
+    {
+     "simbolo": "H",
+     "nome": "Hidrogênio",
+     "numero": 1
+    },
+    {
+     "simbolo": "O",
+     "nome": "Oxigênio",
+     "numero": 8
+    }
+   ]
+  },
+  {
+   "id": "salvia_de_fogo",
+   "nome": "Sálvia de Fogo",
+   "categoria": "ERVA",
+   "composicao": [
+    {
+     "simbolo": "C",
+     "nome": "Carbono",
+     "numero": 6
+    },
+    {
+     "simbolo": "S",
+     "nome": "Enxofre",
+     "numero": 16
+    }
+   ]
+  },
+  {
+   "id": "cogumelo_roxo",
+   "nome": "Cogumelo Roxo",
+   "categoria": "COGUMELO",
+   "composicao": [
+    {
+     "simbolo": "N",
+     "nome": "Nitrogênio",
+     "numero": 7
+    },
+    {
+     "simbolo": "P",
+     "nome": "Fósforo",
+     "numero": 15
+    }
+   ]
+  },
+  {
+   "id": "cogumelo_brilhante",
+   "nome": "Cogumelo Brilhante",
+   "categoria": "COGUMELO",
+   "composicao": [
+    {
+     "simbolo": "P",
+     "nome": "Fósforo",
+     "numero": 15
+    },
+    {
+     "simbolo": "Mg",
+     "nome": "Magnésio",
+     "numero": 12
+    }
+   ]
+  },
+  {
+   "id": "escama_de_salamandra",
+   "nome": "Escama de Salamandra",
+   "categoria": "PARTE_DE_CRIATURA",
+   "composicao": [
+    {
+     "simbolo": "Ca",
+     "nome": "Cálcio",
+     "numero": 20
+    },
+    {
+     "simbolo": "Fe",
+     "nome": "Ferro",
+     "numero": 26
+    }
+   ]
+  },
+  {
+   "id": "pena_de_corvo",
+   "nome": "Pena de Corvo",
+   "categoria": "PARTE_DE_CRIATURA",
+   "composicao": [
+    {
+     "simbolo": "C",
+     "nome": "Carbono",
+     "numero": 6
+    },
+    {
+     "simbolo": "N",
+     "nome": "Nitrogênio",
+     "numero": 7
+    }
+   ]
+  },
+  {
+   "id": "cristal_de_quartzo",
+   "nome": "Cristal de Quartzo",
+   "categoria": "MINERIO",
+   "composicao": [
+    {
+     "simbolo": "Si",
+     "nome": "Silício",
+     "numero": 14
+    },
+    {
+     "simbolo": "O",
+     "nome": "Oxigênio",
+     "numero": 8
+    }
+   ]
+  },
+  {
+   "id": "pepita_de_cobre",
+   "nome": "Pepita de Cobre",
+   "categoria": "MINERIO",
+   "composicao": [
+    {
+     "simbolo": "Cu",
+     "nome": "Cobre",
+     "numero": 29
+    }
+   ]
+  }
+ ],
+ "receitas": [
+  {
+   "a": "erva_lunar",
+   "b": "erva_lunar",
+   "pocao": {
+    "id": "pocao_de_cura_menor",
+    "nome": "Poção de Cura Menor",
+    "efeito": "Restaura 20 de HP.",
+    "cor": "#e05a5a"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "salvia_de_fogo",
+   "pocao": {
+    "id": "tonico_aquecido",
+    "nome": "Tônico Aquecido",
+    "efeito": "Resistência ao frio por 3 turnos.",
+    "cor": "#f08c3c"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "cogumelo_roxo",
+   "pocao": {
+    "id": "elixir_do_sono",
+    "nome": "Elixir do Sono",
+    "efeito": "Faz um inimigo adormecer.",
+    "cor": "#8a6fd1"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "cogumelo_brilhante",
+   "pocao": {
+    "id": "pocao_de_clarividencia",
+    "nome": "Poção de Clarividência",
+    "efeito": "Revela os segredos do mapa.",
+    "cor": "#7fe0d4"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "escama_de_salamandra",
+   "pocao": {
+    "id": "pocao_de_pele_de_pedra",
+    "nome": "Poção de Pele de Pedra",
+    "efeito": "+3 de defesa por 3 turnos.",
+    "cor": "#9a8f7a"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "pocao_da_pena_leve",
+    "nome": "Poção da Pena Leve",
+    "efeito": "+2 de velocidade por 3 turnos.",
+    "cor": "#d9e6f2"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "agua_cristalina",
+    "nome": "Água Cristalina",
+    "efeito": "Restaura 20 de MP.",
+    "cor": "#6fb6ff"
+   }
+  },
+  {
+   "a": "erva_lunar",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "balsamo_de_cobre",
+    "nome": "Bálsamo de Cobre",
+    "efeito": "Cura envenenamento.",
+    "cor": "#c8743c"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "salvia_de_fogo",
+   "pocao": {
+    "id": "pocao_flamejante",
+    "nome": "Poção Flamejante",
+    "efeito": "Causa dano de fogo a um inimigo.",
+    "cor": "#ff5a1f"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "cogumelo_roxo",
+   "pocao": {
+    "id": "fumaca_toxica",
+    "nome": "Fumaça Tóxica",
+    "efeito": "Envenena todos os inimigos.",
+    "cor": "#6b8f2a"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "cogumelo_brilhante",
+   "pocao": {
+    "id": "chama_fatua",
+    "nome": "Chama Fátua",
+    "efeito": "Ilumina cavernas escuras.",
+    "cor": "#a0f0ff"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "escama_de_salamandra",
+   "pocao": {
+    "id": "sopro_do_dragao",
+    "nome": "Sopro do Dragão",
+    "efeito": "Dano de fogo forte em área.",
+    "cor": "#c4241b"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "cinzas_do_corvo",
+    "nome": "Cinzas do Corvo",
+    "efeito": "Cega um inimigo por 2 turnos.",
+    "cor": "#4a4a55"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "vidro_fundido",
+    "nome": "Vidro Fundido",
+    "efeito": "Escudo contra fogo.",
+    "cor": "#ffb36b"
+   }
+  },
+  {
+   "a": "salvia_de_fogo",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "faisca_de_cobre",
+    "nome": "Faísca de Cobre",
+    "efeito": "Dano elétrico em um inimigo.",
+    "cor": "#ffd23f"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "cogumelo_roxo",
+   "pocao": {
+    "id": "veneno_roxo",
+    "nome": "Veneno Roxo",
+    "efeito": "Envenena um inimigo.",
+    "cor": "#7a2fa8"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "cogumelo_brilhante",
+   "pocao": {
+    "id": "pocao_alucinogena",
+    "nome": "Poção Alucinógena",
+    "efeito": "Confunde um inimigo.",
+    "cor": "#e36fd6"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "escama_de_salamandra",
+   "pocao": {
+    "id": "antidoto_escamado",
+    "nome": "Antídoto Escamado",
+    "efeito": "Imunidade a veneno por 3 turnos.",
+    "cor": "#5fbf7a"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "pocao_sombria",
+    "nome": "Poção Sombria",
+    "efeito": "Invisibilidade por 2 turnos.",
+    "cor": "#2b2140"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "pocao_do_esquecimento",
+    "nome": "Poção do Esquecimento",
+    "efeito": "Remove os efeitos de um inimigo.",
+    "cor": "#9fa8c9"
+   }
+  },
+  {
+   "a": "cogumelo_roxo",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "ferrugem_liquida",
+    "nome": "Ferrugem Líquida",
+    "efeito": "Reduz a defesa de um inimigo.",
+    "cor": "#9c4a24"
+   }
+  },
+  {
+   "a": "cogumelo_brilhante",
+   "b": "cogumelo_brilhante",
+   "pocao": {
+    "id": "luz_engarrafada",
+    "nome": "Luz Engarrafada",
+    "efeito": "Cega todos os inimigos por 1 turno.",
+    "cor": "#fff59a"
+   }
+  },
+  {
+   "a": "cogumelo_brilhante",
+   "b": "escama_de_salamandra",
+   "pocao": {
+    "id": "pocao_de_vigor",
+    "nome": "Poção de Vigor",
+    "efeito": "+3 de força por 3 turnos.",
+    "cor": "#e8743a"
+   }
+  },
+  {
+   "a": "cogumelo_brilhante",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "elixir_da_noite",
+    "nome": "Elixir da Noite",
+    "efeito": "Visão no escuro.",
+    "cor": "#3a4a8f"
+   }
+  },
+  {
+   "a": "cogumelo_brilhante",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "prisma_luminoso",
+    "nome": "Prisma Luminoso",
+    "efeito": "Reflete a próxima magia.",
+    "cor": "#b8f0ff"
+   }
+  },
+  {
+   "a": "cogumelo_brilhante",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "pocao_eletrica",
+    "nome": "Poção Elétrica",
+    "efeito": "Dano elétrico em área.",
+    "cor": "#f5e642"
+   }
+  },
+  {
+   "a": "escama_de_salamandra",
+   "b": "escama_de_salamandra",
+   "pocao": {
+    "id": "pocao_de_regeneracao",
+    "nome": "Poção de Regeneração",
+    "efeito": "Recupera HP a cada turno.",
+    "cor": "#d94f6a"
+   }
+  },
+  {
+   "a": "escama_de_salamandra",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "elixir_da_quimera",
+    "nome": "Elixir da Quimera",
+    "efeito": "+força e +velocidade.",
+    "cor": "#b05a2a"
+   }
+  },
+  {
+   "a": "escama_de_salamandra",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "couraca_de_cristal",
+    "nome": "Couraça de Cristal",
+    "efeito": "+3 de defesa mágica.",
+    "cor": "#9fe7ff"
+   }
+  },
+  {
+   "a": "escama_de_salamandra",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "oleo_de_salamandra",
+    "nome": "Óleo de Salamandra",
+    "efeito": "A arma causa dano de fogo.",
+    "cor": "#e2541c"
+   }
+  },
+  {
+   "a": "pena_de_corvo",
+   "b": "pena_de_corvo",
+   "pocao": {
+    "id": "pocao_do_voo",
+    "nome": "Poção do Voo",
+    "efeito": "Esquiva o próximo ataque.",
+    "cor": "#c9d6e8"
+   }
+  },
+  {
+   "a": "pena_de_corvo",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "olho_de_corvo",
+    "nome": "Olho de Corvo",
+    "efeito": "+precisão por 3 turnos.",
+    "cor": "#5a5a7a"
+   }
+  },
+  {
+   "a": "pena_de_corvo",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "amuleto_liquido",
+    "nome": "Amuleto Líquido",
+    "efeito": "+sorte nos próximos saques.",
+    "cor": "#e0b84a"
+   }
+  },
+  {
+   "a": "cristal_de_quartzo",
+   "b": "cristal_de_quartzo",
+   "pocao": {
+    "id": "pocao_de_foco",
+    "nome": "Poção de Foco",
+    "efeito": "+10 de MP máximo.",
+    "cor": "#4f7dff"
+   }
+  },
+  {
+   "a": "cristal_de_quartzo",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "solucao_condutora",
+    "nome": "Solução Condutora",
+    "efeito": "+dano mágico por 3 turnos.",
+    "cor": "#4fd1c5"
+   }
+  },
+  {
+   "a": "pepita_de_cobre",
+   "b": "pepita_de_cobre",
+   "pocao": {
+    "id": "pocao_de_ferro",
+    "nome": "Poção de Ferro",
+    "efeito": "+10 de HP máximo.",
+    "cor": "#8c8c96"
+   }
+  }
+ ]
+}

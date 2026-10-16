@@ -1,0 +1,12 @@
+[configuration]
+
+entry_symbol = "alquimia_library_init"
+compatibility_minimum = "4.7"
+reloadable = false
+
+[libraries]
+
+windows.debug.x86_64 = "res://bin/alquimia.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://bin/alquimia.windows.template_release.x86_64.dll"
+web.debug.wasm32 = "res://bin/alquimia.web.template_debug.wasm32.nothreads.wasm"
+web.release.wasm32 = "res://bin/alquimia.web.template_release.wasm32.nothreads.wasm"

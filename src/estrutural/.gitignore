@@ -1,0 +1,15 @@
+.godot/
+native/godot-cpp/
+native/build/
+native/.sconsign.dblite
+native/*.log
+bin/*.lib
+bin/*.exp
+bin/*.pdb
+bin/~*
+export/
+
+# Assets do TinyPixel: a licença proíbe redistribuir os arquivos do pack.
+# Rode tools/importar_tinypixel.py depois de baixar o pack.
+assets/ui/
+assets/mundo/

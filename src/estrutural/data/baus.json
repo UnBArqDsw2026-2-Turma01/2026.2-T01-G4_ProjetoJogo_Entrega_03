@@ -1,0 +1,40 @@
+{
+	"floresta": {
+		"nome": "Baú da Floresta",
+		"itens": [
+			{ "id": "erva_lunar", "chance": 70, "min": 1, "max": 3 },
+			{ "id": "salvia_de_fogo", "chance": 50, "min": 1, "max": 2 },
+			{ "id": "cogumelo_roxo", "chance": 40, "min": 1, "max": 2 },
+			{ "id": "cogumelo_brilhante", "chance": 15, "min": 1, "max": 1 }
+		]
+	},
+	"pedreira": {
+		"nome": "Baú da Pedreira",
+		"itens": [
+			{ "id": "cristal_de_quartzo", "chance": 60, "min": 1, "max": 2 },
+			{ "id": "pepita_de_cobre", "chance": 45, "min": 1, "max": 2 },
+			{ "id": "salvia_de_fogo", "chance": 10, "min": 1, "max": 1 }
+		]
+	},
+	"cacador": {
+		"nome": "Baú do Caçador",
+		"itens": [
+			{ "id": "pena_de_corvo", "chance": 65, "min": 1, "max": 3 },
+			{ "id": "escama_de_salamandra", "chance": 50, "min": 1, "max": 2 },
+			{ "id": "cogumelo_roxo", "chance": 20, "min": 1, "max": 1 }
+		]
+	},
+	"antigo": {
+		"nome": "Baú Antigo",
+		"itens": [
+			{ "id": "erva_lunar", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "salvia_de_fogo", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "cogumelo_roxo", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "cogumelo_brilhante", "chance": 25, "min": 1, "max": 2 },
+			{ "id": "escama_de_salamandra", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "pena_de_corvo", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "cristal_de_quartzo", "chance": 25, "min": 1, "max": 1 },
+			{ "id": "pepita_de_cobre", "chance": 25, "min": 1, "max": 2 }
+		]
+	}
+}
