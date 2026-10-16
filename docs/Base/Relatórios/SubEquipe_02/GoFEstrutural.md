@@ -22,20 +22,53 @@ Atender à entrega mínima do foco: **um GoF Estrutural, com modelo, código e v
 
 | Item | Descrição |
 |------|-----------|
-| Padrão | *A preencher* |
+| Padrão | Facade (Fachada) |
 | Categoria | GoF Estrutural |
-| Intenção do padrão | *A preencher, com base na literatura.* |
-| Justificativa da escolha | *A preencher: por que este padrão, e não outro da mesma categoria.* |
+| Intenção do padrão | Fornecer uma interface unificada para um conjunto de interfaces de um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar (GAMMA et al., 2000). |
+| Justificativa da escolha | O sistema de alquimia envolve seis classes que precisam colaborar em uma ordem precisa a cada mistura. O problema não é de interfaces incompatíveis (Adapter), de hierarquia parte-todo (Composite), de responsabilidades acrescentadas em tempo de execução (Decorator), de controle de acesso (Proxy), de economia de memória com muitos objetos (Flyweight) nem de duas dimensões que variam de forma independente (Bridge). É um problema de **complexidade de uso**, exatamente o que o Facade resolve (REFACTORING.GURU, 2026). |
 
 <p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Autores, 2026.</p>
 
 ### Contexto (Problema)
 
-*A preencher: descreva o contexto do jogo e o problema a ser resolvido com o padrão.* Indique o que ficaria rígido, duplicado ou acoplado sem ele.
+A mecânica distintiva do G4_ProjetoJogo é a alquimia. O jogador abre a mochila e combina dois ingredientes coletados no mundo (ervas, cogumelos, partes de criaturas e minérios) para criar uma poção. As regras definidas pelo grupo são:
+
+- nesta versão existem **8 ingredientes**, e **toda dupla tem uma receita**, inclusive um ingrediente com ele mesmo (A+A). A ordem não importa (A+B = B+A), o que resulta em C(8+1, 2) = **36 receitas**;
+- o resultado depende da **dupla de ingredientes**, e não dos elementos químicos que os compõem;
+- a primeira vez que uma dupla é combinada, a receita é **descoberta** e registrada no **Livro do Aventureiro**, ficando salva para ser refeita a partir do livro sempre que o jogador quiser;
+- cada ingrediente tem uma **composição química** (elementos da tabela periódica), que fica oculta até o ingrediente ser usado pela primeira vez em uma mistura;
+- **poções não entram em misturas**, só os ingredientes base;
+- misturar consome um de cada ingrediente (A+A consome dois), e refazer uma receita pelo livro exige ter os ingredientes na mochila.
+
+Uma única mistura exige que o código consulte o catálogo de ingredientes, verifique e altere o inventário, busque a receita, crie a poção, atualize o Livro do Aventureiro, revele composições e persista o livro em `user://livro_aventureiro.sav`. Sem um ponto de entrada único, a interface da mochila precisaria conhecer e orquestrar essas seis classes, repetindo a mesma sequência em cada tela que mistura algo (arrastar ingredientes, refazer pelo livro). Qualquer mudança nas regras, como uma nova validação ou um novo formato de salvamento, se espalharia pela UI.
+
+O `AlquimiaFacade` concentra essa orquestração. A UI chama apenas `combinar`, `refazerReceita`, `podeRefazer`, `listarReceitasDescobertas` e `consultarComposicao` e recebe um `ResultadoMistura`. No Godot, o Facade é também a **fronteira do sistema de alquimia com o motor**: do subsistema, só ele é registrado na GDExtension e carregado como *Autoload*. As classes do subsistema não são registradas e, portanto, não podem ser alcançadas pelos nós do jogo nem pelo editor.
 
 ### Modelagem (Notação UML)
 
-*A preencher: apresente a modelagem do padrão, estática ou dinâmica, na notação UML.* Identifique os participantes do padrão no modelo, inclua legenda e fonte na figura e preserve o arquivo-fonte editável na pasta `assets` desta subequipe.
+A modelagem é estática, com um diagrama de classes centrado no Facade. As classes do subsistema exibem apenas os métodos que a fachada utiliza, e as classes de domínio aparecem somente como complemento, sem atributos, pois seu detalhamento não faz parte do padrão. O arquivo-fonte editável em PlantUML está na pasta [`assets`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/docs/Base/Relatórios/SubEquipe_02/assets).
+
+| Participante do padrão | Classe no modelo | Papel |
+|------------------------|------------------|-------|
+| Client | `MochilaUI` (C++, `godot::Control`) | Interface da mochila. Conhece somente a fachada e o `ResultadoMistura`. |
+| Facade | `AlquimiaFacade` (C++, `godot::Node`) | Recebe os pedidos da UI e delega cada etapa da mistura ao subsistema, na ordem correta. |
+| Classes do subsistema | `Inventario`, `CatalogoDeIngredientes`, `TabelaDeReceitas`, `LivroDoAventureiro`, `CriadorDePocao`, `PersistenciaDoLivro` | Executam o trabalho real e não sabem da existência da fachada. |
+
+<p align="center">Tabela 2: Participantes do padrão Facade no sistema de alquimia. Fonte: Autores, 2026.</p>
+
+#### Diagrama de Classes
+
+![Diagrama de classes do Facade de alquimia](assets/facade_alquimia_classes.png)
+
+<p align="center">Figura 1: Diagrama de classes do padrão Facade aplicado ao sistema de alquimia. Fonte: Autores, 2026. <a href="assets/facade_alquimia_classes.puml">Fonte editável (PlantUML)</a>.</p>
+
+Pontos de destaque do modelo:
+
+- a `MochilaUI` tem uma única associação, com a fachada. Uma chamada a `combinar` aciona, por trás, catálogo, inventário, tabela de receitas, criador de poção, livro e persistência;
+- `combinar` e `refazerReceita` compartilham o método privado `executarMistura`, de modo que as duas entradas da UI usam uma única implementação das regras;
+- `TabelaDeReceitas` trata A+B e B+A como a mesma dupla, e `LivroDoAventureiro` guarda separadamente as receitas descobertas e as composições reveladas;
+- todas as classes do subsistema são **compostas** pela fachada. Nesta versão, o `Inventario` existe só para a alquimia. Quando o jogo tiver o jogador completo, o inventário passará a pertencer a ele e a relação vira agregação, sem mudar nada na UI;
+- além das operações de mistura, a fachada oferece consultas de leitura (`listarInventario`, `descreverReceita`, `listarIngredientes`) para que a UI consiga desenhar a tela sem acessar o subsistema diretamente.
 
 ### Implementação (Código & Vídeo com Padrão em Execução)
 
@@ -43,7 +76,144 @@ O código deste foco fica em `src/estrutural/`, conforme a organização descrit
 
 #### Código
 
-*A preencher: explique cada trecho de código dos participantes do padrão e inclua o link para o código hospedado no repositório.*
+O padrão foi implementado na Godot Engine 4.7. Todo o código do jogo está em C++, compilado como GDExtension com a biblioteca godot-cpp: a fachada, o subsistema e os nós do jogo (mochila, mundo, jogador, baús). As cenas `.tscn` apenas instanciam esses tipos, sem scripts. As instruções de compilação estão no [README do projeto](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/README.md).
+
+| Participante | Código |
+|--------------|--------|
+| Client | [`native/src/jogo/mochila_ui.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.h) e [`mochila_ui.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.cpp) |
+| Facade | [`native/src/alquimia_facade.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/alquimia_facade.h) e [`alquimia_facade.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/alquimia_facade.cpp) |
+| Subsistema | [`native/src/subsistema.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.h) e [`subsistema.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.cpp) |
+| Domínio (complemento) | [`native/src/dominio.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/dominio.h) e [`resultado_mistura.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/resultado_mistura.h) |
+| Dados (8 ingredientes e 36 receitas) | [`data/alquimia.json`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/data/alquimia.json) |
+| Teste automatizado | [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/tests/teste_facade.gd) |
+
+<p align="center">Tabela 3: Arquivos de código de cada participante do padrão. Fonte: Autores, 2026.</p>
+
+**Facade: a fronteira com o Godot.** Do sistema de alquimia, só a `AlquimiaFacade` e o `ResultadoMistura` que ela devolve são registrados no motor. As seis classes do subsistema não são registradas. Os nós do jogo são registrados como `RUNTIME_CLASS`, que não executa dentro do editor:
+
+```cpp
+void initialize_alquimia(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
+	// Do sistema de alquimia, só a fachada (e o resultado que ela devolve) são
+	// visíveis ao Godot. O subsistema não é registrado.
+	GDREGISTER_CLASS(ResultadoMistura);
+	GDREGISTER_CLASS(AlquimiaFacade);
+
+	// Nós do jogo (Client da fachada). RUNTIME: não executam dentro do editor.
+	GDREGISTER_RUNTIME_CLASS(MochilaUI);
+	GDREGISTER_RUNTIME_CLASS(Mundo);
+	// ... Jogador, Bau, IngredienteColetavel, Galinha
+}
+```
+
+A fachada compõe o subsistema e expõe métodos de alto nível. Ela é carregada como *Autoload* com o nome `Alquimia`:
+
+```cpp
+class AlquimiaFacade : public Node {
+	GDCLASS(AlquimiaFacade, Node)
+public:
+	Ref<ResultadoMistura> combinar(const String &idA, const String &idB);
+	Ref<ResultadoMistura> refazerReceita(const String &idReceita);
+	// ...
+private:
+	Ref<ResultadoMistura> executarMistura(const alquimia::Receita &receita);
+
+	alquimia::Inventario inventario;
+	alquimia::CatalogoDeIngredientes catalogo;
+	alquimia::TabelaDeReceitas tabela;
+	alquimia::LivroDoAventureiro livro;
+	alquimia::CriadorDePocao criador;
+	alquimia::PersistenciaDoLivro persistencia;
+};
+```
+
+**Facade: a orquestração escondida.** `executarMistura` é o centro do padrão. Ele concentra a sequência que, sem a fachada, a UI teria de repetir em cada tela. `combinar` e `refazerReceita` apenas validam a entrada e delegam a ele:
+
+```cpp
+Ref<ResultadoMistura> AlquimiaFacade::executarMistura(const Receita &receita) {
+	const String &a = receita.idIngredienteA;
+	const String &b = receita.idIngredienteB;
+
+	// 1. Inventário: há ingredientes suficientes? (A+A gasta dois)
+	const bool temIngredientes = (a == b)
+			? inventario.possui(a, 2)
+			: inventario.possui(a, 1) && inventario.possui(b, 1);
+	if (!temIngredientes) {
+		return ResultadoMistura::falhou(ResultadoMistura::INGREDIENTE_INSUFICIENTE, "Faltam ingredientes na mochila.");
+	}
+
+	// 2. Inventário: consome os ingredientes.
+	inventario.remover(a, 1);
+	inventario.remover(b, 1);
+
+	// 3. CriadorDePocao + Inventário: cria a poção e guarda na mochila.
+	const Pocao pocao = criador.criar(receita);
+	inventario.adicionar(pocao, 1);
+
+	// 4. LivroDoAventureiro: registra a receita e revela composições.
+	const bool receitaNova = livro.registrarReceita(receita.id);
+	// ... revela a composição de cada ingrediente usado pela primeira vez
+
+	// 5. PersistenciaDoLivro: só grava quando algo novo foi aprendido.
+	if (receitaNova || !reveladas.is_empty()) {
+		persistencia.salvar(livro);
+	}
+	return ResultadoMistura::sucedeu(receita.id, descreverPocao(pocao), receitaNova, reveladas);
+}
+```
+
+**Subsistema: cada classe resolve uma parte.** As classes do subsistema não conhecem a fachada. Um exemplo é a regra de que a ordem não importa, que fica isolada na `TabelaDeReceitas`:
+
+```cpp
+String TabelaDeReceitas::chaveDaDupla(const String &idA, const String &idB) {
+	// Ordena os ids para que A+B e B+A caiam na mesma receita.
+	const String separador("+");
+	return idA < idB ? idA + separador + idB : idB + separador + idA;
+}
+```
+
+**Client: uma chamada por ação.** A mochila inclui apenas o cabeçalho da fachada e nunca cita uma classe do subsistema. Ela encontra a fachada pelo *Autoload* `Alquimia`, e cada ação do jogador é uma única chamada:
+
+```cpp
+// comum.h: o Client só conhece a fachada, que roda como Autoload "Alquimia".
+inline AlquimiaFacade *fachada(const Node *no) {
+	return no->get_node<AlquimiaFacade>(NodePath("/root/Alquimia"));
+}
+
+// mochila_ui.cpp
+void MochilaUI::misturar() {
+	if (bancada[0].is_empty() || bancada[1].is_empty()) {
+		mostrarAviso(u("Coloque dois itens na bancada."));
+		return;
+	}
+	const Ref<ResultadoMistura> r = fachada(this)->combinar(bancada[0], bancada[1]);
+	mostrarResultado(r);
+	if (r->isSucesso()) {
+		bancada[0] = "";
+		bancada[1] = "";
+	}
+	atualizar();
+}
+```
+
+Os baús e os ingredientes do chão também são clientes da fachada: ambos entregam itens à mochila com `fachada(this)->coletarIngrediente(id, quantidade)`.
+
+O teste [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/tests/teste_facade.gd) exercita a fachada sem janela e passa em todos os cenários. Os cenários cobertos são:
+
+- descoberta de receita e revelação de composição;
+- repetição de uma receita já conhecida;
+- A+B igual a B+A;
+- recusa de poção na bancada;
+- refazer receita pelo livro;
+- falta de ingredientes;
+- as 36 combinações;
+- persistência do livro entre execuções.
+
+#### Jogo no navegador
+
+A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, fica disponível em [unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_03/jogo/](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_03/jogo/index.html). Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para a mochila.
 
 #### Vídeo
 
@@ -53,11 +223,11 @@ O código deste foco fica em `src/estrutural/`, conforme a organização descrit
 
 | Artefato relacionado | Elo com este padrão |
 |----------------------|---------------------|
-| [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica) | *A preencher: classes, fluxos ou decisões reaproveitados.* |
+| [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica) | O `modulo_mistura_quimica` (bancada de 2 slots e matriz de reações) e o arquivo `livro_aventureiro.sav` em `user://` foram detalhados no Facade como `TabelaDeReceitas`, `LivroDoAventureiro` e `PersistenciaDoLivro`. |
 | [Ata Geral 04](/Atas/AtaGeral04.md) | Decisão do grupo que atribuiu o padrão estrutural ao Subgrupo 02. |
 | [Atas do Subgrupo 02](/Atas/SubEquipe_02.md) | *A preencher: decisões que originaram o artefato.* |
 
-<p align="center">Tabela 2: Elos com outros artefatos. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 4: Elos com outros artefatos. Fonte: Autores, 2026.</p>
 
 ## Referências
 
@@ -65,7 +235,13 @@ O código deste foco fica em `src/estrutural/`, conforme a organização descrit
 
 > LARMAN, Craig. **Utilizando UML e Padrões**: uma introdução à análise e ao projeto orientados a objetos e ao desenvolvimento iterativo. 3. ed. Porto Alegre: Bookman, 2007.
 
+> REFACTORING.GURU. **Facade**. Disponível em: https://refactoring.guru/pt-br/design-patterns/facade. Acesso em: 16 out. 2026.
+
+> REFACTORING.GURU. **Padrões de projeto estruturais**. Disponível em: https://refactoring.guru/pt-br/design-patterns/structural-patterns. Acesso em: 16 out. 2026.
+
 > SERRANO, Milene; SERRANO, Maurício. **Arquitetura e Desenho de Software**. Universidade de Brasília, 2026.
+
+> UNB FCTE — ARQDSW. **GoFs Estruturais**. Módulo Padrão de Projeto. Disponível em: https://sites.google.com/view/unb-fcte-arqdsw/m%C3%B3dulos/m%C3%B3dulo-padr%C3%A3o-de-projeto/gofs-estruturais. Acesso em: 16 out. 2026.
 
 ## Nível de Contribuição dos Integrantes
 
@@ -76,7 +252,7 @@ O código deste foco fica em `src/estrutural/`, conforme a organização descrit
 | Marcelo de Araújo Lopes | *A preencher* |
 | Marcos Vinícius Gündel da Silva | *A preencher* |
 
-<p align="center">Tabela 3: Contribuição dos integrantes.</p>
+<p align="center">Tabela 5: Contribuição dos integrantes.</p>
 
 ## Histórico de Versão
 
@@ -84,4 +260,4 @@ O código deste foco fica em `src/estrutural/`, conforme a organização descrit
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | | | | |
 
-<p align="center">Tabela 4: Histórico de versão.</p>
+<p align="center">Tabela 6: Histórico de versão.</p>
