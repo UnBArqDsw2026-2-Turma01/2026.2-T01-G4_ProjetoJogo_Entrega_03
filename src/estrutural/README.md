@@ -1,6 +1,6 @@
 # GoF Estrutural: Facade no sistema de alquimia
 
-Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mochila do jogador combina ingredientes por meio de uma única classe, a `AlquimiaFacade`, que esconde o subsistema de alquimia. O jogador anda por um mapa, coleta ingredientes e abre baús; tudo o que mexe no inventário passa pela fachada. A modelagem está em [GoFEstrutural.md](../../docs/Base/Relatórios/SubEquipe_02/GoFEstrutural.md).
+Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mochila do jogador combina ingredientes por meio de uma única classe, a `AlquimiaFacade`, que esconde o subsistema de alquimia. O jogador anda por um mapa, coleta ingredientes e abre baús; tudo o que mexe no inventário passa pela fachada. A modelagem está em [Facade.md](../../docs/Base/Relatórios/SubEquipe_02/Facade.md) (e a visão geral da subequipe em [GoFEstrutural.md](../../docs/Base/Relatórios/SubEquipe_02/GoFEstrutural.md)).
 
 ## Onde está cada participante do padrão
 
