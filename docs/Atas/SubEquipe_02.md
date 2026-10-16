@@ -29,7 +29,7 @@ Toda reunião é registrada em uma ata própria, seguindo o modelo definido em [
 
 | Ata | Data | Assunto | Redator | Link |
 |:---:|:----:|---------|---------|:----:|
-| — | — | Nenhuma reunião registrada nesta entrega até o momento. | — | — |
+| 01 | 16/10/2026 | Alinhamento e Distribuição dos Padrões GoF Estruturais | João Victor da Silva Batista de Farias | [Ata 01](/Atas/AtaSub02_01.md) |
 
 <p align="center">Tabela 2: Registro de reuniões.</p>
 
