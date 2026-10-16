@@ -26,7 +26,7 @@ void MochilaUI::abrir() {
 	atualizar();
 }
 
-// --- Ações do jogador: cada uma é UMA chamada à fachada ---
+
 
 void MochilaUI::misturar() {
 	if (bancada[0].is_empty() || bancada[1].is_empty()) {
@@ -44,18 +44,6 @@ void MochilaUI::misturar() {
 
 void MochilaUI::refazer(const String &idReceita) {
 	mostrarResultado(fachada(this)->refazerReceita(idReceita));
-	atualizar();
-}
-
-void MochilaUI::coletar() {
-	fachada(this)->coletarIngredientes(5);
-	mostrarAviso(u("Você coletou mais 5 de cada ingrediente."));
-	atualizar();
-}
-
-void MochilaUI::esquecerLivro() {
-	fachada(this)->esquecerLivro();
-	mostrarAviso(u("O Livro do Aventureiro foi apagado."));
 	atualizar();
 }
 
@@ -148,14 +136,14 @@ void MochilaUI::mostrarResultado(const Ref<ResultadoMistura> &r) {
 	slotResultado->set_texture(icone(pocao["id"]));
 	String texto;
 	if (r->isReceitaNova()) {
-		texto += String("[b][color=#") + cor_destaque().to_html(false) + "]" + u("Receita nova descoberta!") + "[/color][/b]\n";
+		texto += String("[color=#") + cor_destaque().to_html(false) + "]" + u("Receita nova descoberta!") + "[/color]\n";
 	}
 	const Color corPocao = pocao["cor"];
-	texto += String("[b][color=#") + corPocao.darkened(0.35).to_html(false) + "]" + String(pocao["nome"]) + "[/color][/b]: " + String(pocao["efeito"]) + "\n";
+	texto += String("[color=#") + corPocao.darkened(0.35).to_html(false) + "]" + String(pocao["nome"]) + "[/color]: " + String(pocao["efeito"]) + "\n";
 	const Array reveladas = r->getComposicoesReveladas();
 	for (int i = 0; i < reveladas.size(); i++) {
 		const Dictionary c = reveladas[i];
-		texto += u("Composição de [b]") + String(c["nome"]) + "[/b]: " + formatarElementos(c["elementos"]) + "\n";
+		texto += u("Composição de [color=#7a3b5a]") + String(c["nome"]) + "[/color]: " + formatarElementos(c["elementos"]) + "\n";
 	}
 	resultado->set_text(texto);
 }
@@ -236,8 +224,6 @@ Control *MochilaUI::montarMochila() {
 
 	HBoxContainer *botoes = memnew(HBoxContainer);
 	botoes->add_theme_constant_override("separation", 12);
-	botoes->add_child(botao(u("Coletar ingredientes"), callable_mp(this, &MochilaUI::coletar)));
-	botoes->add_child(botao(u("Apagar livro (demo)"), callable_mp(this, &MochilaUI::esquecerLivro)));
 	if (podeFechar) {
 		botoes->add_child(botao(u("Fechar (I)"), callable_mp(this, &MochilaUI::pedirFechar)));
 	}
@@ -281,7 +267,6 @@ Control *MochilaUI::montarBancadaELivro() {
 	resultado->set_use_bbcode(true);
 	resultado->set_custom_minimum_size(Vector2(0, 150));
 	resultado->add_theme_font_size_override("normal_font_size", 16);
-	resultado->add_theme_font_size_override("bold_font_size", 16);
 	resultado->set_text(u("Escolha dois itens da mochila e clique em Misturar."));
 	coluna->add_child(resultado);
 

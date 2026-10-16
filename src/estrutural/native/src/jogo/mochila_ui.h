@@ -41,8 +41,6 @@ protected:
 
 private:
 	void refazer(const String &idReceita);
-	void coletar();
-	void esquecerLivro();
 	void tirarDaBancada(int indice);
 	void limparBancada();
 	void pedirFechar();

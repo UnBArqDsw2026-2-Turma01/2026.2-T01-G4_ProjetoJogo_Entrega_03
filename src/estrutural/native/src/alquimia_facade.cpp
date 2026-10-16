@@ -26,7 +26,7 @@ void AlquimiaFacade::_ready() {
 	coletarIngredientes(QUANTIDADE_INICIAL);
 }
 
-// --- Operações de alto nível ---
+
 
 Ref<ResultadoMistura> AlquimiaFacade::combinar(const String &idA, const String &idB) {
 	if (!catalogo.buscar(idA) || !catalogo.buscar(idB)) {
@@ -73,7 +73,7 @@ Array AlquimiaFacade::consultarComposicao(const String &idIngrediente) const {
 	return elementosDe(*ingrediente);
 }
 
-// O coração da fachada: a sequência que a UI não precisa conhecer.
+
 Ref<ResultadoMistura> AlquimiaFacade::executarMistura(const Receita &receita) {
 	const String &a = receita.idIngredienteA;
 	const String &b = receita.idIngredienteB;
