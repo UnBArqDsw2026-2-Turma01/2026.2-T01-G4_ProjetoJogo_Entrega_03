@@ -9,16 +9,39 @@ https://onelevelstudio.itch.io/tinypixel e roda (de dentro de src/estrutural/):
 import shutil
 import subprocess
 import sys
+import tempfile
+import zipfile
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
 
-def main(pasta_pack):
-    pack = Path(pasta_pack)
-    assets = pack / "Assets - For all game engines and tools"
-    if not assets.is_dir():
-        sys.exit(f"Pasta não encontrada: {assets}")
+def main(origem_pack):
+    origem = Path(origem_pack)
+    temp_dir = None
+
+    if origem.is_file() and (origem.suffix.lower() == ".zip" or zipfile.is_zipfile(origem)):
+        print(f"Descompactando arquivo zip '{origem}'...")
+        temp_dir = tempfile.TemporaryDirectory()
+        with zipfile.ZipFile(origem, "r") as z:
+            z.extractall(temp_dir.name)
+        # Procura a pasta que contém "Assets - For all game engines and tools"
+        candidatos = list(Path(temp_dir.name).rglob("Assets - For all game engines and tools"))
+        if not candidatos:
+            sys.exit(f"Erro: 'Assets - For all game engines and tools' não encontrado no zip {origem}")
+        assets = candidatos[0]
+        pack = assets.parent
+    else:
+        pack = origem
+        assets = pack / "Assets - For all game engines and tools"
+        if not assets.is_dir():
+            # Tenta busca recursiva na pasta caso o caminho informado seja o diretório pai
+            candidatos = list(pack.rglob("Assets - For all game engines and tools"))
+            if candidatos:
+                assets = candidatos[0]
+                pack = assets.parent
+            else:
+                sys.exit(f"Pasta não encontrada: {assets}")
 
     ui = RAIZ / "assets" / "ui"
     jogador = RAIZ / "assets" / "mundo" / "jogador"
