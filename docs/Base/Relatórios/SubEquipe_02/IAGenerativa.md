@@ -1,4 +1,4 @@
-# SubEquipe_02 — IA Generativa
+# SubEquipe 02: IA Generativa
 
 ## Descrição
 
@@ -23,7 +23,7 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 | Nome do Membro | Lições Aprendidas | Uso da IA Generativa (senso crítico) |
 |----------------|-------------------|--------------------------------------|
 | João Igor Pereira da Costa | *A preencher* | *A preencher* |
-| João Victor da Silva Batista de Farias | Padrão Composite aplicado a interfaces em C++; separação entre hierarquia visual e lógica de negócio; integração nativa com GDExtension e Godot 4 | Uso do Antigravity (Gemini) com a skill `grill-me` para sabatinar decisões arquiteturais; apoio na refatoração da UI, resolução de compilação da GDExtension (.so) no Linux e scripts de assets |
+| João Victor da Silva Batista de Farias | Separação entre árvore de apresentação (Composite) e regras de domínio (Facade); reuso de painéis de UI entre combate e mochila | Uso do Antigravity (Gemini) com a skill `grill-me` para sabatinar o design arquitetural; apoio na compilação nativa (Linux .so) e scripts de automação; correção crítica de erros de exportação web e carregamento de assets |
 | Marcelo de Araújo Lopes | Facade como interface única de um subsistema; fronteira C++/Godot com GDExtension; layout de diagramas UML legíveis | Claude e Gemini para entender o Facade, gerar assets, apoiar o C++, depurar e organizar a documentação; falhas no diagrama e na versão web corrigidas após testes |
 | Marcos Vinícius Gündel da Silva | *A preencher* | *A preencher* |
 
@@ -43,19 +43,25 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 
 #### Lições Aprendidas
 
-A implementação do padrão Composite em C++ para a interface gráfica mostrou como tratar elementos individuais (botões, rótulos e barras de progresso) e agrupamentos complexos (painéis e menus) sob a mesma interface comum (`UIComponent`).
+Antes de aplicar o Composite, a interface da mochila misturava construção visual de botões diretamente com as chamadas de mistura química da bancada. A principal lição prática foi separar o que é apresentação visual do que é orquestração de regras de negócio.
 
-A principal lição prática foi delimitar com clareza as fronteiras entre os padrões da equipe: a `AlquimiaFacade` deve responder unicamente pelas regras e estado do subsistema de alquimia, enquanto a árvore de UI do Composite gerencia a composição visual, a renderização hierárquica e o repasse de comandos de entrada. Essa divisão evitou que a interface ficasse fortemente acoplada às regras de síntese das poções.
+Quando estruturei a tela em uma árvore de componentes (`UIComponent`), ficou nítido que a `AlquimiaFacade` só precisa receber o comando final (`cmd_mix`) e devolver o resultado da mistura. A árvore de UI cuida de propagar cliques, calcular recuos visuais e decidir o que exibir ou esconder sem poluir o subsistema de poções. Essa separação também permitiu reaproveitar o mesmo painel da bancada dentro do menu de combate (`BattleHUD`) sem duplicar controles visuais.
 
 #### Uso da IA Generativa (senso crítico)
 
-Utilizei o assistente Antigravity com o modelo Gemini. Para conduzir o planejamento arquitetural, ativei a skill `grill-me`. Essa skill funciona como uma sabatina técnica iterativa: em vez de gerar código diretamente, a IA assume o papel de entrevistadora e faz perguntas críticas sobre o design, apontando riscos, suposições frágeis e casos de borda antes de qualquer linha ser escrita.
+Usei o assistente Antigravity com o modelo Gemini. Para conduzir as decisões de arquitetura antes de tocar no código, ativei a skill `grill-me`. Essa skill coloca a IA no papel de entrevistadora crítica: em vez de gerar código por antecipação, ela faz perguntas duras sobre o design proposto, apontando ambiguidades, suposições frágeis e casos de borda.
 
-Com essa abordagem, validei a estrutura de classes do Composite, a transferência de responsabilidades da `MochilaUI` para o modelo em árvore e a divisão de escopo entre os quatro integrantes da subequipe.
+As perguntas da ferramenta me ajudaram a alinhar como a árvore trataria a propagação de eventos polimórficos de trás para frente, como isolar a lógica de interface do motor de jogo para rodar testes no terminal e como dividir as fronteiras entre o Composite e a Facade do Marcelo.
 
-A ferramenta também auxiliou na depuração do ambiente Linux (construção da biblioteca compartilhada `.so` com SCons/godot-cpp, correção do `alquimia.gdextension`) e na criação de scripts utilitários em Python para importação e geração de placeholders visuais.
+A IA também serviu para acelerar tarefas mecânicas e de infraestrutura: gerou scripts em Python para converter e importar o pacote de texturas TinyPixel, configurou o Makefile com testes de console e auxiliou nos comandos de compilação da biblioteca compartilhada (`.so`) para Linux via SCons e godot-cpp.
 
-Como limitação, a IA sugeriu inicialmente configurações de extensão restritas a Windows e Web, além de tentar carregar assets ausentes sem tratamento de exceção, o que exigiu intervenção manual, análise dos logs do motor e testes headlessly no terminal para garantir a estabilidade do jogo.
+Por outro lado, o uso exigiu intervenção manual e senso crítico em pontos importantes onde a ferramenta falhou:
+
+1. **Compilação e suporte a plataformas:** a IA assumiu inicialmente arquivos voltados apenas para Windows e Web, deixando o arquivo de configuração `.gdextension` sem a referência da biblioteca Linux (`.so`), o que gerava falha de carregamento no motor.
+2. **Conflito de versões de exportação web:** ao gerar o pacote `.pck` para a versão do navegador, houve incompatibilidade de cabeçalho entre o Godot 4.8 e o 4.7, além de retenção de arquivos antigos pelo cache do navegador. Foi preciso depurar os cabeçalhos HTTP via terminal e configurar `cache: 'no-store'` no carregador JavaScript.
+3. **Erros de importação de texturas:** a ferramenta tentou referenciar caminhos inexistentes de sprites sem tratamento de erro, gerando avisos no log da engine até que criássemos um gerador de placeholders e importador automático em Python.
+
+A experiência mostrou que a IA funciona bem como debatedora de arquitetura e geradora de scripts de apoio, mas confiar cegamente no código ou na configuração sugerida sem testar cada etapa no terminal rapidamente quebra a compilação do projeto.
 
 ### Marcelo de Araújo Lopes
 
@@ -119,5 +125,6 @@ Usei duas ferramentas: o **Claude** (Anthropic), pelo Claude Code integrado ao V
 | 1.0 | | | | |
 | 1.1 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de Marcelo de Araújo Lopes | [Marcelo de Araújo Lopes](https://github.com/MatielloAL) | |
 | 1.2 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de João Victor da Silva Batista de Farias | [João Victor da Silva Batista de Farias](https://github.com/beyondmagic) | |
+| 1.3 | 17/10/2026 | Humanização e detalhamento crítico das lições aprendidas e do uso de IA Generativa de João Victor da Silva Batista de Farias | [João Victor da Silva Batista de Farias](https://github.com/beyondmagic) | [Marcelo de Araújo Lopes](https://github.com/MatielloAL) |
 
 <p align="center">Tabela 3: Histórico de versão.</p>
