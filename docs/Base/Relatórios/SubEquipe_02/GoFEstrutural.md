@@ -261,12 +261,12 @@ A versão web do projeto, compilada com a extensão C++ em WebAssembly, roda dir
 
 <div style="max-width:960px;margin:0 auto;">
   <div style="position:relative;width:100%;padding-top:56.25%;background:#3b2a2a url('jogo/capa.jpg') center/cover no-repeat;border-radius:6px;overflow:hidden;">
-    <iframe data-src="jogo/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="GoF Estrutural em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <iframe data-src="jogo/index.html?v=4.7.2" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="GoF Estrutural em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
     <button type="button" onclick="var p=this.parentNode,j=p.querySelector('iframe');p.style.background='#000';j.src=j.dataset.src;j.style.display='block';this.remove();" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 40px;font-size:22px;font-weight:bold;color:#3b2a2a;background:#f3e6cf;border:3px solid #3b2a2a;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #3b2a2a;">&#9654; Jogar</button>
   </div>
 </div>
 
-<p align="center">Jogo 1: Demonstração dos padrões GoF Estruturais, em execução no navegador. Fonte: Autores, 2026. <a href="jogo/index.html" target="_blank">Abrir em tela cheia</a>.</p>
+<p align="center">Jogo 1: Demonstração dos padrões GoF Estruturais, em execução no navegador. Fonte: Autores, 2026. <a href="jogo/index.html?v=4.7.2" target="_blank">Abrir em tela cheia</a>.</p>
 
 ---
 
