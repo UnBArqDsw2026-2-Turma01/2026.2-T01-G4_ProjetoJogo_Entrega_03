@@ -2,3 +2,4 @@ node_modules/
 bun.lock
 *.zip
 TinyPixel_*/
+.agents/

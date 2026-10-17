@@ -23,7 +23,7 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 | Nome do Membro | Lições Aprendidas | Uso da IA Generativa (senso crítico) |
 |----------------|-------------------|--------------------------------------|
 | João Igor Pereira da Costa | *A preencher* | *A preencher* |
-| João Victor da Silva Batista de Farias | *A preencher* | *A preencher* |
+| João Victor da Silva Batista de Farias | Padrão Composite aplicado a interfaces em C++; separação entre hierarquia visual e lógica de negócio; integração nativa com GDExtension e Godot 4 | Uso do Antigravity (Gemini) com a skill `grill-me` para sabatinar decisões arquiteturais; apoio na refatoração da UI, resolução de compilação da GDExtension (.so) no Linux e scripts de assets |
 | Marcelo de Araújo Lopes | Facade como interface única de um subsistema; fronteira C++/Godot com GDExtension; layout de diagramas UML legíveis | Claude e Gemini para entender o Facade, gerar assets, apoiar o C++, depurar e organizar a documentação; falhas no diagrama e na versão web corrigidas após testes |
 | Marcos Vinícius Gündel da Silva | *A preencher* | *A preencher* |
 
@@ -43,11 +43,19 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 
 #### Lições Aprendidas
 
-*A preencher.*
+A implementação do padrão Composite em C++ para a interface gráfica mostrou como tratar elementos individuais (botões, rótulos e barras de progresso) e agrupamentos complexos (painéis e menus) sob a mesma interface comum (`UIComponent`).
+
+A principal lição prática foi delimitar com clareza as fronteiras entre os padrões da equipe: a `AlquimiaFacade` deve responder unicamente pelas regras e estado do subsistema de alquimia, enquanto a árvore de UI do Composite gerencia a composição visual, a renderização hierárquica e o repasse de comandos de entrada. Essa divisão evitou que a interface ficasse fortemente acoplada às regras de síntese das poções.
 
 #### Uso da IA Generativa (senso crítico)
 
-*A preencher: ferramenta e modelo utilizados, finalidade, vantagens, limitações observadas e evidências, como o histórico da conversa.*
+Utilizei o assistente Antigravity com o modelo Gemini. Para conduzir o planejamento arquitetural, ativei a skill `grill-me`. Essa skill funciona como uma sabatina técnica iterativa: em vez de gerar código diretamente, a IA assume o papel de entrevistadora e faz perguntas críticas sobre o design, apontando riscos, suposições frágeis e casos de borda antes de qualquer linha ser escrita.
+
+Com essa abordagem, validei a estrutura de classes do Composite, a transferência de responsabilidades da `MochilaUI` para o modelo em árvore e a divisão de escopo entre os quatro integrantes da subequipe.
+
+A ferramenta também auxiliou na depuração do ambiente Linux (construção da biblioteca compartilhada `.so` com SCons/godot-cpp, correção do `alquimia.gdextension`) e na criação de scripts utilitários em Python para importação e geração de placeholders visuais.
+
+Como limitação, a IA sugeriu inicialmente configurações de extensão restritas a Windows e Web, além de tentar carregar assets ausentes sem tratamento de exceção, o que exigiu intervenção manual, análise dos logs do motor e testes headlessly no terminal para garantir a estabilidade do jogo.
 
 ### Marcelo de Araújo Lopes
 
@@ -110,5 +118,6 @@ Usei duas ferramentas: o **Claude** (Anthropic), pelo Claude Code integrado ao V
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | | | | |
 | 1.1 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de Marcelo de Araújo Lopes | [Marcelo de Araújo Lopes](https://github.com/MatielloAL) | |
+| 1.2 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de João Victor da Silva Batista de Farias | [João Victor da Silva Batista de Farias](https://github.com/beyondmagic) | |
 
 <p align="center">Tabela 3: Histórico de versão.</p>
