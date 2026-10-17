@@ -211,16 +211,7 @@ O teste [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/202
 
 #### Jogo no navegador
 
-A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, roda direto nesta página. Clique em **Jogar** para iniciar e, depois, clique dentro do jogo antes de usar o teclado. Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para abrir a mochila e Esc para fechá-la.
-
-<div style="max-width:960px;margin:0 auto;">
-  <div style="position:relative;width:100%;padding-top:56.25%;background:#3b2a2a url('jogo/capa.jpg') center/cover no-repeat;border-radius:6px;overflow:hidden;">
-    <iframe data-src="jogo/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="Facade de alquimia em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
-    <button type="button" onclick="var p=this.parentNode,j=p.querySelector('iframe');p.style.background='#000';j.src=j.dataset.src;j.style.display='block';this.remove();" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 40px;font-size:22px;font-weight:bold;color:#3b2a2a;background:#f3e6cf;border:3px solid #3b2a2a;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #3b2a2a;">&#9654; Jogar</button>
-  </div>
-</div>
-
-<p align="center">Jogo 1: Sistema de alquimia com o padrão Facade, em execução no navegador. Fonte: Marcelo, 2026. <a href="jogo/index.html" target="_blank">Abrir em tela cheia</a>.</p>
+A demonstração jogável integrada em WebAssembly foi movida para o artefato de visão geral: [GoF Estrutural (Visão Geral) - Jogo no Navegador](Base/Relatórios/SubEquipe_02/GoFEstrutural.md?id=jogo-no-navegador).
 
 #### Vídeo
 
@@ -271,5 +262,6 @@ Apresentação do padrão Facade: o problema, a modelagem UML, o código dos par
 | 1.0 | 11/10/2026 | Criação da estrutura do artefato | Marcos Vinícius Gündel da Silva | |
 | 1.1 | 16/10/2026 | Escolha do padrão Facade, contexto do problema, modelagem UML (diagrama de classes), implementação em C++ (GDExtension) com explicação do código, rastreabilidade, versão web jogável e vídeo do padrão em execução | Marcelo de Araújo Lopes | |
 | 1.2 | 16/10/2026 | Migração do conteúdo de Facade para arquivo dedicado (`Facade.md`) | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.3 | 16/10/2026 | Movimentação da demonstração jogável em WebAssembly para o documento de visão geral (`GoFEstrutural.md`) | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 
 <p align="center">Tabela 6: Histórico de versão.</p>

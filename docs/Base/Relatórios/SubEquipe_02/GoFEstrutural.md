@@ -255,13 +255,28 @@ public:
 
 ---
 
+## Jogo no Navegador
+
+A versão web do projeto, compilada com a extensão C++ em WebAssembly, roda direto nesta página. Ela demonstra a integração prática dos padrões estruturais: o subsistema de regras e combinações de alquimia (Facade) e a apresentação visual com navegação desacoplada (Composite). Clique em **Jogar** para iniciar e clique dentro do jogo antes de usar o teclado. Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para abrir a mochila e Esc para fechá-la.
+
+<div style="max-width:960px;margin:0 auto;">
+  <div style="position:relative;width:100%;padding-top:56.25%;background:#3b2a2a url('jogo/capa.jpg') center/cover no-repeat;border-radius:6px;overflow:hidden;">
+    <iframe data-src="jogo/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="GoF Estrutural em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <button type="button" onclick="var p=this.parentNode,j=p.querySelector('iframe');p.style.background='#000';j.src=j.dataset.src;j.style.display='block';this.remove();" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 40px;font-size:22px;font-weight:bold;color:#3b2a2a;background:#f3e6cf;border:3px solid #3b2a2a;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #3b2a2a;">&#9654; Jogar</button>
+  </div>
+</div>
+
+<p align="center">Jogo 1: Demonstração dos padrões GoF Estruturais, em execução no navegador. Fonte: Autores, 2026. <a href="jogo/index.html" target="_blank">Abrir em tela cheia</a>.</p>
+
+---
+
 ## Navegação pelos Artefatos Individuais
 
 Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e execuções práticas de cada padrão, acesse os artefatos dedicados:
 
 - **[1.1 GoF Composite — João Victor da Silva Batista de Farias](Base/Relatórios/SubEquipe_02/Composite.md):** Modelagem e implementação de hierarquia de UI / HUD de Batalha com componentes folhas (`UILabel`, `UIButton`, `UIProgressBar`) e nós compostos (`UIPanel`, `BattleHUD`), com propagação recursiva de comandos e renderização unificada em C++17 e GDScript.
 - **[1.2 GoF Decorator — Marcos Vinícius Gündel da Silva](Base/Relatórios/SubEquipe_02/Decorator.md):** Modelagem e implementação do padrão Decorator para enriquecimento dinâmico de entidades/itens alquímicos.
-- **[1.3 GoF Facade — Marcelo de Araújo Lopes](Base/Relatórios/SubEquipe_02/Facade.md):** Fachada unificada em C++ com GDExtension para o subsistema de alquimia, catálogo de 8 ingredientes e 36 receitas, jogo jogável no navegador via WebAssembly e vídeo de demonstração.
+- **[1.3 GoF Facade — Marcelo de Araújo Lopes](Base/Relatórios/SubEquipe_02/Facade.md):** Fachada unificada em C++ com GDExtension para o subsistema de alquimia, catálogo de 8 ingredientes e 36 receitas, testes de cobertura e vídeo de demonstração.
 
 ---
 
@@ -312,5 +327,6 @@ Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e
 | 1.0 | 16/10/2026 | Estruturação da visão geral integrada dos 4 padrões estruturais em C++, arquitetura de integração e matriz de rastreabilidade | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
 | 1.1 | 16/10/2026 | Separação do padrão Facade para artefato dedicado (`Facade.md`) e consolidação da visão geral integrada | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 | 1.2 | 16/10/2026 | Adição da análise crítica de arquitetura e proposta de refatoração integrando o Composite como fundação de UI para a Facade e o produto final | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
+| 1.3 | 16/10/2026 | Inclusão da demonstração jogável em WebAssembly (Godot 4 e C++) integrando os padrões estruturais | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 
 <p align="center">Tabela 4: Histórico de versão.</p>
