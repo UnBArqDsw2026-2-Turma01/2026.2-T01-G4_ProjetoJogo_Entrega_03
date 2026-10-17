@@ -37,13 +37,25 @@ py -m SCons platform=windows target=template_debug
 
 A DLL é gerada em `bin/`.
 
-Os assets do TinyPixel não estão no repositório, porque a licença proíbe redistribuir os arquivos do pack. Baixe o [TinyPixel Starter Edition](https://onelevelstudio.itch.io/tinypixel), extraia e importe (isso também gera o mapa):
+### Assets visuais (Jogador, Galinha, Mapa e UI)
 
+Os assets originais do TinyPixel não ficam no repositório por restrições de licença. Para rodar o jogo imediatamente sem erros:
+
+**Opção 1 (Rápida - Placeholders inclusos):**
+Gera os sprites em pixel art e o mapa proceduralmente com Pillow:
+```bash
+cd src/estrutural
+python3 tools/gerar_placeholders.py
+```
+
+**Opção 2 (Pack TinyPixel oficial):**
+Baixe o [TinyPixel Starter Edition](https://onelevelstudio.itch.io/tinypixel), extraia e importe:
 ```bash
 cd src/estrutural
 pip install pillow
 py tools/importar_tinypixel.py "<pasta TinyPixel_StarterEdition_v1.0>"
-``` Depois, abra `src/estrutural/project.godot` no Godot e rode a cena principal (F5).
+```
+Depois, abra `src/estrutural/project.godot` no Godot e rode a cena principal (F5).
 
 ## Build para web
 
