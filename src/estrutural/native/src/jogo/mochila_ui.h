@@ -7,6 +7,7 @@
 // nem persistência: tudo isso fica escondido atrás da fachada.
 
 #include "resultado_mistura.h"
+#include "../../../composite/mochila_composite.hpp"
 
 #include <godot_cpp/classes/button.hpp>
 #include <godot_cpp/classes/control.hpp>
@@ -35,6 +36,9 @@ public:
 
 	void setPodeFechar(bool p_pode) { podeFechar = p_pode; }
 	bool getPodeFechar() const { return podeFechar; }
+
+	// Acesso à árvore de apresentação baseada no padrão GoF Composite
+	std::shared_ptr<G4UI::MochilaComposite> getCompositeUI() const { return compositeUI; }
 
 protected:
 	static void _bind_methods();
@@ -79,4 +83,7 @@ private:
 	RichTextLabel *resultado = nullptr;
 	Label *contadorLivro = nullptr;
 	VBoxContainer *listaLivro = nullptr;
+
+	// Árvore de componentes do padrão Composite
+	std::shared_ptr<G4UI::MochilaComposite> compositeUI = nullptr;
 };

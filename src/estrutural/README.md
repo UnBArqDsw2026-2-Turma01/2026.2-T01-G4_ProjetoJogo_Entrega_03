@@ -1,6 +1,6 @@
 # GoF Estrutural: Facade no sistema de alquimia
 
-Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mochila do jogador combina ingredientes por meio de uma única classe, a `AlquimiaFacade`, que esconde o subsistema de alquimia. O jogador anda por um mapa, coleta ingredientes e abre baús; tudo o que mexe no inventário passa pela fachada. A modelagem está em [GoFEstrutural.md](../../docs/Base/Relatórios/SubEquipe_02/GoFEstrutural.md).
+Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mochila do jogador combina ingredientes por meio de uma única classe, a `AlquimiaFacade`, que esconde o subsistema de alquimia. O jogador anda por um mapa, coleta ingredientes e abre baús; tudo o que mexe no inventário passa pela fachada. A modelagem está em [Facade.md](../../docs/Base/Relatórios/SubEquipe_02/Facade.md) (e a visão geral da subequipe em [GoFEstrutural.md](../../docs/Base/Relatórios/SubEquipe_02/GoFEstrutural.md)).
 
 ## Onde está cada participante do padrão
 
@@ -13,9 +13,21 @@ Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mo
 | Dados (8 ingredientes, 36 receitas) | [`data/alquimia.json`](data/alquimia.json) |
 | Mundo de teste (mapa, baús, jogador) | [`native/src/jogo/`](native/src/jogo/), [`data/mapa.json`](data/mapa.json), [`data/baus.json`](data/baus.json) |
 
-## Como compilar e rodar (Windows)
+## Como compilar e rodar
 
-Pré-requisitos: Godot 4.7, Python 3 com `pip install scons`, e o Visual Studio Build Tools (C++).
+Pré-requisitos: Godot 4.7+, Python 3 com `pip install scons`, e compilador C++ (GCC/Clang no Linux, MSVC no Windows).
+
+### Linux
+
+```bash
+cd src/estrutural/native
+git clone --depth 1 https://github.com/godotengine/godot-cpp.git   # se ainda não clonado
+python3 -m SCons platform=linux target=template_debug -j$(nproc)
+```
+
+A biblioteca compartilhada é gerada em `bin/libalquimia.linux.template_debug.x86_64.so`.
+
+### Windows
 
 ```bash
 cd src/estrutural/native
@@ -25,13 +37,25 @@ py -m SCons platform=windows target=template_debug
 
 A DLL é gerada em `bin/`.
 
-Os assets do TinyPixel não estão no repositório, porque a licença proíbe redistribuir os arquivos do pack. Baixe o [TinyPixel Starter Edition](https://onelevelstudio.itch.io/tinypixel), extraia e importe (isso também gera o mapa):
+### Assets visuais (Jogador, Galinha, Mapa e UI)
 
+Os assets originais do TinyPixel não ficam no repositório por restrições de licença. Para rodar o jogo imediatamente sem erros:
+
+**Opção 1 (Rápida - Placeholders inclusos):**
+Gera os sprites em pixel art e o mapa proceduralmente com Pillow:
+```bash
+cd src/estrutural
+python3 tools/gerar_placeholders.py
+```
+
+**Opção 2 (Pack TinyPixel oficial):**
+Baixe o [TinyPixel Starter Edition](https://onelevelstudio.itch.io/tinypixel), extraia e importe:
 ```bash
 cd src/estrutural
 pip install pillow
 py tools/importar_tinypixel.py "<pasta TinyPixel_StarterEdition_v1.0>"
-``` Depois, abra `src/estrutural/project.godot` no Godot e rode a cena principal (F5).
+```
+Depois, abra `src/estrutural/project.godot` no Godot e rode a cena principal (F5).
 
 ## Build para web
 

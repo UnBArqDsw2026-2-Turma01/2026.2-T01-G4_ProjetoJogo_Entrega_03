@@ -142,7 +142,8 @@ const Preloader = /** @constructor */ function () { // eslint-disable-line no-un
 			loaded: 0,
 			done: false,
 		};
-		return fetch(file).then(function (response) {
+		const url = file + (file.indexOf('?') === -1 ? '?v=4.7.2' : '');
+		return fetch(url, { cache: 'no-store' }).then(function (response) {
 			if (!response.ok) {
 				return Promise.reject(new Error(`Failed loading file '${file}'`));
 			}

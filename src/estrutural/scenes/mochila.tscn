@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c584w7ctxuvx6"]
 
-[node name="Mochila" type="MochilaUI"]
+[node name="Mochila" type="MochilaUI" unique_id=1792016954]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

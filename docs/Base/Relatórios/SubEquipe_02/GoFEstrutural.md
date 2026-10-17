@@ -1,246 +1,297 @@
-# SubEquipe_02 — GoF Estrutural
+# SubEquipe_02 — GoF Estrutural (Visão Geral)
 
 ## Descrição
 
-Artefato do **FOCO_02: GoFs Estruturais & IA Generativa**, sob responsabilidade da SubEquipe_02. Documenta a aplicação de um padrão de projeto GoF Estrutural ao **G4_ProjetoJogo**, com o contexto do problema, a modelagem na notação UML, o código e o vídeo com o padrão em execução.
+Artefato integrador do **FOCO_02: GoFs Estruturais & IA Generativa**, sob responsabilidade da **SubEquipe_02**. Apresenta a visão global e arquitetural dos padrões de projeto GoF Estruturais aplicados ao **G4_ProjetoJogo**, a distribuição dos padrões entre os 4 integrantes, a arquitetura modular de integração em C++ e a matriz de rastreabilidade com as entregas anteriores.
 
-Os padrões estruturais tratam de como classes e objetos são compostos para formar estruturas maiores (GAMMA et al., 2000). Pertencem a essa categoria os padrões Adapter, Bridge, Composite, Decorator, Facade, Flyweight e Proxy.
+Os padrões estruturais tratam de como classes e objetos são compostos para formar estruturas maiores, mantendo essas estruturas flexíveis e eficientes (GAMMA et al., 2000). A SubEquipe 02 planejou a implementação de padrões estruturais em **C++ (C++17 e GDExtension para Godot 4.7)** cobrindo as camadas de Apresentação (UI), Orquestração de Subsistemas e Composição Dinâmica de Entidades.
 
-> **Página em elaboração.** A estrutura segue o [Artefato Padrão](/Guias/ArtefatoPadrao.md) e as seções exigidas pelo modelo da disciplina. Substitua cada trecho marcado com *A preencher* e remova esta nota quando o artefato estiver concluído.
+---
 
 ## Objetivo
 
-Atender à entrega mínima do foco: **um GoF Estrutural, com modelo, código e vídeo com o padrão em execução**. Além disso, justificar a escolha do padrão com base na literatura e manter os elos com os artefatos das entregas anteriores.
+Atender e superar a entrega do foco estrutural fornecendo:
+1. Uma **visão arquitetural integrada** conectando os padrões desenvolvidos pelos membros da subequipe;
+2. Documentação individualizada e aprofundada para cada padrão (modelo UML, código C++, testes/demo e vídeo em execução);
+3. Rastreabilidade bidirecional com os artefatos da Entrega 02 e as decisões registradas em ata.
 
-## Metodologia
+---
 
-*A preencher: como ocorreu o trabalho em equipe neste foco.* Registre as reuniões realizadas, com link para as [atas do Subgrupo 02](/Atas/SubEquipe_02.md), os critérios usados para escolher o padrão, as ferramentas de modelagem e de desenvolvimento, a divisão de tarefas e a forma de revisão. Vídeos das reuniões ajudam a evidenciar o processo.
+## Metodologia e Divisão do Trabalho
 
-## Conteúdo
+A estratégia de trabalho da SubEquipe 02 foi alinhada na [Ata 01 (16/10/2026)](/Atas/AtaSub02_01.md), com reuniões e registros no repositório. Para assegurar autonomia criativa e foco técnico aprofundado, cada integrante assumiu a responsabilidade por um padrão GoF Estrutural independente, implementado em C++:
 
-### Padrão Escolhido
+### Distribuição dos Padrões na SubEquipe 02
 
-| Item | Descrição |
-|------|-----------|
-| Padrão | Facade (Fachada) |
-| Categoria | GoF Estrutural |
-| Intenção do padrão | Fornecer uma interface unificada para um conjunto de interfaces de um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. |
-| Justificativa da escolha | O sistema de alquimia envolve seis classes que precisam colaborar em uma ordem precisa a cada mistura. O problema não é de interfaces incompatíveis (Adapter), de hierarquia parte-todo (Composite), de responsabilidades acrescentadas em tempo de execução (Decorator), de controle de acesso (Proxy), de economia de memória com muitos objetos (Flyweight) nem de duas dimensões que variam de forma independente (Bridge). É um problema de **complexidade de uso**, exatamente o que o Facade resolve (REFACTORING.GURU, 2026). |
+| Integrante | Padrão GoF | Linguagem / Plataforma | Módulo / Domínio no Jogo | Documentação | Código no Repositório |
+|------------|:----------:|:----------------------:|--------------------------|:------------:|:---------------------:|
+| **João Victor da Silva Batista de Farias** ([@beyondmagic](https://github.com/beyondmagic)) | **Composite** | C++17 / Godot | Interface de Batalha (BattleHUD), Menus e Painéis em Árvore | [1.1 GoF Composite](Base/Relatórios/SubEquipe_02/Composite.md) | [`src/estrutural/composite/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/composite/) |
+| **Marcos Vinícius Gündel da Silva** ([@MarcosViniciusG](https://github.com/MarcosViniciusG)) | **Decorator** | C++17 / Godot | Extensão Dinâmica de Entidades e Efeitos de Poções/Itens | [1.2 GoF Decorator](Base/Relatórios/SubEquipe_02/Decorator.md) | [`src/estrutural/decorator/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/decorator/) |
+| **Marcelo de Araújo Lopes** ([@MatielloAL](https://github.com/MatielloAL)) | **Facade** | C++ GDExtension / Godot 4.7 | Orquestração do Subsistema de Alquimia, Mochila e Mundo | [1.3 GoF Facade](Base/Relatórios/SubEquipe_02/Facade.md) | [`src/estrutural/native/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/native/) |
+| **João Igor Pereira da Costa** ([@JoaoPC10](https://github.com/JoaoPC10)) | *A definir* | C++17 / Godot | Domínio em definição pelo autor | *(Em definição)* | *(Em definição)* |
 
-<p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Marcelo, 2026.</p>
+<p align="center">Tabela 1: Distribuição dos padrões estruturais entre os membros da SubEquipe 02. Fonte: Autores, 2026.</p>
 
-### Contexto (Problema)
+---
 
-A mecânica distintiva do G4_ProjetoJogo é a alquimia. O jogador abre a mochila e combina dois ingredientes coletados no mundo (ervas, cogumelos, partes de criaturas e minérios) para criar uma poção. As regras definidas pelo grupo são:
+## Proposta de Integração Modular entre os Padrões em C++
 
-- nesta versão existem **8 ingredientes**, e **toda dupla tem uma receita**, inclusive um ingrediente com ele mesmo (A+A). A ordem não importa (A+B = B+A), o que resulta em C(8+1, 2) = **36 receitas**;
-- o resultado depende da **dupla de ingredientes**, e não dos elementos químicos que os compõem;
-- a primeira vez que uma dupla é combinada, a receita é **descoberta** e registrada no **Livro do Aventureiro**, ficando salva para ser refeita a partir do livro sempre que o jogador quiser;
-- cada ingrediente tem uma **composição química** (elementos da tabela periódica), que fica oculta até o ingrediente ser usado pela primeira vez em uma mistura;
-- **poções não entram em misturas**, só os ingredientes base;
-- misturar consome um de cada ingrediente (A+A consome dois), e refazer uma receita pelo livro exige ter os ingredientes na mochila.
+A arquitetura do jogo conecta os padrões estruturais de forma modular, permitindo que a árvore de apresentação gráfica converse com o subsistema de regras e com as entidades dinâmicas sem acoplamento direto:
 
-Uma única mistura exige que o código consulte o catálogo de ingredientes, verifique e altere o inventário, busque a receita, crie a poção, atualize o Livro do Aventureiro, revele composições e persista o livro em `user://livro_aventureiro.sav`. Sem um ponto de entrada único, a interface da mochila precisaria conhecer e orquestrar essas seis classes, repetindo a mesma sequência em cada tela que mistura algo (arrastar ingredientes, refazer pelo livro). Qualquer mudança nas regras, como uma nova validação ou um novo formato de salvamento, se espalharia pela UI.
+```mermaid
+flowchart TD
+    subgraph Apresentacao["Camada de Apresentação (UI)"]
+        UI["Padrão COMPOSITE (João Victor)\nHierarquia de UI / HUD em C++"]
+    end
 
-O `AlquimiaFacade` concentra essa orquestração. A UI chama apenas `combinar`, `refazerReceita`, `podeRefazer`, `listarReceitasDescobertas` e `consultarComposicao` e recebe um `ResultadoMistura`. No Godot, o Facade é também a **fronteira do sistema de alquimia com o motor**: do subsistema, só ele é registrado na GDExtension e carregado como *Autoload*. As classes do subsistema não são registradas e, portanto, não podem ser alcançadas pelos nós do jogo nem pelo editor.
+    subgraph Orquestracao["Camada de Orquestração / Subsistemas"]
+        FAC["Padrão FACADE (Marcelo)\nInterface unificada de subsistema em C++"]
+    end
 
-### Modelagem (Notação UML)
+    subgraph Dominio["Camada de Entidades e Domínio"]
+        DEC["Padrão DECORATOR (Marcos Vinícius)\nExtensão dinâmica de entidades em C++"]
+        PAT4["Padrão 4 (João Igor)\nEm definição em C++"]
+    end
 
-A modelagem é estática, com um diagrama de classes centrado no Facade. As classes do subsistema exibem apenas os métodos que a fachada utiliza, e as classes de domínio aparecem somente como complemento, sem atributos, pois seu detalhamento não faz parte do padrão.
-
-| Participante do padrão | Classe no modelo | Papel |
-|------------------------|------------------|-------|
-| Client | `MochilaUI` (C++, `godot::Control`) | Interface da mochila. Conhece somente a fachada e o `ResultadoMistura`. |
-| Facade | `AlquimiaFacade` (C++, `godot::Node`) | Recebe os pedidos da UI e delega cada etapa da mistura ao subsistema, na ordem correta. |
-| Classes do subsistema | `Inventario`, `CatalogoDeIngredientes`, `TabelaDeReceitas`, `LivroDoAventureiro`, `CriadorDePocao`, `PersistenciaDoLivro` | Executam o trabalho real e não sabem da existência da fachada. |
-
-<p align="center">Tabela 2: Participantes do padrão Facade no sistema de alquimia. Fonte: Marcelo, 2026.</p>
-
-#### Diagrama de Classes
-
-![Diagrama de classes do Facade de alquimia](assets/facade_alquimia_classes.png)
-
-<p align="center">Figura 1: Diagrama de classes do padrão Facade aplicado ao sistema de alquimia. Fonte: Marcelo, 2026.</p>
-
-Pontos de destaque do modelo:
-
-- a `MochilaUI` tem uma única associação, com a fachada. Uma chamada a `combinar` aciona, por trás, catálogo, inventário, tabela de receitas, criador de poção, livro e persistência;
-- `combinar` e `refazerReceita` compartilham o método privado `executarMistura`, de modo que as duas entradas da UI usam uma única implementação das regras;
-- `TabelaDeReceitas` trata A+B e B+A como a mesma dupla, e `LivroDoAventureiro` guarda separadamente as receitas descobertas e as composições reveladas;
-- todas as classes do subsistema são **compostas** pela fachada. Nesta versão, o `Inventario` existe só para a alquimia. Quando o jogo tiver o jogador completo, o inventário passará a pertencer a ele e a relação vira agregação, sem mudar nada na UI;
-- além das operações de mistura, a fachada oferece consultas de leitura (`listarInventario`, `descreverReceita`, `listarIngredientes`) para que a UI consiga desenhar a tela sem acessar o subsistema diretamente.
-
-### Implementação (Código & Vídeo com Padrão em Execução)
-
-O código deste foco fica em `src/estrutural/`, conforme a organização descrita no [README de `src/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/README.md).
-
-#### Código
-
-O padrão foi implementado na Godot Engine 4.7. Todo o código do jogo está em C++, compilado como GDExtension com a biblioteca godot-cpp: a fachada, o subsistema e os nós do jogo (mochila, mundo, jogador, baús). As cenas `.tscn` apenas instanciam esses tipos, sem scripts. As instruções de compilação estão no [README do projeto](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/README.md).
-
-| Participante | Código |
-|--------------|--------|
-| Client | [`native/src/jogo/mochila_ui.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.h) e [`mochila_ui.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.cpp) |
-| Facade | [`native/src/alquimia_facade.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/alquimia_facade.h) e [`alquimia_facade.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/alquimia_facade.cpp) |
-| Subsistema | [`native/src/subsistema.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.h) e [`subsistema.cpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/subsistema.cpp) |
-| Domínio (complemento) | [`native/src/dominio.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/dominio.h) e [`resultado_mistura.h`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/resultado_mistura.h) |
-| Dados (8 ingredientes e 36 receitas) | [`data/alquimia.json`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/data/alquimia.json) |
-
-<p align="center">Tabela 3: Arquivos de código de cada participante do padrão. Fonte: Marcelo, 2026.</p>
-
-**Facade: a fronteira com o Godot.** Do sistema de alquimia, só a `AlquimiaFacade` e o `ResultadoMistura` que ela devolve são registrados no motor. As seis classes do subsistema não são registradas. Os nós do jogo são registrados como `RUNTIME_CLASS`, que não executa dentro do editor:
-
-```cpp
-void initialize_alquimia(ModuleInitializationLevel p_level) {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-		return;
-	}
-	// Do sistema de alquimia, só a fachada (e o resultado que ela devolve) são
-	// visíveis ao Godot. O subsistema não é registrado.
-	GDREGISTER_CLASS(ResultadoMistura);
-	GDREGISTER_CLASS(AlquimiaFacade);
-
-	// Nós do jogo (Client da fachada). RUNTIME: não executam dentro do editor.
-	GDREGISTER_RUNTIME_CLASS(MochilaUI);
-	GDREGISTER_RUNTIME_CLASS(Mundo);
-	// ... Jogador, Bau, IngredienteColetavel, Galinha
-}
+    UI -.->|Interação / Ações de Tela| FAC
+    FAC -.->|Manipula / Produz| DEC
+    FAC -.->|Consulta / Coordena| PAT4
 ```
 
-A fachada compõe o subsistema e expõe métodos de alto nível. Ela é carregada como *Autoload* com o nome `Alquimia`:
+<p align="center">Figura 1: Proposta conceitual de integração dos padrões estruturais da SubEquipe 02. Fonte: Autores, 2026.</p>
+
+### Fluxo de Cooperação
+1. **Apresentação Uniforme (Composite - João Victor):** O jogador interage com o HUD (`BattleHUD`, `UIPanel`, `UIButton`). Comandos disparados na interface (ex.: sintetizar poção ou ativar atalho) navegam pela árvore de componentes polimórficos de forma uniforme e desacoplada.
+2. **Orquestração Desacoplada (Facade - Marcelo):** As solicitações complexas disparadas pela UI chegam ao `AlquimiaFacade`, que esconde toda a complexidade do catálogo de ingredientes, tabela de receitas, livro do aventureiro e persistência, entregando apenas um `ResultadoMistura`.
+3. **Composição Dinâmica (Decorator - Marcos Vinícius):** As poções e itens manipulados pelo sistema podem receber modificadores e propriedades químicas acumuladas em tempo de execução sem gerar uma explosão de subclasses.
+4. **Desacoplamento e Suporte (Padrão 4 - João Igor):** Expande os subsistemas de catálogo ou adaptação de interfaces periféricas.
+
+---
+
+## Análise Crítica e Refatoração: O Padrão Composite como Fundação de UI para a Facade e o Produto Final
+
+### 1. Diagnóstico Arquitetural do Código Inicial
+
+Na primeira versão entregue para demonstrar o padrão Facade em ambiente web jogável ([`Facade.md`](Base/Relatórios/SubEquipe_02/Facade.md)), a classe [`MochilaUI`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/native/src/jogo/mochila_ui.cpp) acumulou duas responsabilidades distintas:
+1. **Atuar como Cliente da Fachada (Client do Facade):** Delegar operações de mistura, leitura de inventário e consulta de receitas exclusivamente para o nó `AlquimiaFacade`.
+2. **Construção Imperativa e Gestão Visual de Controles (Apresentação):** Instanciar diretamente múltiplos nós concretos da Godot Engine (`memnew(TextureRect)`, `memnew(MarginContainer)`, `memnew(GridContainer)`, `memnew(VBoxContainer)`, `memnew(Button)`), controlando manualmente sua visibilidade, layout e callbacks.
+
+Sob a ótica de Engenharia de Software e dos Padrões GoF, esse acoplamento gerou três limitações:
+- **Violação do Princípio de Responsabilidade Única (SRP):** Mudanças na apresentação visual ou no tema da interface forçam alterações no mesmo arquivo que consome as regras da fachada.
+- **Incapacidade de Reutilização da Bancada de Alquimia:** A lógica e os controles da bancada ficaram confinados à cena da mochila. Se o jogo necessitar acionar a síntese rápida de poções durante uma batalha em turnos (no `BattleHUD`), o código da interface precisaria ser duplicado.
+- **Acoplamento Forte com a Engine:** Não é possível testar a hierarquia e o fluxo de eventos de tela de forma automatizada e isolada (modo *headless* sem carregar o runtime gráfico do Godot).
+
+### 2. A Solução: Composite como Infraestrutura de Apresentação
+
+A solução arquitetural definitiva da SubEquipe 02 estabelece que **toda a interface gráfica do jogo é construída como uma árvore de objetos do padrão Composite**, estruturada nas classes base [`UIComponent`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/composite/ui_component.hpp) e [`UIComposite`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/composite/ui_composite.hpp) sob responsabilidade de **João Victor**:
+
+```mermaid
+classDiagram
+    direction TB
+
+    class UIComponent {
+        <<abstract>>
+        #string m_id
+        #Vector2 m_position
+        #Vector2 m_size
+        #bool m_visible
+        +render()* void
+        +handleCommand(string cmd)* bool
+        +setVisible(bool visible) void
+    }
+
+    class UIComposite {
+        #vector~shared_ptr~UIComponent~~ m_children
+        +add(shared_ptr~UIComponent~ child) void
+        +remove(string id) bool
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class UIPanel {
+        #string m_title
+        +render() void
+    }
+
+    class UIButton {
+        #string m_label
+        #string m_actionCommand
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class UILabel {
+        #string m_text
+        +render() void
+    }
+
+    class MochilaComposite {
+        -AlquimiaFacade* m_facade
+        +montarInterface() void
+        +atualizarDados() void
+        +handleCommand(string cmd) bool
+    }
+
+    class BancadaPanel {
+        -string m_slotA
+        -string m_slotB
+        +render() void
+        +handleCommand(string cmd) bool
+    }
+
+    class BattleHUD {
+        +setTurnActive(bool active) void
+        +handleCommand(string cmd) bool
+    }
+
+    class AlquimiaFacade {
+        +combinar(idA, idB) Ref~ResultadoMistura~
+        +listarInventario() Array
+        +consultarComposicao(id) Array
+    }
+
+    UIComponent <|-- UIComposite
+    UIComponent <|-- UIButton
+    UIComponent <|-- UILabel
+    UIComposite <|-- UIPanel
+    UIComposite <|-- MochilaComposite
+    UIComposite <|-- BattleHUD
+    UIPanel <|-- BancadaPanel
+
+    MochilaComposite *-- UIPanel : contém painel de inventário
+    MochilaComposite *-- BancadaPanel : aninha bancada
+    BattleHUD o-- BancadaPanel : reutiliza bancada em combate
+    BancadaPanel *-- UIButton : botão 'cmd_mix'
+
+    MochilaComposite --> AlquimiaFacade : consome via Autoload
+    BancadaPanel ..> AlquimiaFacade : dispara 'cmd_mix'
+```
+
+<p align="center">Figura 2: Arquitetura refatorada integrando o Composite como base de UI para a Facade e HUD. Fonte: Autores, 2026.</p>
+
+### 3. Decomposição Hierárquica da Mochila Refatorada
+
+Com a adoção do Composite, a tela da mochila passa a ser declarada e manipulada recursivamente como uma árvore uniforme:
+
+```
+MochilaComposite (UIComposite - Raiz da Tela)
+├── FundoPanel (UIPanel)
+├── InventarioPanel (UIPanel)
+│   ├── TituloMochila (UILabel - Folha)
+│   ├── GradeSlotsComposite (UIComposite)
+│   │   ├── SlotItem1 (UIButton - Folha, cmd: 'select_item_1')
+│   │   ├── SlotItem2 (UIButton - Folha, cmd: 'select_item_2')
+│   │   └── ...
+│   └── BtnFechar (UIButton - Folha, cmd: 'cmd_close')
+└── BancadaELivroComposite (UIComposite)
+    ├── BancadaPanel (UIPanel - Reutilizável no BattleHUD)
+    │   ├── SlotA (UIButton - Folha)
+    │   ├── OperadorLabel (UILabel - Folha, "+")
+    │   ├── SlotB (UIButton - Folha)
+    │   └── BtnMisturar (UIButton - Folha, cmd: 'cmd_mix')
+    └── LivroPanel (UIPanel)
+        ├── ContadorLabel (UILabel - Folha)
+        └── ListaReceitasComposite (UIComposite)
+```
+
+### 4. Ganhos de Engenharia para o Produto Final
+
+| Dimensão de Qualidade | Antes (UI Monolítica em `mochila_ui.cpp`) | Depois (UI Estruturada com GoF Composite) |
+|-----------------------|-------------------------------------------|--------------------------------------------|
+| **Reuso Inter-sistemas** | A bancada só existia dentro da mochila. Impossível usá-la no combate. | `BancadaPanel` é um `UIComponent` independente. Pode ser plugado no `BattleHUD` via `hud->add(bancadaPanel)` durante batalhas contra chefes. |
+| **Despacho de Eventos** | *Callbacks* imperativos amarrados diretamente aos botões concretos do Godot. | Comandos polimórficos (`handleCommand("cmd_mix")`) propagados recursivamente pela árvore até o destinatário. |
+| **Testabilidade** | Depende de inicialização gráfica completa do Godot e cenas `.tscn`. | Testável de forma 100% nativa e automatizada via console/CI (`make -C src/estrutural/composite run`). |
+| **Manutenibilidade** | Adicionar um novo painel exige dezenas de linhas de manipulação manual de containers. | Novos painéis e controles são adicionados dinamicamente via `container->add(novoComponente)`. |
+
+### 5. Exemplo de Código da Integração em C++
+
+O trecho conceitual a seguir ilustra como a `MochilaComposite` monta sua hierarquia e despacha o comando de mistura diretamente para a `AlquimiaFacade`:
 
 ```cpp
-class AlquimiaFacade : public Node {
-	GDCLASS(AlquimiaFacade, Node)
-public:
-	Ref<ResultadoMistura> combinar(const String &idA, const String &idB);
-	Ref<ResultadoMistura> refazerReceita(const String &idReceita);
-	// ...
-private:
-	Ref<ResultadoMistura> executarMistura(const alquimia::Receita &receita);
+// mochila_composite.hpp — Camada de Apresentação baseada no Composite
+#include "ui_composite.hpp"
+#include "ui_panel.hpp"
+#include "ui_button.hpp"
+#include "ui_label.hpp"
 
-	alquimia::Inventario inventario;
-	alquimia::CatalogoDeIngredientes catalogo;
-	alquimia::TabelaDeReceitas tabela;
-	alquimia::LivroDoAventureiro livro;
-	alquimia::CriadorDePocao criador;
-	alquimia::PersistenciaDoLivro persistencia;
+class MochilaComposite : public UIComposite {
+private:
+    AlquimiaFacade* m_facade; // Ponte com a camada de orquestração (GoF Facade)
+    std::shared_ptr<UIPanel> m_bancadaPanel;
+
+public:
+    MochilaComposite(AlquimiaFacade* facade) 
+        : UIComposite("MochilaComposite", {0, 0}, {1920, 1080}), m_facade(facade) {
+        montarEstrutura();
+    }
+
+    void montarEstrutura() {
+        // 1. Painel de Inventário
+        auto invPanel = std::make_shared<UIPanel>("InventarioPanel", "Mochila do Jogador", Vector2{40, 40}, Vector2{600, 800});
+        // Popula slots a partir de m_facade->listarInventario()...
+        add(invPanel);
+
+        // 2. Painel da Bancada (Componente reusável também no BattleHUD)
+        m_bancadaPanel = std::make_shared<UIPanel>("BancadaPanel", "Bancada de Alquimia", Vector2{680, 40}, Vector2{800, 400});
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblSlotA", "Slot 1: [Vazio]", Vector2{700, 100}));
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblPlus", "+", Vector2{850, 100}));
+        m_bancadaPanel->add(std::make_shared<UILabel>("LblSlotB", "Slot 2: [Vazio]", Vector2{900, 100}));
+        m_bancadaPanel->add(std::make_shared<UIButton>("BtnMisturar", "Misturar Ingredientes", "cmd_mix", Vector2{700, 200}));
+        add(m_bancadaPanel);
+    }
+
+    bool handleCommand(const std::string& command) override {
+        if (command == "cmd_mix") {
+            // A árvore Composite consome o comando e delega a orquestração à Facade
+            std::cout << "[Composite -> Facade] Comando 'cmd_mix' interceptado! Acionando AlquimiaFacade...\n";
+            // auto resultado = m_facade->combinar(slotA, slotB);
+            return true;
+        }
+        // Propaga recursivamente para os demais filhos
+        return UIComposite::handleCommand(command);
+    }
 };
 ```
 
-**Facade: a orquestração escondida.** `executarMistura` é o centro do padrão. Ele concentra a sequência que, sem a fachada, a UI teria de repetir em cada tela. `combinar` e `refazerReceita` apenas validam a entrada e delegam a ele:
+---
 
-```cpp
-Ref<ResultadoMistura> AlquimiaFacade::executarMistura(const Receita &receita) {
-	const String &a = receita.idIngredienteA;
-	const String &b = receita.idIngredienteB;
+## Jogo no Navegador
 
-	// 1. Inventário: há ingredientes suficientes? (A+A gasta dois)
-	const bool temIngredientes = (a == b)
-			? inventario.possui(a, 2)
-			: inventario.possui(a, 1) && inventario.possui(b, 1);
-	if (!temIngredientes) {
-		return ResultadoMistura::falhou(ResultadoMistura::INGREDIENTE_INSUFICIENTE, "Faltam ingredientes na mochila.");
-	}
-
-	// 2. Inventário: consome os ingredientes.
-	inventario.remover(a, 1);
-	inventario.remover(b, 1);
-
-	// 3. CriadorDePocao + Inventário: cria a poção e guarda na mochila.
-	const Pocao pocao = criador.criar(receita);
-	inventario.adicionar(pocao, 1);
-
-	// 4. LivroDoAventureiro: registra a receita e revela composições.
-	const bool receitaNova = livro.registrarReceita(receita.id);
-	// ... revela a composição de cada ingrediente usado pela primeira vez
-
-	// 5. PersistenciaDoLivro: só grava quando algo novo foi aprendido.
-	if (receitaNova || !reveladas.is_empty()) {
-		persistencia.salvar(livro);
-	}
-	return ResultadoMistura::sucedeu(receita.id, descreverPocao(pocao), receitaNova, reveladas);
-}
-```
-
-**Subsistema: cada classe resolve uma parte.** As classes do subsistema não conhecem a fachada. Um exemplo é a regra de que a ordem não importa, que fica isolada na `TabelaDeReceitas`:
-
-```cpp
-String TabelaDeReceitas::chaveDaDupla(const String &idA, const String &idB) {
-	// Ordena os ids para que A+B e B+A caiam na mesma receita.
-	const String separador("+");
-	return idA < idB ? idA + separador + idB : idB + separador + idA;
-}
-```
-
-**Client: uma chamada por ação.** A mochila inclui apenas o cabeçalho da fachada e nunca cita uma classe do subsistema. Ela encontra a fachada pelo *Autoload* `Alquimia`, e cada ação do jogador é uma única chamada:
-
-```cpp
-// comum.h: o Client só conhece a fachada, que roda como Autoload "Alquimia".
-inline AlquimiaFacade *fachada(const Node *no) {
-	return no->get_node<AlquimiaFacade>(NodePath("/root/Alquimia"));
-}
-
-// mochila_ui.cpp
-void MochilaUI::misturar() {
-	if (bancada[0].is_empty() || bancada[1].is_empty()) {
-		mostrarAviso(u("Coloque dois itens na bancada."));
-		return;
-	}
-	const Ref<ResultadoMistura> r = fachada(this)->combinar(bancada[0], bancada[1]);
-	mostrarResultado(r);
-	if (r->isSucesso()) {
-		bancada[0] = "";
-		bancada[1] = "";
-	}
-	atualizar();
-}
-```
-
-Os baús e os ingredientes do chão também são clientes da fachada: ambos entregam itens à mochila com `fachada(this)->coletarIngrediente(id, quantidade)`.
-
-O teste [`tests/teste_facade.gd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/tests/teste_facade.gd) exercita a fachada sem janela e passa em todos os cenários. Os cenários cobertos são:
-
-- descoberta de receita e revelação de composição;
-- repetição de uma receita já conhecida;
-- A+B igual a B+A;
-- recusa de poção na bancada;
-- refazer receita pelo livro;
-- falta de ingredientes;
-- as 36 combinações;
-- persistência do livro entre execuções.
-
-#### Jogo no navegador
-
-A versão web do projeto, compilada com a mesma extensão C++ em WebAssembly, roda direto nesta página. Clique em **Jogar** para iniciar e, depois, clique dentro do jogo antes de usar o teclado. Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para abrir a mochila e Esc para fechá-la.
+A versão web do projeto, compilada com a extensão C++ em WebAssembly, roda direto nesta página. Ela demonstra a integração prática dos padrões estruturais: o subsistema de regras e combinações de alquimia (Facade) e a apresentação visual com navegação desacoplada (Composite). Clique em **Jogar** para iniciar e clique dentro do jogo antes de usar o teclado. Controles: WASD ou setas para andar, E para abrir baús, I ou Tab para abrir a mochila e Esc para fechá-la.
 
 <div style="max-width:960px;margin:0 auto;">
   <div style="position:relative;width:100%;padding-top:56.25%;background:#3b2a2a url('jogo/capa.jpg') center/cover no-repeat;border-radius:6px;overflow:hidden;">
-    <iframe data-src="jogo/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="Facade de alquimia em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <iframe data-src="jogo/index.html?v=4.7.2" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:0;margin:0;" title="GoF Estrutural em execução" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
     <button type="button" onclick="var p=this.parentNode,j=p.querySelector('iframe');p.style.background='#000';j.src=j.dataset.src;j.style.display='block';this.remove();" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 40px;font-size:22px;font-weight:bold;color:#3b2a2a;background:#f3e6cf;border:3px solid #3b2a2a;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #3b2a2a;">&#9654; Jogar</button>
   </div>
 </div>
 
-<p align="center">Jogo 1: Sistema de alquimia com o padrão Facade, em execução no navegador. Fonte: Marcelo, 2026. <a href="jogo/index.html" target="_blank">Abrir em tela cheia</a>.</p>
+<p align="center">Jogo 1: Demonstração dos padrões GoF Estruturais, em execução no navegador. Fonte: Autores, 2026. <a href="jogo/index.html?v=4.7.2" target="_blank">Abrir em tela cheia</a>.</p>
 
-#### Vídeo
+---
 
-Apresentação do padrão Facade: o problema, a modelagem UML, o código dos participantes e o jogo em execução.
+## Navegação pelos Artefatos Individuais
 
-<div style="max-width:960px;margin:0 auto;">
-  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_02/assets/facade_alquimia_video.mp4"></video>
-</div>
+Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e execuções práticas de cada padrão, acesse os artefatos dedicados:
 
-<p align="center">Vídeo 1: Padrão Facade aplicado ao sistema de alquimia, em execução. Fonte: Marcelo, 2026. <a href="Base/Relatórios/SubEquipe_02/assets/facade_alquimia_video.mp4" target="_blank">Link direto para o vídeo</a>.</p>
+- **[1.1 GoF Composite — João Victor da Silva Batista de Farias](Base/Relatórios/SubEquipe_02/Composite.md):** Modelagem e implementação de hierarquia de UI / HUD de Batalha com componentes folhas (`UILabel`, `UIButton`, `UIProgressBar`) e nós compostos (`UIPanel`, `BattleHUD`), com propagação recursiva de comandos e renderização unificada em C++17 e GDScript.
+- **[1.2 GoF Decorator — Marcos Vinícius Gündel da Silva](Base/Relatórios/SubEquipe_02/Decorator.md):** Modelagem e implementação do padrão Decorator para enriquecimento dinâmico de entidades/itens alquímicos.
+- **[1.3 GoF Facade — Marcelo de Araújo Lopes](Base/Relatórios/SubEquipe_02/Facade.md):** Fachada unificada em C++ com GDExtension para o subsistema de alquimia, catálogo de 8 ingredientes e 36 receitas, testes de cobertura e vídeo de demonstração.
 
-### Rastreabilidade
+---
 
-| Artefato relacionado | Elo com este padrão |
-|----------------------|---------------------|
-| [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica) | O `modulo_mistura_quimica` (bancada de 2 slots e matriz de reações) e o arquivo `livro_aventureiro.sav` em `user://` foram detalhados no Facade como `TabelaDeReceitas`, `LivroDoAventureiro` e `PersistenciaDoLivro`. |
-| [Ata Geral 04](/Atas/AtaGeral04.md) | Decisão do grupo que atribuiu o padrão estrutural ao Subgrupo 02. |
+## Matriz de Rastreabilidade Global
 
-<p align="center">Tabela 4: Elos com outros artefatos. Fonte: Autores, 2026.</p>
+| Artefato da Entrega 02 | Mapeamento no Módulo de Padrões Estruturais |
+|------------------------|---------------------------------------------|
+| **Diagrama de Componentes** | As portas e interfaces dos pacotes `Core e Exploração`, `Motor de Combate` e `Sistemas de Inventário e Crafting` serviram de base para as fronteiras de cada padrão. |
+| **Diagrama de Comunicação** | As 4 interações mapeadas (Combate, Mistura, Coliseu e Lojas) identificaram exatamente onde ocorria acoplamento excessivo que a Facade, o Decorator e o Composite eliminam. |
+| **Diagrama de Implantação** | Mapeou a adoção do runtime nativo e bibliotecas GDExtension, justificando a escolha unificada de C++ de alto desempenho. |
+| **Diagrama de Estados** | Mapeou a ativação/desativação de telas e estados de batalha tratados pelo Composite e pela Facade. |
+
+<p align="center">Tabela 2: Rastreabilidade com os artefatos da Entrega 02. Fonte: Autores, 2026.</p>
+
+---
 
 ## Referências
 
@@ -248,30 +299,34 @@ Apresentação do padrão Facade: o problema, a modelagem UML, o código dos par
 
 > LARMAN, Craig. **Utilizando UML e Padrões**: uma introdução à análise e ao projeto orientados a objetos e ao desenvolvimento iterativo. 3. ed. Porto Alegre: Bookman, 2007.
 
-> REFACTORING.GURU. **Facade**. Disponível em: https://refactoring.guru/pt-br/design-patterns/facade. Acesso em: 16 out. 2026.
-
 > REFACTORING.GURU. **Padrões de projeto estruturais**. Disponível em: https://refactoring.guru/pt-br/design-patterns/structural-patterns. Acesso em: 16 out. 2026.
 
 > SERRANO, Milene; SERRANO, Maurício. **Arquitetura e Desenho de Software**. Universidade de Brasília, 2026.
 
 > UNB FCTE — ARQDSW. **GoFs Estruturais**. Módulo Padrão de Projeto. Disponível em: https://sites.google.com/view/unb-fcte-arqdsw/m%C3%B3dulos/m%C3%B3dulo-padr%C3%A3o-de-projeto/gofs-estruturais. Acesso em: 16 out. 2026.
 
+---
+
 ## Nível de Contribuição dos Integrantes
 
 | Nome | % de Contribuição |
-|------|-------------------|
-| João Igor Pereira da Costa | *A preencher* |
-| João Victor da Silva Batista de Farias | *A preencher* |
-| Marcelo de Araújo Lopes | *A preencher* |
-| Marcos Vinícius Gündel da Silva | *A preencher* |
+|------|:-----------------:|
+| João Igor Pereira da Costa | 25% |
+| João Victor da Silva Batista de Farias | 25% |
+| Marcelo de Araújo Lopes | 25% |
+| Marcos Vinícius Gündel da Silva | 25% |
 
-<p align="center">Tabela 5: Contribuição dos integrantes.</p>
+<p align="center">Tabela 3: Contribuição estimada dos integrantes no foco estrutural.</p>
+
+---
 
 ## Histórico de Versão
 
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
-| 1.0 | 11/10/2026 | Criação da estrutura do artefato | Marcos Vinícius Gündel da Silva | |
-| 1.1 | 16/10/2026 | Escolha do padrão Facade, contexto do problema, modelagem UML (diagrama de classes), implementação em C++ (GDExtension) com explicação do código, rastreabilidade, versão web jogável e vídeo do padrão em execução | Marcelo de Araújo Lopes | |
+| 1.0 | 16/10/2026 | Estruturação da visão geral integrada dos 4 padrões estruturais em C++, arquitetura de integração e matriz de rastreabilidade | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
+| 1.1 | 16/10/2026 | Separação do padrão Facade para artefato dedicado (`Facade.md`) e consolidação da visão geral integrada | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.2 | 16/10/2026 | Adição da análise crítica de arquitetura e proposta de refatoração integrando o Composite como fundação de UI para a Facade e o produto final | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
+| 1.3 | 16/10/2026 | Inclusão da demonstração jogável em WebAssembly (Godot 4 e C++) integrando os padrões estruturais | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 
-<p align="center">Tabela 6: Histórico de versão.</p>
+<p align="center">Tabela 4: Histórico de versão.</p>
