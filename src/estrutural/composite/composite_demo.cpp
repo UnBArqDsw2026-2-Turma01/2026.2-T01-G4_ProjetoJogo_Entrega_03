@@ -8,11 +8,6 @@
 // com despacho polimórfico de comandos para a AlquimiaFacade.
 
 #include "ui_component.hpp"
-#include "ui_composite.hpp"
-#include "ui_label.hpp"
-#include "ui_button.hpp"
-#include "ui_progress_bar.hpp"
-#include "ui_panel.hpp"
 #include "battle_hud.hpp"
 #include "bancada_panel.hpp"
 #include "mochila_composite.hpp"

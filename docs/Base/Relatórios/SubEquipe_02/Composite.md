@@ -204,13 +204,11 @@ godot --headless --path src/estrutural -s composite/composite_demo.gd
 
 Apresentação do padrão Composite: contextualização do problema na interface de combate do jogo, modelo de classes UML, explicação dos participantes em código e demonstração prática da árvore de UI e do despacho de eventos no terminal.
 
-<div style="max-width:720px;margin:0 auto;">
-  <div style="position:relative;width:100%;padding-top:56.25%;">
-    <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/ID_DO_VIDEO" title="Padrão Composite em execução" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  </div>
+<div style="max-width:960px;margin:0 auto;">
+  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_02/assets/composite_ui_video.mp4"></video>
 </div>
 
-<p align="center">Vídeo 1: Padrão Composite aplicado à interface de combate, em execução. Fonte: João Victor Farias, 2026. <a href="https://youtu.be/ID_DO_VIDEO" target="_blank">Link direto para o vídeo</a>.</p>
+<p align="center">Vídeo 1: Padrão Composite aplicado à interface de combate, em execução. Fonte: João Victor Farias, 2026. <a href="Base/Relatórios/SubEquipe_02/assets/composite_ui_video.mp4" target="_blank">Link direto para o vídeo</a>.</p>
 
 ---
 
@@ -253,5 +251,6 @@ Apresentação do padrão Composite: contextualização do problema na interface
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 16/10/2026 | Elaboração inicial da documentação do GoF Composite em C++, modelagem UML, código-fonte e rastreabilidade | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 | 1.1 | 17/10/2026 | Revisão e humanização do texto, eliminação de clichês e padronização do bloco de vídeo | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.2 | 17/10/2026 | Incorporação do vídeo de demonstração gravado em execução (`composite_ui_video.mp4`) | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 
 <p align="center">Tabela 4: Histórico de versão.</p>
