@@ -13,9 +13,21 @@ Projeto Godot 4.7 da SubEquipe 02, todo em C++ (GDExtension com godot-cpp). A mo
 | Dados (8 ingredientes, 36 receitas) | [`data/alquimia.json`](data/alquimia.json) |
 | Mundo de teste (mapa, baús, jogador) | [`native/src/jogo/`](native/src/jogo/), [`data/mapa.json`](data/mapa.json), [`data/baus.json`](data/baus.json) |
 
-## Como compilar e rodar (Windows)
+## Como compilar e rodar
 
-Pré-requisitos: Godot 4.7, Python 3 com `pip install scons`, e o Visual Studio Build Tools (C++).
+Pré-requisitos: Godot 4.7+, Python 3 com `pip install scons`, e compilador C++ (GCC/Clang no Linux, MSVC no Windows).
+
+### Linux
+
+```bash
+cd src/estrutural/native
+git clone --depth 1 https://github.com/godotengine/godot-cpp.git   # se ainda não clonado
+python3 -m SCons platform=linux target=template_debug -j$(nproc)
+```
+
+A biblioteca compartilhada é gerada em `bin/libalquimia.linux.template_debug.x86_64.so`.
+
+### Windows
 
 ```bash
 cd src/estrutural/native
