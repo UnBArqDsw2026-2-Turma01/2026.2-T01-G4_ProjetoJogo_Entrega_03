@@ -1,9 +1,5 @@
 # SubEquipe 02: Padrão GoF Composite (Interface de Usuário em C++)
 
-## Descrição
-
-Este documento descreve a aplicação do padrão estrutural Composite na interface de usuário do G4_ProjetoJogo, sob responsabilidade de João Victor da Silva Batista de Farias. O trabalho reúne a modelagem na notação UML, a implementação das classes em C++17 com Makefile, a versão equivalente em GDScript, o roteiro de execução e os elos de rastreabilidade com as entregas anteriores.
-
 ## Objetivo
 
 Organizar elementos simples de tela (rótulos, botões e barras de progresso) e contêineres complexos (painéis e menus) em uma estrutura de árvore uniforme. O objetivo é permitir que rotinas de renderização e comandos de entrada naveguem por qualquer nível da interface de combate e menus sem depender de verificações manuais de tipo.
