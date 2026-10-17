@@ -216,9 +216,9 @@ Apresentação do padrão Composite: contextualização do problema na interface
 
 | Artefato de Origem | Elo com o Padrão Composite |
 |--------------------|----------------------------|
-| [Léxico L16: HUD de Batalha](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Léxicos) | O Léxico define o HUD como a interface visual que reúne HP, MP, barra de turnos e menu de ações, mapeado diretamente na classe `BattleHUD`. |
-| [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica) | O pacote de apresentação gráfica e os módulos de gatilho foram refinados para a hierarquia polimórfica de `UIComponent`. |
-| [Diagrama de Estados do Combate](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/DiagramasDeEstados) | A transição de turno em que o menu de ações do jogador fica ativo ou oculto é feita por `hud->setTurnActive(isPlayerTurn)`, ocultando a subárvore inteira de uma só vez. |
+| [Léxico L16: HUD de Batalha](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relat%C3%B3rios/SubEquipe_02/ModelagemDinamica?id=rastreabilidade-dos-diagramas-de-estados) | O Léxico define o HUD como a interface visual que reúne HP, MP, barra de turnos e menu de ações, mapeado diretamente na classe `BattleHUD`. |
+| [Modelagem Estática da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relat%C3%B3rios/SubEquipe_02/ModelagemEstatica) | O pacote de apresentação gráfica e os módulos de gatilho foram refinados para a hierarquia polimórfica de `UIComponent`. |
+| [Diagrama de Estados do Combate](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relat%C3%B3rios/SubEquipe_02/ModelagemDinamica?id=diagrama-de-estados) | A transição de turno em que o menu de ações do jogador fica ativo ou oculto é feita por `hud->setTurnActive(isPlayerTurn)`, ocultando a subárvore inteira de uma só vez. |
 | [Ata 01 da SubEquipe 02](/Atas/AtaSub02_01.md) | Decisão do subgrupo que atribuiu o padrão Composite a João Victor da Silva Batista de Farias. |
 
 <p align="center">Tabela 2: Rastreabilidade com artefatos anteriores. Fonte: Autores, 2026.</p>
@@ -249,8 +249,8 @@ Apresentação do padrão Composite: contextualização do problema na interface
 
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
-| 1.0 | 16/10/2026 | Elaboração inicial da documentação do GoF Composite em C++, modelagem UML, código-fonte e rastreabilidade | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
-| 1.1 | 17/10/2026 | Revisão e humanização do texto, eliminação de clichês e padronização do bloco de vídeo | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
-| 1.2 | 17/10/2026 | Incorporação do vídeo de demonstração gravado em execução (`composite_ui_video.mp4`) | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.0 | 16/10/2026 | Elaboração inicial da documentação do GoF Composite em C++, modelagem UML, código-fonte e rastreabilidade | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
+| 1.1 | 17/10/2026 | Revisão e humanização do texto, eliminação de clichês e padronização do bloco de vídeo | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
+| 1.2 | 17/10/2026 | Incorporação do vídeo de demonstração gravado em execução (`composite_ui_video.mp4`) | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
 
 <p align="center">Tabela 4: Histórico de versão.</p>
