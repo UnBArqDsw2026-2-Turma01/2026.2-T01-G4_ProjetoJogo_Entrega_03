@@ -32,6 +32,7 @@ public:
 
 	// Ações do jogador: cada uma é UMA chamada à fachada.
 	void colocarNaBancada(const String &idItem);
+	void usarPocao(const String &idPocao); // padrão Decorator: a fachada decora o jogador
 	void misturar();
 
 	void setPodeFechar(bool p_pode) { podeFechar = p_pode; }

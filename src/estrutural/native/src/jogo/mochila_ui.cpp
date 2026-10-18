@@ -46,6 +46,23 @@ void MochilaUI::misturar() {
 	atualizar();
 }
 
+void MochilaUI::usarPocao(const String &idPocao) {
+	const Dictionary r = fachada(this)->usarPocaoForaDeCombate(idPocao);
+	if (!bool(r["sucesso"])) {
+		mostrarAviso(r["mensagem"]);
+		return;
+	}
+	const Color cor = r["cor"];
+	String texto = String("[color=#") + cor.darkened(0.35).to_html(false) + "]" + String(r["nome"]) + "[/color]" + u(" usada.") + "\n";
+	const PackedStringArray mensagens = r["mensagens"];
+	for (int i = 0; i < mensagens.size(); i++) {
+		texto += mensagens[i] + String("\n");
+	}
+	resultado->set_text(texto);
+	atualizar();
+	emit_signal("pocao_usada", r);
+}
+
 void MochilaUI::refazer(const String &idReceita) {
 	mostrarResultado(fachada(this)->refazerReceita(idReceita));
 	atualizar();
@@ -171,7 +188,8 @@ void MochilaUI::mostrarAviso(const String &texto) {
 String MochilaUI::descreverItem(const Dictionary &item) const {
 	const String nome = item["nome"];
 	if (String(item["tipo"]) == "pocao") {
-		return nome + String(": ") + String(item["efeito"]) + u(" (poções não entram na bancada)");
+		const bool soEmCombate = fachada(this)->precisaDeInimigo(item["id"]);
+		return nome + String(": ") + String(item["efeito"]) + (soEmCombate ? u(" (só pode ser usada em combate)") : u(" (clique para usar)"));
 	}
 	const Array elementos = fachada(this)->consultarComposicao(item["id"]);
 	if (elementos.is_empty()) {
@@ -236,7 +254,7 @@ Control *MochilaUI::montarMochila() {
 	grade->add_theme_constant_override("v_separation", 8);
 	coluna->add_child(rolagem_vertical(grade));
 
-	dica = rotulo(u("Passe o mouse sobre um item para ver os detalhes. Clique para levá-lo à bancada."), cor_suave());
+	dica = rotulo(u("Passe o mouse sobre um item para ver os detalhes. Clique em um ingrediente para levá-lo à bancada, ou em uma poção para usá-la."), cor_suave());
 	dica->set_custom_minimum_size(Vector2(0, 52));
 	dica->set_autowrap_mode(TextServer::AUTOWRAP_WORD_SMART);
 	coluna->add_child(dica);
@@ -301,7 +319,11 @@ Control *MochilaUI::montarBancadaELivro() {
 Button *MochilaUI::criarSlotInventario(const Dictionary &item) {
 	Button *s = slot(textura("res://assets/ui/button_b.png"), Vector2(76, 76), false);
 	s->set_button_icon(icone(item["id"]));
-	s->connect("pressed", callable_mp(this, &MochilaUI::colocarNaBancada).bind(item["id"]));
+	if (String(item["tipo"]) == "pocao") {
+		s->connect("pressed", callable_mp(this, &MochilaUI::usarPocao).bind(item["id"]));
+	} else {
+		s->connect("pressed", callable_mp(this, &MochilaUI::colocarNaBancada).bind(item["id"]));
+	}
 	s->connect("mouse_entered", callable_mp(this, &MochilaUI::mostrarDica).bind(item));
 
 	Label *quantidade = memnew(Label);
@@ -420,9 +442,11 @@ TextureRect *MochilaUI::miniIcone(const String &id) {
 void MochilaUI::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("abrir"), &MochilaUI::abrir);
 	ClassDB::bind_method(D_METHOD("colocar_na_bancada", "id_item"), &MochilaUI::colocarNaBancada);
+	ClassDB::bind_method(D_METHOD("usar_pocao", "id_pocao"), &MochilaUI::usarPocao);
 	ClassDB::bind_method(D_METHOD("misturar"), &MochilaUI::misturar);
 	ClassDB::bind_method(D_METHOD("set_pode_fechar", "pode"), &MochilaUI::setPodeFechar);
 	ClassDB::bind_method(D_METHOD("get_pode_fechar"), &MochilaUI::getPodeFechar);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "pode_fechar"), "set_pode_fechar", "get_pode_fechar");
 	ADD_SIGNAL(MethodInfo("fechar_pedido"));
+	ADD_SIGNAL(MethodInfo("pocao_usada", PropertyInfo(Variant::DICTIONARY, "resultado")));
 }

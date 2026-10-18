@@ -9,6 +9,7 @@
 using namespace alquimia;
 
 static const char *CAMINHO_DADOS = "res://data/alquimia.json";
+static const char *CAMINHO_PERSONAGENS = "res://data/inimigos.json";
 static const int QUANTIDADE_INICIAL = 5;
 
 void AlquimiaFacade::_ready() {
@@ -22,11 +23,13 @@ void AlquimiaFacade::_ready() {
 	catalogo.carregar(dados.get("ingredientes", Array()));
 	tabela.carregar(dados.get("receitas", Array()));
 	criador.carregar(dados.get("receitas", Array()));
+	efeitos.carregar(dados.get("receitas", Array()));
 	persistencia.carregar(livro);
 	coletarIngredientes(QUANTIDADE_INICIAL);
+
+	const Dictionary personagens = JSON::parse_string(FileAccess::get_file_as_string(CAMINHO_PERSONAGENS));
+	jogador = ponte::combatente(personagens.get("jogador", Dictionary()));
 }
-
-
 
 Ref<ResultadoMistura> AlquimiaFacade::combinar(const String &idA, const String &idB) {
 	if (!catalogo.buscar(idA) || !catalogo.buscar(idB)) {
@@ -198,6 +201,115 @@ void AlquimiaFacade::esquecerLivro() {
 	persistencia.salvar(livro);
 }
 
+// --- Poções em uso (padrão Decorator) ---
+
+UsoDePocao AlquimiaFacade::usarPocao(const String &idPocao, G4Efeitos::Combatente *alvo, const std::vector<G4Efeitos::Combatente *> &inimigos) {
+	UsoDePocao uso;
+	const Pocao *pocao = criador.modelo(idPocao);
+	const auto *lista = efeitos.buscar(idPocao);
+	if (!pocao || !lista) {
+		uso.mensagem = String::utf8("Só poções podem ser usadas.");
+		return uso;
+	}
+	if (!inventario.possui(idPocao, 1)) {
+		uso.mensagem = String::utf8("Você não tem essa poção.");
+		return uso;
+	}
+	if (efeitos.precisaDeInimigo(idPocao) && inimigos.empty()) {
+		uso.mensagem = String::utf8("Essa poção só pode ser usada em combate.");
+		return uso;
+	}
+	if (efeitos.precisaEscolherAlvo(idPocao) && !alvo) {
+		uso.mensagem = String::utf8("Escolha um inimigo como alvo.");
+		return uso;
+	}
+
+	// 1. Inventário: gasta a poção.  2. FabricaDeEfeitos: decora os alvos.
+	inventario.remover(idPocao, 1);
+	uso.aplicacoes = fabrica.aplicarPocao(*lista, *jogador, inimigos, alvo);
+	for (const auto &aplicacao : uso.aplicacoes) {
+		uso.revelarMapa = uso.revelarMapa || aplicacao.second.revelarMapa;
+	}
+	uso.sucesso = true;
+	uso.nome = pocao->getNome();
+	uso.cor = pocao->getCor();
+	uso.vfx = efeitos.vfx(idPocao);
+	return uso;
+}
+
+bool AlquimiaFacade::precisaDeInimigo(const String &idPocao) const {
+	return efeitos.precisaDeInimigo(idPocao);
+}
+
+bool AlquimiaFacade::precisaEscolherAlvo(const String &idPocao) const {
+	return efeitos.precisaEscolherAlvo(idPocao);
+}
+
+Dictionary AlquimiaFacade::usarPocaoForaDeCombate(const String &idPocao) {
+	const UsoDePocao uso = usarPocao(idPocao, nullptr, {});
+	Dictionary d;
+	d["sucesso"] = uso.sucesso;
+	d["mensagem"] = uso.mensagem;
+	d["nome"] = uso.nome;
+	d["vfx"] = uso.vfx;
+	d["cor"] = uso.cor;
+	d["revelar_mapa"] = uso.revelarMapa;
+	PackedStringArray mensagens;
+	for (const auto &aplicacao : uso.aplicacoes) {
+		mensagens.push_back(ponte::texto(aplicacao.second.mensagem));
+	}
+	d["mensagens"] = mensagens;
+	return d;
+}
+
+Dictionary AlquimiaFacade::descreverJogador() const {
+	const G4Efeitos::Personagem &p = jogador->personagem();
+	Dictionary atributos;
+	const std::pair<const char *, G4Efeitos::Atributo> nomes[] = {
+		{ "forca", G4Efeitos::Atributo::FORCA }, { "defesa", G4Efeitos::Atributo::DEFESA },
+		{ "defesa_magica", G4Efeitos::Atributo::DEFESA_MAGICA }, { "velocidade", G4Efeitos::Atributo::VELOCIDADE },
+		{ "precisao", G4Efeitos::Atributo::PRECISAO }, { "sorte", G4Efeitos::Atributo::SORTE },
+		{ "dano_magico", G4Efeitos::Atributo::DANO_MAGICO },
+	};
+	for (const auto &[nome, atributo] : nomes) {
+		atributos[nome] = p.atributo(atributo);
+	}
+	Dictionary d;
+	d["nome"] = ponte::texto(p.nome());
+	d["hp"] = p.hp();
+	d["hp_maximo"] = jogador->hpMaximo();
+	d["mp"] = p.mp();
+	d["mp_maximo"] = jogador->mpMaximo();
+	d["atributos"] = atributos;
+	d["efeitos"] = ponte::efeitosAtivos(*jogador);
+	d["raio_de_luz"] = p.raioDeLuz();
+	return d;
+}
+
+int AlquimiaFacade::bonusDeSorte() const {
+	return jogador->personagem().atributo(G4Efeitos::Atributo::SORTE);
+}
+
+void AlquimiaFacade::registrarSaque() {
+	jogador->saquear();
+}
+
+// A luz da Chama Fátua e do Elixir da Noite dura enquanto o jogador está na caverna.
+void AlquimiaFacade::apagarLuzes() {
+	jogador->removerEfeitos([](const G4Efeitos::EfeitoDecorator &e) {
+		return dynamic_cast<const G4Efeitos::RaioDeLuz *>(&e) != nullptr;
+	});
+}
+
+void AlquimiaFacade::restaurarJogador() {
+	jogador->restaurar();
+}
+
+void AlquimiaFacade::descansar() {
+	jogador->personagem().alterarHp(1);
+	jogador->personagem().alterarMp(1);
+}
+
 // --- Auxiliares ---
 
 Dictionary AlquimiaFacade::descreverPocao(const Pocao &pocao) const {
@@ -233,4 +345,12 @@ void AlquimiaFacade::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("coletar_ingrediente", "id_ingrediente", "quantidade"), &AlquimiaFacade::coletarIngrediente);
 	ClassDB::bind_method(D_METHOD("coletar_ingredientes", "quantidade"), &AlquimiaFacade::coletarIngredientes);
 	ClassDB::bind_method(D_METHOD("esquecer_livro"), &AlquimiaFacade::esquecerLivro);
+	ClassDB::bind_method(D_METHOD("usar_pocao", "id_pocao"), &AlquimiaFacade::usarPocaoForaDeCombate);
+	ClassDB::bind_method(D_METHOD("precisa_de_inimigo", "id_pocao"), &AlquimiaFacade::precisaDeInimigo);
+	ClassDB::bind_method(D_METHOD("descrever_jogador"), &AlquimiaFacade::descreverJogador);
+	ClassDB::bind_method(D_METHOD("bonus_de_sorte"), &AlquimiaFacade::bonusDeSorte);
+	ClassDB::bind_method(D_METHOD("registrar_saque"), &AlquimiaFacade::registrarSaque);
+	ClassDB::bind_method(D_METHOD("apagar_luzes"), &AlquimiaFacade::apagarLuzes);
+	ClassDB::bind_method(D_METHOD("restaurar_jogador"), &AlquimiaFacade::restaurarJogador);
+	ClassDB::bind_method(D_METHOD("descansar"), &AlquimiaFacade::descansar);
 }

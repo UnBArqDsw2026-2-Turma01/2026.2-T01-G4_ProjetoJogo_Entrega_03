@@ -61,9 +61,11 @@ void Bau::_unhandled_input(const Ref<InputEvent> &evento) {
 void Bau::abrir() {
 	Array obtidos;
 	const Array itens = tipo["itens"];
+	// Sorte do jogador (Amuleto Líquido, um decorador contado em saques) soma na chance.
+	const int sorte = fachada(this)->bonusDeSorte();
 	for (int i = 0; i < itens.size(); i++) {
 		const Dictionary item = itens[i];
-		if (UtilityFunctions::randf() * 100.0 < double(item["chance"])) {
+		if (UtilityFunctions::randf() * 100.0 < double(item["chance"]) + sorte) {
 			const int quantidade = UtilityFunctions::randi_range(int(item["min"]), int(item["max"]));
 			if (fachada(this)->coletarIngrediente(item["id"], quantidade)) {
 				Dictionary obtido;
@@ -74,6 +76,7 @@ void Bau::abrir() {
 		}
 	}
 
+	fachada(this)->registrarSaque();
 	aberto = true;
 	sprite->set_texture(icone("bau_aberto"));
 	painel->hide();
