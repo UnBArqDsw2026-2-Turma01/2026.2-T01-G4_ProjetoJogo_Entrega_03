@@ -12,7 +12,17 @@ Atender à entrega do padrão estrutural: **um GoF Decorator com modelo, código
 
 ## Metodologia
 
-*A preencher pelo autor:* descreva como ocorreu a elaboração deste artefato, as reuniões realizadas ([Atas do Subgrupo 02](/Atas/SubEquipe_02.md)), ferramentas de modelagem e desenvolvimento utilizadas, e o processo de revisão.
+A divisão dos padrões estruturais foi decidida na primeira reunião da SubEquipe 02, em 16/10/2026, pelo WhatsApp ([Ata 01 do Subgrupo 02](/Atas/AtaSub02_01.md)). Propus que cada integrante escolhesse um dos sete padrões estruturais para aplicar em um módulo do jogo. Na lista de usos possíveis que o João Victor levantou, o Decorator aparecia para modificadores e power-ups, e fiquei com ele. A subequipe também decidiu usar C++17 em todos os padrões, para que o código rodasse tanto no terminal quanto dentro do Godot.
+
+A elaboração seguiu estas etapas:
+
+1. **Levantamento do problema:** listei as 36 poções do jogo, que até então tinham só um efeito descrito em texto, e separei as que mudam o comportamento de um personagem por um tempo (25, candidatas a decoradores) das que agem uma vez e acabam (11). Também levantei as mecânicas que faltavam para os efeitos fazerem sentido: atributos, combate por turnos, inimigos, uma caverna escura e segredos no mapa.
+2. **Assets:** gerei as artes que faltavam com IA, o Gemini para inimigos e cenários e scripts em Python para ícones e efeitos visuais, como descrito no [relatório de IA Generativa](/Base/Relatórios/SubEquipe_02/IAGenerativa.md).
+3. **Modelagem:** fiz os diagramas de classes em Mermaid, identificando os papéis do padrão, e os ajustei depois da implementação, para que refletissem o código final. Para ficarem legíveis e com zoom no site, separei o padrão da integração com o jogo e exportei as figuras como imagem com o mermaid-cli, usando o layout ELK, que evita cruzamento de setas.
+4. **Implementação:** escrevi o núcleo do padrão em C++17 sem depender do Godot, no mesmo formato do Composite (headers, `Makefile` e demonstração no terminal). Depois, liguei o núcleo ao jogo pela fachada do Marcelo, que ganhou a operação `usarPocao`, e criei a tela de combate, a caverna e os segredos.
+5. **Verificação:** testes automatizados do núcleo (172 verificações, incluindo as 36 poções), testes do jogo sem janela, capturas de tela do combate e da caverna e a versão para navegador testada antes de ser publicada.
+
+Usei o VS Code com o Claude Code (Anthropic) e o Gemini (Google), o Godot 4.7.2 com godot-cpp e SCons, o g++ e o Emscripten 4.0.11 para a versão web. O uso da IA está detalhado no relatório de IA Generativa. A revisão é feita por outro integrante no pull request, como pede o [Guia de Contribuição](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/CONTRIBUTING.md).
 
 ---
 
@@ -25,185 +35,40 @@ Atender à entrega do padrão estrutural: **um GoF Decorator com modelo, código
 | **Padrão** | **Decorator** |
 | **Categoria** | GoF Estrutural |
 | **Autor Responsável** | Marcos Vinícius Gündel da Silva ([@MarcosViniciusG](https://github.com/MarcosViniciusG)) |
-| **Intenção do Padrão** | *A preencher, com base na literatura (ex.: GAMMA et al., 2000).* |
-| **Justificativa da Escolha** | *A preencher: por que este padrão, quais entidades ele estende dinamicamente e quais benefícios traz para o jogo.* |
+| **Intenção do Padrão** | Acrescentar responsabilidades a um objeto dinamicamente, em tempo de execução. Os decoradores são uma alternativa flexível ao uso de subclasses para estender funcionalidades (GAMMA et al., 2000). |
+| **Justificativa da Escolha** | Na divisão da subequipe, o Decorator ficou com os modificadores e power-ups do jogo, que no G4_ProjetoJogo são os efeitos das poções: bônus, penalidades, resistências e condições como sono e veneno. Esses efeitos se acumulam no mesmo personagem, duram tempos diferentes e podem ser retirados no meio do combate. O Decorator permite empilhar e retirar efeitos em tempo de execução sem uma subclasse para cada combinação, e quem usa o personagem (combate, mundo e interface) não precisa saber quais efeitos estão ativos. Entre os outros estruturais listados, o Composite organiza hierarquias parte-todo e o Proxy controla o acesso a um objeto; nenhum deles acrescenta comportamento a um objeto que já existe. |
 
 <p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Autores, 2026.</p>
 
 ### Contexto (Problema)
 
-*A preencher pelo autor:* descreva o contexto do jogo e o problema a ser resolvido com o padrão Decorator. Indique o que ficaria rígido, duplicado ou limitado ao uso estático de subclasses sem a flexibilidade da decoração em tempo de execução.
+Antes deste trabalho, as 36 poções do jogo podiam ser criadas na bancada de alquimia, mas não faziam nada. Cada uma tinha só um texto de efeito, como "+3 de defesa por 3 turnos" ou "Envenena um inimigo", e o jogo não tinha combate, atributos nem inimigos.
+
+Implementar esses efeitos traz três exigências:
+
+- **Combinação:** um personagem pode estar ao mesmo tempo sob o Elixir da Quimera e a Poção de Pele de Pedra e ainda envenenado, com os efeitos aplicados em qualquer ordem;
+- **Duração e remoção:** cada efeito dura uma quantidade diferente de turnos ou de baús abertos, alguns acabam ao serem usados (Poção do Voo) e outros são retirados por outras poções (o Bálsamo de Cobre tira o veneno);
+- **Transparência:** o combate, o mundo e a interface precisam consultar atributos, resistências e condições do personagem sem conhecer cada efeito.
+
+Sem um padrão, as alternativas seriam ruins. Com herança, seria preciso uma subclasse para cada combinação, como um "jogador envenenado com Quimera", o que é inviável com 25 efeitos que se combinam livremente. Com indicadores e condicionais dentro do personagem (`if (envenenado)`, `if (comSorte)`), a classe cresceria a cada poção nova, e o combate também precisaria conhecer cada caso. No Decorator, cada efeito é um objeto que envolve o personagem e muda só o que lhe cabe.
 
 ### Modelagem (Notação UML)
 
-O diagrama de classes da Figura 1 mostra como os efeitos das poções decoram um personagem em tempo de execução. Cada efeito ativo é um objeto que envolve o personagem e altera apenas o que lhe diz respeito, repassando todo o resto para o objeto envolvido.
+O modelo está dividido em dois diagramas de classes. A Figura 1 mostra o padrão em si: como os efeitos das poções decoram um personagem em tempo de execução. Cada efeito ativo é um objeto que envolve o personagem e altera apenas o que lhe diz respeito, repassando todo o resto para o objeto envolvido. As cores indicam o papel de cada classe no padrão: Client em roxo, Component em azul, ConcreteComponent em verde, Decorator em laranja, ConcreteDecorators em amarelo e classes de apoio em cinza. Clique nas figuras para ampliá-las.
 
-```mermaid
-classDiagram
-    direction TB
-
-    class Personagem {
-        <<Component>>
-        +nome() string*
-        +atributo(a: Atributo) int*
-        +resistencia(e: Elemento) float*
-        +elementoDoAtaque() Elemento*
-        +podeAgir() bool*
-        +podeSerAlvo() bool*
-        +escolherAlvo(alvos: int, pretendido: int) int*
-        +raioDeLuz() float*
-        +reagirAoAtaque(ataque: Ataque) Reacao*
-        +aoIniciarTurno(topo: Personagem) void*
-        +aoReceberDano(dano: int) void*
-        +aoSaquear() void*
-        +hp() int*
-        +mp() int*
-        +alterarHp(delta: int) void*
-        +alterarMp(delta: int) void*
-        +efeitosAtivos() vector~string~*
-    }
-
-    class AtributosBase {
-        <<ConcreteComponent>>
-        -string nome
-        -map~Atributo, int~ base
-        -int hpAtual
-        -int mpAtual
-        -float raioBase
-        +aumentarBase(a: Atributo, delta: int) void
-    }
-
-    class EfeitoDecorator {
-        <<Decorator>>
-        #unique_ptr~Personagem~ envolvido
-        #Duracao duracao
-        #string icone
-        +expirou() bool
-        +aoIniciarTurno(topo: Personagem) void
-        +aoSaquear() void
-        +efeitosAtivos() vector~string~
-        +removerEfeitos(cadeia, filtro) unique_ptr~Personagem~$
-    }
-
-    class Duracao {
-        -Unidade unidade
-        -int restante
-        +consumir(u: Unidade) void
-        +esgotada() bool
-    }
-
-    class ModificadorDeAtributo {
-        <<ConcreteDecorator>>
-        -Atributo alvo
-        -int delta
-        +atributo(a: Atributo) int
-    }
-
-    class Resistencia {
-        <<ConcreteDecorator>>
-        -Elemento elemento
-        -float fator
-        +resistencia(e: Elemento) float
-    }
-
-    class EfeitoPorTurno {
-        <<ConcreteDecorator>>
-        -int deltaHp
-        -Elemento elemento
-        +aoIniciarTurno(topo: Personagem) void
-    }
-
-    class Sono {
-        <<ConcreteDecorator>>
-        +podeAgir() bool
-        +aoReceberDano(dano: int) void
-    }
-
-    class Confusao {
-        <<ConcreteDecorator>>
-        +escolherAlvo(alvos: int, pretendido: int) int
-    }
-
-    class Invisibilidade {
-        <<ConcreteDecorator>>
-        +podeSerAlvo() bool
-    }
-
-    class ReacaoUnica {
-        <<ConcreteDecorator>>
-        -Reacao reacao
-        +reagirAoAtaque(ataque: Ataque) Reacao
-    }
-
-    class ArmaElemental {
-        <<ConcreteDecorator>>
-        -Elemento elemento
-        +elementoDoAtaque() Elemento
-    }
-
-    class RaioDeLuz {
-        <<ConcreteDecorator>>
-        -float raio
-        +raioDeLuz() float
-    }
-
-    class Combatente {
-        <<Client>>
-        -unique_ptr~Personagem~ cadeia
-        -AtributosBase* base
-        +personagem() Personagem
-        +decorar(comEfeito: function) void
-        +removerEfeitos(filtro: function) void
-        +passarTurno() void
-        +receberAtaque(ataque: Ataque) int
-        +aumentarBase(a: Atributo, delta: int) void
-    }
-
-    class FabricaDeEfeitos {
-        +aplicar(espec: EspecificacaoEfeito, alvo: Combatente) void
-        -criarDecorador(espec: EspecificacaoEfeito) function
-        -aplicarInstantaneo(espec: EspecificacaoEfeito, alvo: Combatente) void
-    }
-
-    class EspecificacaoEfeito {
-        +string tipo
-        +string alvo
-        +Atributo atributo
-        +Elemento elemento
-        +int valor
-        +Duracao duracao
-        +string icone
-    }
-
-    class AlquimiaFacade {
-        <<Facade>>
-        +usarPocao(idPocao: String, alvo: Combatente) ResultadoUso
-    }
-
-    Personagem <|.. AtributosBase : implementa
-    Personagem <|.. EfeitoDecorator : implementa
-    EfeitoDecorator "1" o-- "1" Personagem : envolvido
-    EfeitoDecorator *-- Duracao
-    EfeitoDecorator <|-- ModificadorDeAtributo
-    EfeitoDecorator <|-- Resistencia
-    EfeitoDecorator <|-- EfeitoPorTurno
-    EfeitoDecorator <|-- Sono
-    EfeitoDecorator <|-- Confusao
-    EfeitoDecorator <|-- Invisibilidade
-    EfeitoDecorator <|-- ReacaoUnica
-    EfeitoDecorator <|-- ArmaElemental
-    EfeitoDecorator <|-- RaioDeLuz
-    Combatente "1" *-- "1" Personagem : cadeia
-    Combatente --> AtributosBase : base
-    FabricaDeEfeitos ..> EspecificacaoEfeito : lê
-    FabricaDeEfeitos ..> EfeitoDecorator : cria
-    FabricaDeEfeitos ..> Combatente : decora
-    AlquimiaFacade ..> FabricaDeEfeitos : usa
-```
+![Diagrama de classes do padrão Decorator: Component, ConcreteComponent, Decorator, ConcreteDecorators e Client](assets/decorator_classes_padrao.png)
 
 <p align="center">Figura 1: Diagrama de classes do padrão Decorator aplicado aos efeitos das poções, na notação UML. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
 
-`Atributo`, `Elemento`, `Reacao` e `Unidade` são enumerações, e `Ataque` é uma estrutura com o dano, o elemento e se o ataque é mágico. Eles foram omitidos da figura para manter a legibilidade. A Tabela 2 descreve o papel de cada classe no padrão.
+A Figura 2 mostra como o padrão se liga ao resto do jogo: a fachada do sistema de alquimia (em rosa, padrão Facade) usa a `FabricaDeEfeitos` para decorar o `Combatente` do jogador, e o `Combate` conduz os turnos sobre os participantes.
+
+![Diagrama de classes da integração do Decorator com a fachada, a fábrica de efeitos e o combate](assets/decorator_classes_integracao.png)
+
+<p align="center">Figura 2: Diagrama de classes da integração do padrão Decorator com o jogo, na notação UML. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
+
+Os diagramas foram escritos em Mermaid e exportados como imagem; os arquivos-fonte editáveis ([`decorator_classes_padrao.mmd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/docs/Base/Relatórios/SubEquipe_02/assets/decorator_classes_padrao.mmd) e [`decorator_classes_integracao.mmd`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/docs/Base/Relatórios/SubEquipe_02/assets/decorator_classes_integracao.mmd)) ficam ao lado das imagens.
+
+`Atributo`, `Elemento`, `Reacao` e `Unidade` são enumerações; `Ataque`, `ResultadoAtaque`, `ResultadoEfeito`, `Evento`, `Inimigo` e `UsoDePocao` são estruturas de dados simples. Eles foram omitidos da figura para manter a legibilidade. A Tabela 2 descreve o papel de cada classe no padrão.
 
 | Papel no padrão | Classe | Responsabilidade |
 |-----------------|--------|------------------|
@@ -213,7 +78,8 @@ classDiagram
 | ConcreteDecorator | 9 classes (Tabela 3) | Cada uma sobrescreve apenas o comportamento que o efeito muda. |
 | Client | `Combatente` | Dono da cadeia de decoradores: coloca novos efeitos por cima, remove os expirados ao passar o turno e remove os efeitos desfeitos por outras poções. |
 | Complemento | `FabricaDeEfeitos` e `EspecificacaoEfeito` | Transformam a descrição dos efeitos de cada poção, lida de `data/alquimia.json`, em decoradores ou em ações instantâneas. |
-| Complemento | `AlquimiaFacade` | Ganha a operação `usarPocao`, que tira a poção do inventário e pede à fábrica que aplique os efeitos. Assim, a interface continua conhecendo só a fachada. |
+| Complemento | `Combate` | Combate por turnos. Faz todas as contas pelo topo da cadeia de cada `Combatente` (velocidade, precisão, se pode agir, se pode ser alvo), sem conhecer nenhum decorador concreto, e devolve uma lista de eventos para a tela animar. |
+| Complemento | `AlquimiaFacade` e `EfeitosDasPocoes` | A fachada ganha a operação `usarPocao`, que tira a poção do inventário e pede à fábrica que aplique os efeitos, e guarda a cadeia de efeitos do jogador. `EfeitosDasPocoes` é uma nova classe do subsistema escondido pela fachada. Assim, a interface continua conhecendo só a fachada. |
 
 <p align="center">Tabela 2: Participantes do padrão Decorator. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
 
@@ -242,18 +108,11 @@ As outras 11 poções não decoram ninguém, porque agem uma vez e acabam. A `Fa
 
 O Bálsamo de Cobre e a Poção do Esquecimento são um caso à parte: em vez de criar um decorador, eles **removem** decoradores da cadeia. O Bálsamo tira os efeitos de veneno do jogador, e o Esquecimento tira todos os efeitos de um inimigo.
 
-A Figura 2 mostra a cadeia de um jogador que foi envenenado, bebeu um Antídoto Escamado e depois um Elixir da Quimera.
+A Figura 3 mostra a cadeia de um jogador que foi envenenado, bebeu um Antídoto Escamado e depois um Elixir da Quimera.
 
-```mermaid
-flowchart LR
-    C["Combatente<br/>(jogador)"] --> Q1["ModificadorDeAtributo<br/>velocidade +2"]
-    Q1 --> Q2["ModificadorDeAtributo<br/>força +2"]
-    Q2 --> R["Resistencia<br/>veneno x0"]
-    R --> V["EfeitoPorTurno<br/>veneno -4 HP"]
-    V --> B["AtributosBase<br/>força 5, velocidade 4"]
-```
+![Exemplo de cadeia de decoradores: Combatente, dois ModificadorDeAtributo, Resistencia, EfeitoPorTurno e AtributosBase](assets/decorator_cadeia_exemplo.png)
 
-<p align="center">Figura 2: Exemplo de cadeia de decoradores em tempo de execução. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
+<p align="center">Figura 3: Exemplo de cadeia de decoradores em tempo de execução. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
 
 Uma consulta como `atributo(VELOCIDADE)` entra pelo decorador mais externo e atravessa a cadeia até o `AtributosBase`, e cada decorador soma a sua parte: 4 da base mais 2 da Quimera. No início do turno, o veneno aplica o dano pedindo a resistência ao **topo** da cadeia, e não ao objeto que ele envolve. Por isso o Antídoto, bebido depois do veneno, ainda zera o dano. Sem o padrão, cada combinação precisaria de uma subclasse própria, como um "jogador envenenado com Quimera"; com ele, os efeitos se combinam em qualquer ordem e quantidade durante o jogo.
 
@@ -263,7 +122,64 @@ O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/Un
 
 #### Código
 
-*A preencher pelo autor:* explique a estrutura dos arquivos, as classes que compõem a cadeia de decoração e os métodos customizados, incluindo links para os arquivos correspondentes no repositório.
+O núcleo do padrão é C++17 puro e é o mesmo código que roda na demonstração do terminal e dentro do jogo. A Tabela 4 mostra onde está cada participante; os demais arquivos apenas usam esses participantes.
+
+| Papel no padrão | Classe | Arquivo |
+|-----------------|--------|---------|
+| Component | `Personagem` | [`personagem.hpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/decorator/personagem.hpp) |
+| ConcreteComponent | `AtributosBase` | [`atributos_base.hpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/decorator/atributos_base.hpp) |
+| Decorator | `EfeitoDecorator` | [`efeito_decorator.hpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/decorator/efeito_decorator.hpp) |
+| ConcreteDecorator | 9 classes, como `ModificadorDeAtributo` e `Sono` | [`efeitos.hpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/decorator/efeitos.hpp) |
+| Client | `Combatente` | [`combatente.hpp`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/decorator/combatente.hpp) |
+
+<p align="center">Tabela 4: Onde está cada participante do padrão Decorator. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
+
+Três trechos mostram o padrão funcionando.
+
+**1. O Decorator só repassa.** O `EfeitoDecorator` guarda o personagem que envolve e, por padrão, entrega cada chamada a ele. No início do turno, também conta a duração do efeito.
+
+```cpp
+EfeitoDecorator(std::unique_ptr<Personagem> p_envolvido, Duracao p_duracao, std::string p_icone) :
+        envolvido(std::move(p_envolvido)), duracao(p_duracao), icone(std::move(p_icone)) {}
+
+int atributo(Atributo a) const override { return envolvido->atributo(a); }
+
+void aoIniciarTurno(Personagem &topo) override {
+    duracao.consumir(Duracao::Unidade::TURNOS);
+    envolvido->aoIniciarTurno(topo);
+}
+```
+
+**2. Cada decorador concreto muda só uma coisa.** O `ModificadorDeAtributo` soma o seu valor quando a consulta é sobre o atributo dele e repassa as outras sem mexer. Com parâmetros diferentes, a mesma classe serve para 11 poções, como Vigor, Pele de Pedra e Ferrugem Líquida.
+
+```cpp
+int atributo(Atributo a) const override {
+    const int valor = envolvido->atributo(a);
+    return a == alvo ? valor + delta : valor;
+}
+```
+
+**3. O Client empilha e consulta pelo topo.** O `Combatente` coloca cada efeito novo por cima da cadeia. No início do turno, entrega ao topo a própria cadeia como parâmetro, e a chamada desce por todos os efeitos. É por isso que o veneno (`EfeitoPorTurno`) calcula o dano com a resistência do topo, e não só da parte que ele envolve: um Antídoto bebido depois do veneno fica por cima dele e ainda assim zera o dano.
+
+```cpp
+void decorar(const ComEfeito &comEfeito) { cadeia = comEfeito(std::move(cadeia)); }
+
+void passarTurno() {
+    cadeia->aoIniciarTurno(*cadeia);
+    removerExpirados();
+}
+```
+
+Os demais arquivos complementam o padrão sem fazer parte dele: a `FabricaDeEfeitos` transforma os efeitos de cada poção, descritos em [`alquimia.json`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/data/alquimia.json), em decoradores; o `Combate` conduz os turnos; e, no jogo, a `AlquimiaFacade` ganhou a operação `usarPocao`, enquanto a tela de combate e o mundo mostram os efeitos ativos. A lista completa está no [README do projeto](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/blob/main/src/estrutural/README.md).
+
+##### Como executar
+
+```bash
+make -C src/estrutural/decorator run    # demonstração passo a passo no terminal
+make -C src/estrutural/decorator test   # 172 verificações, incluindo as 36 poções
+```
+
+O jogo completo, com o combate, a caverna e as runas, está na [versão para navegador](/Base/Relatórios/SubEquipe_02/GoFEstrutural.md?id=jogo-no-navegador).
 
 #### Vídeo
 
@@ -275,9 +191,9 @@ O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/Un
 |----------------------|---------------------|
 | [Modelagem da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/) | *A preencher: classes, atributos ou comportamentos reaproveitados.* |
 | [Ata 01 da SubEquipe 02](/Atas/AtaSub02_01.md) | Decisão do subgrupo que atribuiu o padrão Decorator a Marcos Vinícius Gündel da Silva. |
-| [Atas do Subgrupo 02](/Atas/SubEquipe_02.md) | *A preencher: atas de acompanhamento e reuniões internas.* |
+| [Atas do Subgrupo 02](/Atas/SubEquipe_02.md) | Índice das reuniões internas da subequipe; a Ata 01 registra a conversa em que o Decorator foi associado a modificadores e power-ups (Figura 1 da ata). |
 
-<p align="center">Tabela 4: Elos com outros artefatos. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 5: Elos com outros artefatos. Fonte: Autores, 2026.</p>
 
 ---
 
@@ -285,6 +201,8 @@ O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/Un
 
 > GAMMA, Erich; HELM, Richard; JOHNSON, Ralph; VLISSIDES, John. **Padrões de Projeto**: soluções reutilizáveis de software orientado a objetos. Porto Alegre: Bookman, 2000.
 > 
+> REFACTORING.GURU. **Decorator**. Disponível em: https://refactoring.guru/pt-br/design-patterns/decorator. Acesso em: 18 out. 2026.
+>
 > SERRANO, Milene; SERRANO, Maurício. **Arquitetura e Desenho de Software**. Universidade de Brasília, 2026.
 
 ## Nível de Contribuição dos Integrantes
@@ -293,7 +211,7 @@ O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/Un
 |------|:-----------------:|
 | Marcos Vinícius Gündel da Silva | 100% |
 
-<p align="center">Tabela 5: Contribuição dos integrantes.</p>
+<p align="center">Tabela 6: Contribuição dos integrantes.</p>
 
 ## Histórico de Versão
 
@@ -301,3 +219,8 @@ O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/Un
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 16/10/2026 | Criação do template inicial do artefato GoF Decorator | [Marcos Vinícius](https://github.com/MarcosViniciusG) | [João Victor](https://github.com/beyondmagic) |
 | 1.1 | 17/10/2026 | Modelagem UML do padrão Decorator: diagrama de classes, participantes, decoradores por poção e exemplo de cadeia | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.2 | 17/10/2026 | Ajuste do diagrama de classes e dos participantes ao código implementado (combate, fábrica e fachada) | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.3 | 17/10/2026 | Seção de código: arquivos do núcleo e da integração, destaques de código e instruções de execução | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.4 | 18/10/2026 | Metodologia, intenção, justificativa da escolha e contexto do problema | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.5 | 18/10/2026 | Diagramas exportados como imagens com zoom, sem cruzamento de setas: padrão (Figura 1) e integração com o jogo (Figura 2) | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.6 | 18/10/2026 | Seção de código enxugada: participantes do padrão e três trechos essenciais | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |

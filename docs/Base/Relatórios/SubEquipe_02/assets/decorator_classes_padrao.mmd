@@ -1,0 +1,152 @@
+---
+config:
+  layout: elk
+  theme: base
+  themeVariables:
+    lineColor: "#555555"
+    primaryTextColor: "#1a1a1a"
+  class:
+    useMaxWidth: false
+    hideEmptyMembersBox: true
+---
+classDiagram
+    direction TB
+
+    class Combatente {
+        <<Client>>
+        -unique_ptr~Personagem~ cadeia
+        -AtributosBase* base
+        +decorar(comEfeito) void
+        +removerEfeitos(filtro) int
+        +passarTurno() void
+        +saquear() void
+        +atacar() Ataque
+        +receberAtaque(ataque: Ataque) ResultadoAtaque
+    }
+
+    class Personagem {
+        <<Component>>
+        +nome() string*
+        +atributo(a: Atributo) int*
+        +resistencia(e: Elemento) float*
+        +elementoDoAtaque() Elemento*
+        +podeAgir() bool*
+        +podeSerAlvo() bool*
+        +escolherAlvo(alvos: int, pretendido: int) int*
+        +raioDeLuz() float*
+        +reagirAoAtaque(ataque: Ataque) Reacao*
+        +aoIniciarTurno(topo: Personagem) void*
+        +aoReceberDano(dano: int) void*
+        +aoSaquear() void*
+        +hp() / mp() int*
+        +alterarHp(delta) / alterarMp(delta) void*
+        +efeitosAtivos() vector~string~*
+    }
+
+    class AtributosBase {
+        <<ConcreteComponent>>
+        -map~Atributo, int~ base
+        -map~Elemento, float~ resistenciasBase
+        -int hpAtual
+        -int mpAtual
+        -float raioBase
+        +aumentarBase(a: Atributo, delta: int) void
+        +restaurar() void
+    }
+
+    class EfeitoDecorator {
+        <<Decorator>>
+        #unique_ptr~Personagem~ envolvido
+        #Duracao duracao
+        #string icone
+        +expirou() bool
+        +aoIniciarTurno(topo: Personagem) void
+        +aoSaquear() void
+        +efeitosAtivos() vector~string~
+        +removerEfeitos(cadeia, filtro)$ unique_ptr~Personagem~
+    }
+
+    class Duracao {
+        -Unidade unidade
+        -int restante
+        +consumir(u: Unidade) void
+        +esgotar() void
+        +esgotada() bool
+    }
+
+    class ModificadorDeAtributo {
+        <<ConcreteDecorator>>
+        -Atributo alvo
+        -int delta
+        +atributo(a) int
+    }
+    class Resistencia {
+        <<ConcreteDecorator>>
+        -Elemento elemento
+        -float fator
+        +resistencia(e) float
+    }
+    class EfeitoPorTurno {
+        <<ConcreteDecorator>>
+        -int deltaHp
+        -Elemento elemento
+        +aoIniciarTurno(topo) void
+    }
+    class Sono {
+        <<ConcreteDecorator>>
+        +podeAgir() bool
+        +aoReceberDano(dano) void
+    }
+    class Confusao {
+        <<ConcreteDecorator>>
+        +escolherAlvo(alvos, pretendido) int
+    }
+    class Invisibilidade {
+        <<ConcreteDecorator>>
+        +podeSerAlvo() bool
+    }
+    class ReacaoUnica {
+        <<ConcreteDecorator>>
+        -Reacao reacao
+        +reagirAoAtaque(ataque) Reacao
+    }
+    class ArmaElemental {
+        <<ConcreteDecorator>>
+        -Elemento elemento
+        +elementoDoAtaque() Elemento
+    }
+    class RaioDeLuz {
+        <<ConcreteDecorator>>
+        -float raio
+        +raioDeLuz() float
+    }
+
+    Combatente "1" *-- "1" Personagem : cadeia
+    Personagem <|.. AtributosBase
+    Personagem <|.. EfeitoDecorator
+    EfeitoDecorator "1" o-- "1" Personagem : envolvido
+    EfeitoDecorator *-- Duracao
+    EfeitoDecorator <|-- ModificadorDeAtributo
+    EfeitoDecorator <|-- Resistencia
+    EfeitoDecorator <|-- EfeitoPorTurno
+    EfeitoDecorator <|-- Sono
+    EfeitoDecorator <|-- Confusao
+    EfeitoDecorator <|-- Invisibilidade
+    EfeitoDecorator <|-- ReacaoUnica
+    EfeitoDecorator <|-- ArmaElemental
+    EfeitoDecorator <|-- RaioDeLuz
+
+    style Personagem fill:#e3f2fd,stroke:#1e88e5,stroke-width:2px
+    style AtributosBase fill:#e8f5e9,stroke:#43a047,stroke-width:2px
+    style EfeitoDecorator fill:#fff3e0,stroke:#fb8c00,stroke-width:2px
+    style ModificadorDeAtributo fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Resistencia fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style EfeitoPorTurno fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Sono fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Confusao fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Invisibilidade fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style ReacaoUnica fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style ArmaElemental fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style RaioDeLuz fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Combatente fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+    style Duracao fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1.5px

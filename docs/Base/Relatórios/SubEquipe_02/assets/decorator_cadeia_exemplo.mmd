@@ -1,0 +1,21 @@
+---
+config:
+  theme: base
+  themeVariables:
+    lineColor: "#555555"
+    primaryTextColor: "#1a1a1a"
+  flowchart:
+    useMaxWidth: false
+---
+flowchart LR
+    C["<b>Combatente</b><br/>(jogador)"] --> Q1["<b>ModificadorDeAtributo</b><br/>velocidade +2"]
+    Q1 --> Q2["<b>ModificadorDeAtributo</b><br/>força +2"]
+    Q2 --> R["<b>Resistencia</b><br/>veneno x0"]
+    R --> V["<b>EfeitoPorTurno</b><br/>veneno -4 HP"]
+    V --> B["<b>AtributosBase</b><br/>força 5, velocidade 4"]
+    style C fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+    style Q1 fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style Q2 fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style R fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style V fill:#fffde7,stroke:#c9a400,stroke-width:1.5px
+    style B fill:#e8f5e9,stroke:#43a047,stroke-width:2px
