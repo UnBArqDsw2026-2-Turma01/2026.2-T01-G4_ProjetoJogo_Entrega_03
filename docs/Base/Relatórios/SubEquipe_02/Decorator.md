@@ -1,10 +1,8 @@
-# SubEquipe_02 — GoF Decorator
+# SubEquipe_02: GoF Decorator
 
 ## Descrição
 
 Artefato do **FOCO_02: GoFs Estruturais & IA Generativa**, sob responsabilidade de **Marcos Vinícius Gündel da Silva**. Documenta a aplicação do padrão de projeto GoF Estrutural **Decorator** ao **G4_ProjetoJogo**, com o contexto do problema, a modelagem na notação UML, o código e o vídeo com o padrão em execução.
-
-> **Página em elaboração.** A estrutura segue o [Artefato Padrão](/Guias/ArtefatoPadrao.md?id=artefatos-de-padrões-de-projeto) da disciplina. Preencha cada seção conforme o desenvolvimento do padrão.
 
 ## Objetivo
 
@@ -16,7 +14,7 @@ A divisão dos padrões estruturais foi decidida na primeira reunião da SubEqui
 
 A elaboração seguiu estas etapas:
 
-1. **Levantamento do problema:** listei as 36 poções do jogo, que até então tinham só um efeito descrito em texto, e separei as que mudam o comportamento de um personagem por um tempo (25, candidatas a decoradores) das que agem uma vez e acabam (11). Também levantei as mecânicas que faltavam para os efeitos fazerem sentido: atributos, combate por turnos, inimigos, uma caverna escura e segredos no mapa.
+1. **Levantamento do problema:** partindo dos modelos da Entrega 02 (Tabela 5), em especial do Diagrama de Comunicação "Turno de Combate" que fiz na entrega anterior, listei as 36 poções do jogo, que até então tinham só um efeito descrito em texto, e separei as que mudam o comportamento de um personagem por um tempo (25, candidatas a decoradores) das que agem uma vez e acabam (11). Também levantei as mecânicas que faltavam para os efeitos fazerem sentido: atributos, combate por turnos, inimigos, uma caverna escura e segredos no mapa.
 2. **Assets:** gerei as artes que faltavam com IA, o Gemini para inimigos e cenários e scripts em Python para ícones e efeitos visuais, como descrito no [relatório de IA Generativa](/Base/Relatórios/SubEquipe_02/IAGenerativa.md).
 3. **Modelagem:** fiz os diagramas de classes em Mermaid, identificando os papéis do padrão, e os ajustei depois da implementação, para que refletissem o código final. Para ficarem legíveis e com zoom no site, separei o padrão da integração com o jogo e exportei as figuras como imagem com o mermaid-cli, usando o layout ELK, que evita cruzamento de setas.
 4. **Implementação:** escrevi o núcleo do padrão em C++17 sem depender do Godot, no mesmo formato do Composite (headers, `Makefile` e demonstração no terminal). Depois, liguei o núcleo ao jogo pela fachada do Marcelo, que ganhou a operação `usarPocao`, e criei a tela de combate, a caverna e os segredos.
@@ -36,9 +34,9 @@ Usei o VS Code com o Claude Code (Anthropic) e o Gemini (Google), o Godot 4.7.2 
 | **Categoria** | GoF Estrutural |
 | **Autor Responsável** | Marcos Vinícius Gündel da Silva ([@MarcosViniciusG](https://github.com/MarcosViniciusG)) |
 | **Intenção do Padrão** | Acrescentar responsabilidades a um objeto dinamicamente, em tempo de execução. Os decoradores são uma alternativa flexível ao uso de subclasses para estender funcionalidades (GAMMA et al., 2000). |
-| **Justificativa da Escolha** | Na divisão da subequipe, o Decorator ficou com os modificadores e power-ups do jogo, que no G4_ProjetoJogo são os efeitos das poções: bônus, penalidades, resistências e condições como sono e veneno. Esses efeitos se acumulam no mesmo personagem, duram tempos diferentes e podem ser retirados no meio do combate. O Decorator permite empilhar e retirar efeitos em tempo de execução sem uma subclasse para cada combinação, e quem usa o personagem (combate, mundo e interface) não precisa saber quais efeitos estão ativos. Entre os outros estruturais listados, o Composite organiza hierarquias parte-todo e o Proxy controla o acesso a um objeto; nenhum deles acrescenta comportamento a um objeto que já existe. |
+| **Justificativa da Escolha** | Na divisão da subequipe, o Decorator ficou com os modificadores e power-ups do jogo, que no projeto são os efeitos das poções: bônus, penalidades, resistências e condições como sono e veneno. Esses efeitos se acumulam no mesmo personagem, duram tempos diferentes e podem ser retirados no meio do combate. O Decorator permite empilhar e retirar efeitos em tempo de execução sem uma subclasse para cada combinação, e quem usa o personagem (combate, mundo e interface) não precisa saber quais efeitos estão ativos. |
 
-<p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 1: Padrão escolhido pela SubEquipe_02. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
 
 ### Contexto (Problema)
 
@@ -116,7 +114,7 @@ A Figura 3 mostra a cadeia de um jogador que foi envenenado, bebeu um Antídoto 
 
 Uma consulta como `atributo(VELOCIDADE)` entra pelo decorador mais externo e atravessa a cadeia até o `AtributosBase`, e cada decorador soma a sua parte: 4 da base mais 2 da Quimera. No início do turno, o veneno aplica o dano pedindo a resistência ao **topo** da cadeia, e não ao objeto que ele envolve. Por isso o Antídoto, bebido depois do veneno, ainda zera o dano. Sem o padrão, cada combinação precisaria de uma subclasse própria, como um "jogador envenenado com Quimera"; com ele, os efeitos se combinam em qualquer ordem e quantidade durante o jogo.
 
-### Implementação (Código & Vídeo com Padrão em Execução)
+### Implementação (Código e Vídeo com Padrão em Execução)
 
 O código deste foco fica em [`src/estrutural/decorator/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/decorator/).
 
@@ -183,17 +181,26 @@ O jogo completo, com o combate, a caverna e as runas, está na [versão para nav
 
 #### Vídeo
 
-*A preencher pelo autor:* incorpore o vídeo que demonstra o código em execução, com legenda e link direto, conforme o [modelo de vídeo incorporado](/Guias/ArtefatoPadrao.md?id=modelo-de-vídeo-incorporado).
+Apresentação do padrão Decorator: o problema dos efeitos das poções, o diagrama de classes, a implementação dos participantes, a demonstração no terminal e os efeitos no jogo, no combate e na caverna.
+
+<div style="max-width:960px;margin:0 auto;">
+  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_02/assets/efeito_decorator_video.mp4"></video>
+</div>
+
+<p align="center">Vídeo 1: Padrão Decorator aplicado aos efeitos das poções, em execução. Fonte: Marcos Vinícius Gündel da Silva, 2026. <a href="Base/Relatórios/SubEquipe_02/assets/efeito_decorator_video.mp4" target="_blank">Link direto para o vídeo</a>.</p>
 
 ### Rastreabilidade
 
 | Artefato Relacionado | Elo com este Padrão |
 |----------------------|---------------------|
-| [Modelagem da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/) | *A preencher: classes, atributos ou comportamentos reaproveitados.* |
+| [Diagrama de Comunicação "Turno de Combate" (Entrega 02, SubEquipe 02)](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemDinamica?id=interação-1-turno-de-combate) | Modelei na Entrega 02 a mensagem `aplicaEfeitoNovaPocao()`, da mistura de elementos para o motor de batalha. Nesta entrega, ela foi implementada: o `usarPocao` da fachada entrega a poção à `FabricaDeEfeitos`, que decora o `Combatente`. O `sinalizaTurno()` corresponde ao início do turno, quando o `Combatente` avisa o topo da cadeia. |
+| [Diagrama de Classes (Entrega 02, SubEquipe 03)](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_03/ModelagemEstatica?id=personagens) | Reaproveitei os nomes `Personagem` e `Combatente` e os atributos de combate (vida, ataque e defesa). A fraqueza elemental do `Inimigo` ao `TipoEfeito` virou as resistências por elemento (o Gólem de Enxofre resiste a fogo e é fraco a eletricidade). A diferença: lá, `Combatente` era uma superclasse na herança; aqui, os efeitos não são subclasses do personagem, e sim decoradores que o envolvem. |
+| [Diagrama de Componentes (Entrega 02, SubEquipe 02)](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_02/ModelagemEstatica?id=diagrama-de-componentes) | A interface "Atributos" e o componente "Menu de Status" aparecem como a HUD, que mostra HP, MP e os ícones dos efeitos ativos lidos da cadeia; a saída "Output Nova Poção" da mistura é a poção que o jogador agora pode usar. |
+| [Requisitos Funcionais do MVP (Entrega 02, SubEquipe 01)](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_01/RequisitosFuncionais) | O RF10 pede validar tipo, quantidade e alvo antes de descontar o consumível, e preservar tudo em caso de recusa: é o que o `usarPocao` faz antes de gastar a poção. A regra de manter os PV entre zero e o máximo está no `AtributosBase`, e os RF08, RF09 e RF11 (início, turnos e fim do combate) estão no `Combate`. |
 | [Ata 01 da SubEquipe 02](/Atas/AtaSub02_01.md) | Decisão do subgrupo que atribuiu o padrão Decorator a Marcos Vinícius Gündel da Silva. |
 | [Atas do Subgrupo 02](/Atas/SubEquipe_02.md) | Índice das reuniões internas da subequipe; a Ata 01 registra a conversa em que o Decorator foi associado a modificadores e power-ups (Figura 1 da ata). |
 
-<p align="center">Tabela 5: Elos com outros artefatos. Fonte: Autores, 2026.</p>
+<p align="center">Tabela 5: Elos com outros artefatos. Fonte: Marcos Vinícius Gündel da Silva, 2026.</p>
 
 ---
 
@@ -223,4 +230,5 @@ O jogo completo, com o combate, a caverna e as runas, está na [versão para nav
 | 1.3 | 17/10/2026 | Seção de código: arquivos do núcleo e da integração, destaques de código e instruções de execução | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
 | 1.4 | 18/10/2026 | Metodologia, intenção, justificativa da escolha e contexto do problema | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
 | 1.5 | 18/10/2026 | Diagramas exportados como imagens com zoom, sem cruzamento de setas: padrão (Figura 1) e integração com o jogo (Figura 2) | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
-| 1.6 | 18/10/2026 | Seção de código enxugada: participantes do padrão e três trechos essenciais | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.6 | 18/10/2026 | Seção de código reduzida: participantes do padrão e três trechos essenciais | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
+| 1.7 | 18/10/2026 | Vídeo do padrão em execução, rastreabilidade com a Entrega 02 e remoção do aviso de página em elaboração | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
