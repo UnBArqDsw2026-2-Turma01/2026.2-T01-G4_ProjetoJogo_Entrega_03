@@ -145,7 +145,14 @@
     "id": "pocao_de_cura_menor",
     "nome": "Poção de Cura Menor",
     "efeito": "Restaura 20 de HP.",
-    "cor": "#e05a5a"
+    "cor": "#e05a5a",
+    "vfx": "brilho_cura",
+    "efeitos": [
+     {
+      "tipo": "cura_hp",
+      "valor": 20
+     }
+    ]
    }
   },
   {
@@ -155,7 +162,17 @@
     "id": "tonico_aquecido",
     "nome": "Tônico Aquecido",
     "efeito": "Resistência ao frio por 3 turnos.",
-    "cor": "#f08c3c"
+    "cor": "#f08c3c",
+    "vfx": "escudo",
+    "efeitos": [
+     {
+      "tipo": "resistencia",
+      "elemento": "frio",
+      "fator": 0.5,
+      "turnos": 3,
+      "icone": "resistencia_frio"
+     }
+    ]
    }
   },
   {
@@ -165,7 +182,16 @@
     "id": "elixir_do_sono",
     "nome": "Elixir do Sono",
     "efeito": "Faz um inimigo adormecer.",
-    "cor": "#8a6fd1"
+    "cor": "#8a6fd1",
+    "vfx": "nuvem",
+    "efeitos": [
+     {
+      "tipo": "sono",
+      "alvo": "inimigo",
+      "turnos": 3,
+      "icone": "sono"
+     }
+    ]
    }
   },
   {
@@ -175,7 +201,13 @@
     "id": "pocao_de_clarividencia",
     "nome": "Poção de Clarividência",
     "efeito": "Revela os segredos do mapa.",
-    "cor": "#7fe0d4"
+    "cor": "#7fe0d4",
+    "vfx": "clarao",
+    "efeitos": [
+     {
+      "tipo": "revelar_mapa"
+     }
+    ]
    }
   },
   {
@@ -185,7 +217,18 @@
     "id": "pocao_de_pele_de_pedra",
     "nome": "Poção de Pele de Pedra",
     "efeito": "+3 de defesa por 3 turnos.",
-    "cor": "#9a8f7a"
+    "cor": "#9a8f7a",
+    "vfx": "escudo",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "defesa",
+      "valor": 3,
+      "icone": "defesa",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -195,7 +238,18 @@
     "id": "pocao_da_pena_leve",
     "nome": "Poção da Pena Leve",
     "efeito": "+2 de velocidade por 3 turnos.",
-    "cor": "#d9e6f2"
+    "cor": "#d9e6f2",
+    "vfx": "penas",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "velocidade",
+      "valor": 2,
+      "icone": "velocidade",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -205,7 +259,14 @@
     "id": "agua_cristalina",
     "nome": "Água Cristalina",
     "efeito": "Restaura 20 de MP.",
-    "cor": "#6fb6ff"
+    "cor": "#6fb6ff",
+    "vfx": "brilho_cura",
+    "efeitos": [
+     {
+      "tipo": "cura_mp",
+      "valor": 20
+     }
+    ]
    }
   },
   {
@@ -215,7 +276,14 @@
     "id": "balsamo_de_cobre",
     "nome": "Bálsamo de Cobre",
     "efeito": "Cura envenenamento.",
-    "cor": "#c8743c"
+    "cor": "#c8743c",
+    "vfx": "dissipar",
+    "efeitos": [
+     {
+      "tipo": "remover_efeitos",
+      "remover": "veneno"
+     }
+    ]
    }
   },
   {
@@ -225,7 +293,16 @@
     "id": "pocao_flamejante",
     "nome": "Poção Flamejante",
     "efeito": "Causa dano de fogo a um inimigo.",
-    "cor": "#ff5a1f"
+    "cor": "#ff5a1f",
+    "vfx": "fogo",
+    "efeitos": [
+     {
+      "tipo": "dano",
+      "alvo": "inimigo",
+      "valor": 15,
+      "elemento": "fogo"
+     }
+    ]
    }
   },
   {
@@ -235,7 +312,18 @@
     "id": "fumaca_toxica",
     "nome": "Fumaça Tóxica",
     "efeito": "Envenena todos os inimigos.",
-    "cor": "#6b8f2a"
+    "cor": "#6b8f2a",
+    "vfx": "nuvem",
+    "efeitos": [
+     {
+      "tipo": "por_turno",
+      "alvo": "todos_inimigos",
+      "valor": -3,
+      "elemento": "veneno",
+      "turnos": 3,
+      "icone": "veneno"
+     }
+    ]
    }
   },
   {
@@ -245,7 +333,16 @@
     "id": "chama_fatua",
     "nome": "Chama Fátua",
     "efeito": "Ilumina cavernas escuras.",
-    "cor": "#a0f0ff"
+    "cor": "#a0f0ff",
+    "vfx": "clarao",
+    "efeitos": [
+     {
+      "tipo": "luz",
+      "valor": 96,
+      "duracao": "permanente",
+      "icone": "luz"
+     }
+    ]
    }
   },
   {
@@ -255,7 +352,16 @@
     "id": "sopro_do_dragao",
     "nome": "Sopro do Dragão",
     "efeito": "Dano de fogo forte em área.",
-    "cor": "#c4241b"
+    "cor": "#c4241b",
+    "vfx": "sopro_dragao",
+    "efeitos": [
+     {
+      "tipo": "dano",
+      "alvo": "todos_inimigos",
+      "valor": 12,
+      "elemento": "fogo"
+     }
+    ]
    }
   },
   {
@@ -265,7 +371,18 @@
     "id": "cinzas_do_corvo",
     "nome": "Cinzas do Corvo",
     "efeito": "Cega um inimigo por 2 turnos.",
-    "cor": "#4a4a55"
+    "cor": "#4a4a55",
+    "vfx": "cinzas",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "inimigo",
+      "atributo": "precisao",
+      "valor": -50,
+      "icone": "cegueira",
+      "turnos": 2
+     }
+    ]
    }
   },
   {
@@ -275,7 +392,17 @@
     "id": "vidro_fundido",
     "nome": "Vidro Fundido",
     "efeito": "Escudo contra fogo.",
-    "cor": "#ffb36b"
+    "cor": "#ffb36b",
+    "vfx": "escudo",
+    "efeitos": [
+     {
+      "tipo": "resistencia",
+      "elemento": "fogo",
+      "fator": 0.5,
+      "turnos": 3,
+      "icone": "resistencia_fogo"
+     }
+    ]
    }
   },
   {
@@ -285,7 +412,16 @@
     "id": "faisca_de_cobre",
     "nome": "Faísca de Cobre",
     "efeito": "Dano elétrico em um inimigo.",
-    "cor": "#ffd23f"
+    "cor": "#ffd23f",
+    "vfx": "raio",
+    "efeitos": [
+     {
+      "tipo": "dano",
+      "alvo": "inimigo",
+      "valor": 15,
+      "elemento": "eletrico"
+     }
+    ]
    }
   },
   {
@@ -295,7 +431,18 @@
     "id": "veneno_roxo",
     "nome": "Veneno Roxo",
     "efeito": "Envenena um inimigo.",
-    "cor": "#7a2fa8"
+    "cor": "#7a2fa8",
+    "vfx": "nuvem",
+    "efeitos": [
+     {
+      "tipo": "por_turno",
+      "alvo": "inimigo",
+      "valor": -4,
+      "elemento": "veneno",
+      "turnos": 3,
+      "icone": "veneno"
+     }
+    ]
    }
   },
   {
@@ -305,7 +452,16 @@
     "id": "pocao_alucinogena",
     "nome": "Poção Alucinógena",
     "efeito": "Confunde um inimigo.",
-    "cor": "#e36fd6"
+    "cor": "#e36fd6",
+    "vfx": "nuvem",
+    "efeitos": [
+     {
+      "tipo": "confusao",
+      "alvo": "inimigo",
+      "turnos": 2,
+      "icone": "confusao"
+     }
+    ]
    }
   },
   {
@@ -315,7 +471,17 @@
     "id": "antidoto_escamado",
     "nome": "Antídoto Escamado",
     "efeito": "Imunidade a veneno por 3 turnos.",
-    "cor": "#5fbf7a"
+    "cor": "#5fbf7a",
+    "vfx": "escudo",
+    "efeitos": [
+     {
+      "tipo": "resistencia",
+      "elemento": "veneno",
+      "fator": 0,
+      "turnos": 3,
+      "icone": "imune_veneno"
+     }
+    ]
    }
   },
   {
@@ -325,7 +491,15 @@
     "id": "pocao_sombria",
     "nome": "Poção Sombria",
     "efeito": "Invisibilidade por 2 turnos.",
-    "cor": "#2b2140"
+    "cor": "#2b2140",
+    "vfx": "nuvem",
+    "efeitos": [
+     {
+      "tipo": "invisibilidade",
+      "turnos": 2,
+      "icone": "invisivel"
+     }
+    ]
    }
   },
   {
@@ -335,7 +509,15 @@
     "id": "pocao_do_esquecimento",
     "nome": "Poção do Esquecimento",
     "efeito": "Remove os efeitos de um inimigo.",
-    "cor": "#9fa8c9"
+    "cor": "#9fa8c9",
+    "vfx": "dissipar",
+    "efeitos": [
+     {
+      "tipo": "remover_efeitos",
+      "alvo": "inimigo",
+      "remover": "todos"
+     }
+    ]
    }
   },
   {
@@ -345,7 +527,18 @@
     "id": "ferrugem_liquida",
     "nome": "Ferrugem Líquida",
     "efeito": "Reduz a defesa de um inimigo.",
-    "cor": "#9c4a24"
+    "cor": "#9c4a24",
+    "vfx": "aura_debuff",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "inimigo",
+      "atributo": "defesa",
+      "valor": -3,
+      "icone": "defesa_reduzida",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -355,7 +548,18 @@
     "id": "luz_engarrafada",
     "nome": "Luz Engarrafada",
     "efeito": "Cega todos os inimigos por 1 turno.",
-    "cor": "#fff59a"
+    "cor": "#fff59a",
+    "vfx": "clarao",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "todos_inimigos",
+      "atributo": "precisao",
+      "valor": -50,
+      "icone": "cegueira",
+      "turnos": 1
+     }
+    ]
    }
   },
   {
@@ -365,7 +569,18 @@
     "id": "pocao_de_vigor",
     "nome": "Poção de Vigor",
     "efeito": "+3 de força por 3 turnos.",
-    "cor": "#e8743a"
+    "cor": "#e8743a",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "forca",
+      "valor": 3,
+      "icone": "forca",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -375,7 +590,16 @@
     "id": "elixir_da_noite",
     "nome": "Elixir da Noite",
     "efeito": "Visão no escuro.",
-    "cor": "#3a4a8f"
+    "cor": "#3a4a8f",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "luz",
+      "valor": 160,
+      "duracao": "permanente",
+      "icone": "visao_noturna"
+     }
+    ]
    }
   },
   {
@@ -385,7 +609,16 @@
     "id": "prisma_luminoso",
     "nome": "Prisma Luminoso",
     "efeito": "Reflete a próxima magia.",
-    "cor": "#b8f0ff"
+    "cor": "#b8f0ff",
+    "vfx": "prisma",
+    "efeitos": [
+     {
+      "tipo": "reacao",
+      "reacao": "reflexo",
+      "duracao": "uso_unico",
+      "icone": "reflexo"
+     }
+    ]
    }
   },
   {
@@ -395,7 +628,16 @@
     "id": "pocao_eletrica",
     "nome": "Poção Elétrica",
     "efeito": "Dano elétrico em área.",
-    "cor": "#f5e642"
+    "cor": "#f5e642",
+    "vfx": "raio",
+    "efeitos": [
+     {
+      "tipo": "dano",
+      "alvo": "todos_inimigos",
+      "valor": 10,
+      "elemento": "eletrico"
+     }
+    ]
    }
   },
   {
@@ -405,7 +647,16 @@
     "id": "pocao_de_regeneracao",
     "nome": "Poção de Regeneração",
     "efeito": "Recupera HP a cada turno.",
-    "cor": "#d94f6a"
+    "cor": "#d94f6a",
+    "vfx": "brilho_cura",
+    "efeitos": [
+     {
+      "tipo": "por_turno",
+      "valor": 5,
+      "turnos": 3,
+      "icone": "regeneracao"
+     }
+    ]
    }
   },
   {
@@ -415,7 +666,26 @@
     "id": "elixir_da_quimera",
     "nome": "Elixir da Quimera",
     "efeito": "+força e +velocidade.",
-    "cor": "#b05a2a"
+    "cor": "#b05a2a",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "forca",
+      "valor": 2,
+      "icone": "forca",
+      "turnos": 3
+     },
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "velocidade",
+      "valor": 2,
+      "icone": "velocidade",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -425,7 +695,18 @@
     "id": "couraca_de_cristal",
     "nome": "Couraça de Cristal",
     "efeito": "+3 de defesa mágica.",
-    "cor": "#9fe7ff"
+    "cor": "#9fe7ff",
+    "vfx": "escudo",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "defesa_magica",
+      "valor": 3,
+      "icone": "defesa_magica",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -435,7 +716,16 @@
     "id": "oleo_de_salamandra",
     "nome": "Óleo de Salamandra",
     "efeito": "A arma causa dano de fogo.",
-    "cor": "#e2541c"
+    "cor": "#e2541c",
+    "vfx": "fogo",
+    "efeitos": [
+     {
+      "tipo": "arma_elemental",
+      "elemento": "fogo",
+      "turnos": 3,
+      "icone": "arma_fogo"
+     }
+    ]
    }
   },
   {
@@ -445,7 +735,16 @@
     "id": "pocao_do_voo",
     "nome": "Poção do Voo",
     "efeito": "Esquiva o próximo ataque.",
-    "cor": "#c9d6e8"
+    "cor": "#c9d6e8",
+    "vfx": "penas",
+    "efeitos": [
+     {
+      "tipo": "reacao",
+      "reacao": "esquiva",
+      "duracao": "uso_unico",
+      "icone": "esquiva"
+     }
+    ]
    }
   },
   {
@@ -455,7 +754,18 @@
     "id": "olho_de_corvo",
     "nome": "Olho de Corvo",
     "efeito": "+precisão por 3 turnos.",
-    "cor": "#5a5a7a"
+    "cor": "#5a5a7a",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "precisao",
+      "valor": 15,
+      "icone": "precisao",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -465,7 +775,18 @@
     "id": "amuleto_liquido",
     "nome": "Amuleto Líquido",
     "efeito": "+sorte nos próximos saques.",
-    "cor": "#e0b84a"
+    "cor": "#e0b84a",
+    "vfx": "brilho_cura",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "sorte",
+      "valor": 25,
+      "icone": "sorte",
+      "saques": 3
+     }
+    ]
    }
   },
   {
@@ -475,7 +796,15 @@
     "id": "pocao_de_foco",
     "nome": "Poção de Foco",
     "efeito": "+10 de MP máximo.",
-    "cor": "#4f7dff"
+    "cor": "#4f7dff",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "aumentar_base",
+      "atributo": "mp_maximo",
+      "valor": 10
+     }
+    ]
    }
   },
   {
@@ -485,7 +814,18 @@
     "id": "solucao_condutora",
     "nome": "Solução Condutora",
     "efeito": "+dano mágico por 3 turnos.",
-    "cor": "#4fd1c5"
+    "cor": "#4fd1c5",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "modificador",
+      "alvo": "si",
+      "atributo": "dano_magico",
+      "valor": 5,
+      "icone": "dano_magico",
+      "turnos": 3
+     }
+    ]
    }
   },
   {
@@ -495,7 +835,15 @@
     "id": "pocao_de_ferro",
     "nome": "Poção de Ferro",
     "efeito": "+10 de HP máximo.",
-    "cor": "#8c8c96"
+    "cor": "#8c8c96",
+    "vfx": "aura_buff",
+    "efeitos": [
+     {
+      "tipo": "aumentar_base",
+      "atributo": "hp_maximo",
+      "valor": 10
+     }
+    ]
    }
   }
  ]

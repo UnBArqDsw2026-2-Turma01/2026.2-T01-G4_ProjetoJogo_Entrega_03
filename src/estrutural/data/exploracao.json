@@ -1,0 +1,25 @@
+{
+	"caverna": {
+		"entrada": [3000, 1860],
+		"origem": [0, 2800],
+		"escala": 3,
+		"chegada": [322, 288],
+		"saida": [296, 344, 54, 40],
+		"colisoes": [
+			[0, 0, 640, 88],
+			[58, 88, 160, 24],
+			[0, 0, 58, 384],
+			[588, 0, 52, 384],
+			[0, 300, 296, 84],
+			[350, 300, 290, 84],
+			[405, 88, 160, 92]
+		]
+	},
+	"segredos": [
+		{ "area": "mundo", "posicao": [360, 240], "recompensa": [{ "id": "cogumelo_brilhante", "quantidade": 2 }, { "id": "erva_lunar", "quantidade": 2 }] },
+		{ "area": "mundo", "posicao": [3480, 1260], "recompensa": [{ "id": "escama_de_salamandra", "quantidade": 2 }, { "id": "cristal_de_quartzo", "quantidade": 1 }] },
+		{ "area": "mundo", "posicao": [600, 2280], "recompensa": [{ "id": "pena_de_corvo", "quantidade": 2 }, { "id": "salvia_de_fogo", "quantidade": 2 }] },
+		{ "area": "caverna", "posicao": [100, 150], "recompensa": [{ "id": "pepita_de_cobre", "quantidade": 3 }] },
+		{ "area": "caverna", "posicao": [560, 268], "recompensa": [{ "id": "cristal_de_quartzo", "quantidade": 3 }] }
+	]
+}

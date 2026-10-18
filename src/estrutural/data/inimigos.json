@@ -1,0 +1,37 @@
+{
+	"jogador": {
+		"nome": "Alquimista",
+		"atributos": { "hp_maximo": 60, "mp_maximo": 30, "forca": 9, "defesa": 2, "defesa_magica": 2, "velocidade": 4, "precisao": 90 },
+		"raio_de_luz": 40
+	},
+	"inimigos": {
+		"golem_de_enxofre": {
+			"nome": "Gólem de Enxofre",
+			"atributos": { "hp_maximo": 36, "forca": 7, "defesa": 4, "defesa_magica": 1, "velocidade": 2, "precisao": 80 },
+			"resistencias": { "fogo": 0.25, "eletrico": 1.5 },
+			"especial": { "nome": "Bafo Sulfuroso", "chance": 30, "ataque": { "valor": 9, "elemento": "fogo" } },
+			"recompensas": [{ "id": "pepita_de_cobre", "min": 1, "max": 2 }, { "id": "cristal_de_quartzo", "min": 0, "max": 1 }]
+		},
+		"cogumelo_andante": {
+			"nome": "Cogumelo Andante",
+			"atributos": { "hp_maximo": 24, "forca": 5, "defesa": 1, "defesa_magica": 2, "velocidade": 3, "precisao": 85 },
+			"resistencias": { "veneno": 0 },
+			"especial": { "nome": "Esporos Venenosos", "chance": 40,
+				"efeito": { "tipo": "por_turno", "alvo": "inimigo", "valor": -3, "elemento": "veneno", "turnos": 3, "icone": "veneno" } },
+			"recompensas": [{ "id": "cogumelo_roxo", "min": 1, "max": 2 }, { "id": "cogumelo_brilhante", "min": 0, "max": 1 }]
+		},
+		"morcego_da_caverna": {
+			"nome": "Morcego da Caverna",
+			"atributos": { "hp_maximo": 18, "forca": 5, "defesa": 0, "defesa_magica": 1, "velocidade": 7, "precisao": 90 },
+			"recompensas": [{ "id": "pena_de_corvo", "min": 1, "max": 2 }]
+		}
+	},
+	"_posicoes": "mundo: pixels do mapa; caverna: pixels de mapa_caverna.png (sem a ampliação 3x)",
+	"encontros": [
+		{ "inimigos": ["cogumelo_andante", "cogumelo_andante"], "posicao": [744, 504], "area": "mundo" },
+		{ "inimigos": ["golem_de_enxofre"], "posicao": [1416, 960], "area": "mundo" },
+		{ "inimigos": ["golem_de_enxofre", "cogumelo_andante"], "posicao": [2520, 1320], "area": "mundo" },
+		{ "inimigos": ["morcego_da_caverna", "morcego_da_caverna"], "posicao": [150, 240], "area": "caverna" },
+		{ "inimigos": ["morcego_da_caverna", "golem_de_enxofre"], "posicao": [470, 250], "area": "caverna" }
+	]
+}

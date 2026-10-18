@@ -4,9 +4,12 @@
 #include "jogo/bau.h"
 #include "jogo/galinha.h"
 #include "jogo/ingrediente_coletavel.h"
+#include "jogo/inimigo_no_mapa.h"
 #include "jogo/jogador.h"
 #include "jogo/mochila_ui.h"
 #include "jogo/mundo.h"
+#include "jogo/runa.h"
+#include "jogo/tela_de_combate.h"
 #include "resultado_mistura.h"
 
 #include <gdextension_interface.h>
@@ -19,18 +22,19 @@ void initialize_alquimia(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	// Do sistema de alquimia, só a fachada (e o resultado que ela devolve) são
-	// visíveis ao Godot. O subsistema não é registrado.
+
 	GDREGISTER_CLASS(ResultadoMistura);
 	GDREGISTER_CLASS(AlquimiaFacade);
 
-	// Nós do jogo (Client da fachada). RUNTIME: não executam dentro do editor.
 	GDREGISTER_RUNTIME_CLASS(MochilaUI);
 	GDREGISTER_RUNTIME_CLASS(Jogador);
 	GDREGISTER_RUNTIME_CLASS(IngredienteColetavel);
 	GDREGISTER_RUNTIME_CLASS(Galinha);
 	GDREGISTER_RUNTIME_CLASS(Bau);
 	GDREGISTER_RUNTIME_CLASS(Mundo);
+	GDREGISTER_RUNTIME_CLASS(TelaDeCombate);
+	GDREGISTER_RUNTIME_CLASS(InimigoNoMapa);
+	GDREGISTER_RUNTIME_CLASS(Runa);
 }
 
 void uninitialize_alquimia(ModuleInitializationLevel p_level) {
