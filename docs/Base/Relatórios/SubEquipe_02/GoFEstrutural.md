@@ -19,7 +19,16 @@ Atender e superar a entrega do foco estrutural fornecendo:
 
 ## Metodologia e Divisão do Trabalho
 
-A estratégia de trabalho da SubEquipe 02 foi alinhada na [Ata 01 (16/10/2026)](/Atas/AtaSub02_01.md), com reuniões e registros no repositório. Para assegurar autonomia criativa e foco técnico aprofundado, cada integrante assumiu a responsabilidade por um padrão GoF Estrutural independente, implementado em C++:
+A estratégia de trabalho da SubEquipe 02 foi alinhada na [Ata 01 (16/10/2026)](/Atas/AtaSub02_01.md), com reuniões e registros no repositório. Para assegurar autonomia criativa e foco técnico aprofundado, cada integrante assumiu a responsabilidade por um padrão GoF Estrutural independente, implementado em C++.
+
+A divisão foi feita pelo WhatsApp, como registra a Figura 1 da Ata 01. Marcos Vinícius propôs escolher 4 dos 7 padrões estruturais, um por integrante, cada um aplicado a um módulo do jogo. João Victor listou os 7 padrões com usos possíveis no G4_ProjetoJogo, e cada integrante assumiu um deles:
+
+- **Composite** (João Victor): hierarquia de widgets pai e filho da cena, como a HUD de combate e os menus;
+- **Decorator** (Marcos Vinícius): modificadores e power-ups, aplicados aos efeitos das poções sobre os personagens;
+- **Bridge** (João Igor): separar a lógica de entrada, como teclado e controle, do movimento do personagem;
+- **Facade** (Marcelo): interface mais simples para um sistema complexo; os exemplos citados foram gerenciador de som e sistema de arquivos para salvar o jogo, e o padrão foi aplicado ao subsistema de alquimia.
+
+Flyweight (otimização de memória), Proxy (carregamento de texturas e assets) e Adapter (integração com bibliotecas de terceiros) também foram listados, mas não foram escolhidos.
 
 ### Distribuição dos Padrões na SubEquipe 02
 
@@ -28,7 +37,7 @@ A estratégia de trabalho da SubEquipe 02 foi alinhada na [Ata 01 (16/10/2026)](
 | **João Victor da Silva Batista de Farias** ([@beyondmagic](https://github.com/beyondmagic)) | **Composite** | C++17 / Godot | Interface de Batalha (BattleHUD), Menus e Painéis em Árvore | [1.1 GoF Composite](Base/Relatórios/SubEquipe_02/Composite.md) | [`src/estrutural/composite/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/composite/) |
 | **Marcos Vinícius Gündel da Silva** ([@MarcosViniciusG](https://github.com/MarcosViniciusG)) | **Decorator** | C++17 / Godot | Extensão Dinâmica de Entidades e Efeitos de Poções/Itens | [1.2 GoF Decorator](Base/Relatórios/SubEquipe_02/Decorator.md) | [`src/estrutural/decorator/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/decorator/) |
 | **Marcelo de Araújo Lopes** ([@MatielloAL](https://github.com/MatielloAL)) | **Facade** | C++ GDExtension / Godot 4.7 | Orquestração do Subsistema de Alquimia, Mochila e Mundo | [1.3 GoF Facade](Base/Relatórios/SubEquipe_02/Facade.md) | [`src/estrutural/native/`](https://github.com/UnBArqDsw2026-2-Turma01/2026.2-T01-G4_ProjetoJogo_Entrega_03/tree/main/src/estrutural/native/) |
-| **João Igor Pereira da Costa** ([@JoaoPC10](https://github.com/JoaoPC10)) | *A definir* | C++17 / Godot | Domínio em definição pelo autor | *(Em definição)* | *(Em definição)* |
+| **João Igor Pereira da Costa** ([@JoaoPC10](https://github.com/JoaoPC10)) | **Bridge** | C++17 / Godot | Separação entre a lógica de entrada (teclado, controle) e o movimento do personagem | *(Em elaboração)* | *(Em elaboração)* |
 
 <p align="center">Tabela 1: Distribuição dos padrões estruturais entre os membros da SubEquipe 02. Fonte: Autores, 2026.</p>
 
@@ -50,7 +59,7 @@ flowchart TD
 
     subgraph Dominio["Camada de Entidades e Domínio"]
         DEC["Padrão DECORATOR (Marcos Vinícius)\nExtensão dinâmica de entidades em C++"]
-        PAT4["Padrão 4 (João Igor)\nEm definição em C++"]
+        PAT4["Padrão BRIDGE (João Igor)\nEntrada separada do movimento em C++"]
     end
 
     UI -.->|Interação / Ações de Tela| FAC
@@ -63,8 +72,8 @@ flowchart TD
 ### Fluxo de Cooperação
 1. **Apresentação Uniforme (Composite - João Victor):** O jogador interage com o HUD (`BattleHUD`, `UIPanel`, `UIButton`). Comandos disparados na interface (ex.: sintetizar poção ou ativar atalho) navegam pela árvore de componentes polimórficos de forma uniforme e desacoplada.
 2. **Orquestração Desacoplada (Facade - Marcelo):** As solicitações complexas disparadas pela UI chegam ao `AlquimiaFacade`, que esconde toda a complexidade do catálogo de ingredientes, tabela de receitas, livro do aventureiro e persistência, entregando apenas um `ResultadoMistura`.
-3. **Composição Dinâmica (Decorator - Marcos Vinícius):** As poções e itens manipulados pelo sistema podem receber modificadores e propriedades químicas acumuladas em tempo de execução sem gerar uma explosão de subclasses.
-4. **Desacoplamento e Suporte (Padrão 4 - João Igor):** Expande os subsistemas de catálogo ou adaptação de interfaces periféricas.
+3. **Composição Dinâmica (Decorator - Marcos Vinícius):** Os efeitos das poções (modificadores e power-ups) decoram os personagens em tempo de execução: bônus, penalidades e condições se acumulam e saem sem gerar uma explosão de subclasses.
+4. **Desacoplamento da Entrada (Bridge - João Igor):** Separa a lógica de entrada (teclado, controle) do movimento do personagem, para que uma possa variar sem alterar a outra.
 
 ---
 
@@ -328,5 +337,6 @@ Para conferir o detalhamento teórico, diagramas de classe UML, códigos-fonte e
 | 1.1 | 16/10/2026 | Separação do padrão Facade para artefato dedicado (`Facade.md`) e consolidação da visão geral integrada | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
 | 1.2 | 16/10/2026 | Adição da análise crítica de arquitetura e proposta de refatoração integrando o Composite como fundação de UI para a Facade e o produto final | João Victor da Silva Batista de Farias | Marcos Vinícius Gündel da Silva |
 | 1.3 | 16/10/2026 | Inclusão da demonstração jogável em WebAssembly (Godot 4 e C++) integrando os padrões estruturais | João Victor da Silva Batista de Farias | Marcelo de Araújo Lopes |
+| 1.4 | 18/10/2026 | Registro da divisão dos padrões na metodologia, com o Bridge de João Igor, e atualização do papel do Decorator | Marcos Vinícius Gündel da Silva | |
 
 <p align="center">Tabela 4: Histórico de versão.</p>

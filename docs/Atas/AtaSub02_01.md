@@ -44,14 +44,19 @@
 | Nº | Descrição | Tipo |
 | :-: | :-------- | :--: |
 | 1 | Estratégia de entrega: A SubEquipe 02 deliberou por ir além da entrega mínima e desenvolver **4 padrões estruturais (1 por membro)** com posterior integração entre eles, garantindo excelente aproveitamento pedagógico e alta contribuição de todos. | 2. Decisão |
-| 2 | Escolha dos padrões: João Victor assumiu o padrão **Composite** para a hierarquia de interface de usuário (HUD de combate e menus). Marcos Vinícius assumiu o padrão **Decorator** para infusão alquímica e modificadores de itens. Marcelo ficou responsável pelo padrão **Facade** para orquestração da alquimia e regras de jogo (`AlchemyFacade`). O padrão de João Igor ainda será definido. | 2. Decisão |
-| 3 | Linguagem de programação: A subequipe unificou a implementação de todos os padrões em **C++ (padrão C++17)**, garantindo alto desempenho, compilação nativa com `g++` e integração conceitual direta com o runtime da Godot Engine 4.4 via GDExtension. | 2. Decisão |
-| 4 | Estrutura de documentação: Foi aprovada a criação de páginas dedicadas para cada padrão (`Composite.md`, `Decorator.md`, `Facade.md`) vinculadas à página principal `GoFEstrutural.md` no menu lateral do Docsify. | 3. Definição |
-| 5 | Cronograma: Foi estabelecido que os modelos UML e o código devem estar consolidados até sábado (17/10), a gravação dos vídeos demonstrativos no domingo (18/10) e a revisão final das atas, participações e IA Generativa na segunda-feira (19/10) pela manhã. | 3. Definição |
+| 2 | Levantamento dos padrões: Marcos Vinícius propôs escolher 4 dos 7 padrões estruturais e dividi-los entre os integrantes, cada um aplicando o seu em um módulo do jogo. João Victor listou os 7 padrões com usos possíveis no jogo (Figura 1): Composite, Decorator, Flyweight, Proxy, Bridge, Facade e Adapter. | 1. Apresentação |
+| 3 | Escolha dos padrões: João Victor assumiu o **Composite**, para a hierarquia de widgets pai e filho da cena (HUD de combate e menus). Marcos Vinícius assumiu o **Decorator**, para modificadores e power-ups. João Igor assumiu o **Bridge**, para separar a lógica de entrada (teclado, controle) do movimento do personagem. Marcelo assumiu o **Facade**, para criar uma interface mais simples para um sistema complexo (como gerenciador de som e sistema de arquivos para salvar o jogo). Flyweight, Proxy e Adapter foram listados, mas não foram escolhidos. | 2. Decisão |
+| 4 | Linguagem de programação: A subequipe unificou a implementação de todos os padrões em **C++ (padrão C++17)**, garantindo alto desempenho, compilação nativa com `g++` e integração conceitual direta com o runtime da Godot Engine 4.4 via GDExtension. | 2. Decisão |
+| 5 | Estrutura de documentação: Foi aprovada a criação de páginas dedicadas para cada padrão (`Composite.md`, `Decorator.md`, `Facade.md`) vinculadas à página principal `GoFEstrutural.md` no menu lateral do Docsify. | 3. Definição |
+| 6 | Cronograma: Foi estabelecido que os modelos UML e o código devem estar consolidados até sábado (17/10), a gravação dos vídeos demonstrativos no domingo (18/10) e a revisão final das atas, participações e IA Generativa na segunda-feira (19/10) pela manhã. | 3. Definição |
 
 <p align="center">Tabela 5: Assuntos tratados. Fonte: Autores, 2026.</p>
 
 > **Tipos:** 1. Apresentação · 2. Decisão · 3. Definição · 4. Solicitação · 5. Pendência.
+
+![Conversa da SubEquipe 02 no WhatsApp com os padrões estruturais e seus usos possíveis no jogo](../Base/Relatórios/SubEquipe_02/assets/subgrupo02_divisao.png)
+
+<p align="center">Figura 1: Proposta de dividir os padrões estruturais entre os integrantes e lista dos 7 padrões com usos possíveis no jogo, seguida da escolha do Composite por João Victor. Fonte: grupo de WhatsApp da SubEquipe 02, 16/10/2026.</p>
 
 ## Próxima Reunião
 
@@ -64,7 +69,7 @@
 | 1 | Validar código C++ do Composite (`composite_demo`) e gravar vídeo demonstrativo | João Victor | 18/10/2026 |
 | 2 | Validar código C++ do Decorator (`decorator_demo`) e gravar vídeo demonstrativo | Marcos Vinícius | 18/10/2026 |
 | 3 | Implementar o esqueleto do Facade (`AlchemyFacade`) em C++ | Marcelo | 18/10/2026 |
-| 4 | Definir e iniciar a modelagem do seu respectivo padrão GoF Estrutural em C++ | João Igor | 17/10/2026 |
+| 4 | Iniciar a modelagem do padrão Bridge em C++ | João Igor | 17/10/2026 |
 | 5 | Escrever o relato individual de lições aprendidas e uso crítico de IA Generativa | Todos os membros | 18/10/2026 |
 | 6 | Revisão cruzada e consolidação da Entrega 03 no GitPages | SubEquipe 02 | 19/10/2026 |
 
@@ -75,6 +80,7 @@
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 16/10/2026 | Criação da ata de reunião interna de alinhamento da SubEquipe 02 | [João Victor](https://github.com/beyondmagic) | [Marcelo](https://github.com/MatielloAL) |
+| 1.1 | 18/10/2026 | Inclusão da conversa no WhatsApp (Figura 1), do levantamento dos 7 padrões estruturais e da divisão completa, com o Bridge de João Igor | [Marcos Vinícius](https://github.com/MarcosViniciusG) | |
 
 <p align="center">Tabela 7: Histórico de versão. Fonte: Autores, 2026.</p>
 

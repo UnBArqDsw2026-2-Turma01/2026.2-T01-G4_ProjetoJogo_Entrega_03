@@ -1,0 +1,85 @@
+---
+config:
+  layout: elk
+  theme: base
+  themeVariables:
+    lineColor: "#555555"
+    primaryTextColor: "#1a1a1a"
+  class:
+    useMaxWidth: false
+    hideEmptyMembersBox: true
+---
+classDiagram
+    direction TB
+
+    class AlquimiaFacade {
+        <<Facade>>
+        +usarPocao(idPocao, alvo, inimigos) UsoDePocao
+        +descreverJogador() Dictionary
+        +bonusDeSorte() int
+        +registrarSaque() void
+        +apagarLuzes() void
+    }
+
+    class EfeitosDasPocoes {
+        +carregar(receitas: Array) void
+        +buscar(idPocao: String) vector~EspecificacaoEfeito~
+    }
+
+    class FabricaDeEfeitos {
+        +aplicar(espec, alvo, usuario) ResultadoEfeito
+        +aplicarPocao(efeitos, usuario, inimigos, alvo) vector~Aplicacao~
+        -criarDecorador(espec) function
+        -aplicarInstantaneo(espec, alvo, usuario) ResultadoEfeito
+    }
+
+    class EspecificacaoEfeito {
+        +string tipo
+        +string alvo
+        +Atributo atributo
+        +Elemento elemento
+        +int valor
+        +float fator
+        +Reacao reacao
+        +string remover
+        +Duracao duracao
+        +string icone
+        +deCampos(campos, erro)$ EspecificacaoEfeito
+    }
+
+    class Combate {
+        -vector~Inimigo~ inimigos
+        +avancar() vector~Evento~
+        +jogadorAtaca(alvo) vector~Evento~
+        +jogadorUsaMagia(alvo) vector~Evento~
+        +jogadorUsouPocao(nome, aplicacoes) vector~Evento~
+        +jogadorFoge() vector~Evento~
+    }
+
+    class Combatente {
+        <<Client>>
+        +decorar(comEfeito) void
+        +removerEfeitos(filtro) int
+        +aumentarBase(a, delta) void
+    }
+
+    class EfeitoDecorator {
+        <<Decorator>>
+    }
+
+    AlquimiaFacade --> EfeitosDasPocoes
+    AlquimiaFacade --> FabricaDeEfeitos
+    AlquimiaFacade --> "1" Combatente : jogador
+    EfeitosDasPocoes --> "*" EspecificacaoEfeito
+    FabricaDeEfeitos ..> EspecificacaoEfeito : lê
+    FabricaDeEfeitos ..> EfeitoDecorator : cria
+    FabricaDeEfeitos ..> Combatente : decora
+    Combate --> "1..*" Combatente : participantes
+
+    style AlquimiaFacade fill:#fce4ec,stroke:#d81b60,stroke-width:2px
+    style EfeitoDecorator fill:#fff3e0,stroke:#fb8c00,stroke-width:2px
+    style Combatente fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+    style FabricaDeEfeitos fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1.5px
+    style EspecificacaoEfeito fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1.5px
+    style EfeitosDasPocoes fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1.5px
+    style Combate fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1.5px
