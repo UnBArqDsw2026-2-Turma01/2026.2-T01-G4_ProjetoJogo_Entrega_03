@@ -25,7 +25,7 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 | João Igor Pereira da Costa | *A preencher* | *A preencher* |
 | João Victor da Silva Batista de Farias | Separação entre árvore de apresentação (Composite) e regras de domínio (Facade); reuso de painéis de UI entre combate e mochila | Uso do Antigravity (Gemini) com a skill `grill-me` para sabatinar o design arquitetural; apoio na compilação nativa (Linux .so) e scripts de automação; correção crítica de erros de exportação web e carregamento de assets |
 | Marcelo de Araújo Lopes | Facade como interface única de um subsistema; fronteira C++/Godot com GDExtension; layout de diagramas UML legíveis | Claude e Gemini para entender o Facade, gerar assets, apoiar o C++, depurar e organizar a documentação; falhas no diagrama e na versão web corrigidas após testes |
-| Marcos Vinícius Gündel da Silva | *A preencher* | *A preencher* |
+| Marcos Vinícius Gündel da Silva | *A preencher* | Claude para analisar o encaixe das poções no Decorator, planejar os assets e escrever os scripts de processamento e desenho; Gemini para inimigos, cenários e efeitos; saídas conferidas e corrigidas visualmente |
 
 <p align="center">Tabela 1: Síntese dos pontos de vista dos participantes no Foco_02. Fonte: Autores, 2026.</p>
 
@@ -99,7 +99,28 @@ Usei duas ferramentas: o **Claude** (Anthropic), pelo Claude Code integrado ao V
 
 #### Uso da IA Generativa (senso crítico)
 
-*A preencher: ferramenta e modelo utilizados, finalidade, vantagens, limitações observadas e evidências, como o histórico da conversa.*
+Usei duas ferramentas: o **Claude** (Anthropic, modelo Claude Opus 5.5), pelo Claude Code integrado ao VS Code, e o **Gemini** (Google, Gemini Pro 3.1 Max com o gerador de imagens Nano Banana Pro). Os usos foram:
+
+- **analisar onde o Decorator se encaixa no jogo**: pedi ao Claude o levantamento das 36 poções existentes no código e discutimos quais efeitos são de fato decorações (bônus e penalidades com duração, que se acumulam no personagem e podem ser removidos) e quais são ações instantâneas, como curar ou causar dano, que não deveriam ser forçadas no padrão. Também levantamos as mecânicas que o jogo ainda não tinha para os efeitos fazerem sentido, como atributos, combate por turnos, inimigos e uso de itens;
+- **planejar os assets necessários**: a partir dessas mecânicas, o Claude listou cada asset com tamanho, quantidade de quadros e caminho no repositório, e escreveu os prompts para a geração das imagens;
+- **gerar a arte que exigia desenho**: no Gemini, gerei em 17/10/2026 os três inimigos com suas animações, os dois fundos de combate, o mapa e a entrada da caverna e o efeito do Sopro do Dragão, anexando sprites do próprio jogo como referência de estilo (Figura 4);
+- **processar e completar os assets**: o Claude escreveu o script `processar_brutos.py`, que recorta o fundo das imagens do Gemini, separa e espelha os quadros, padroniza a escala de cada inimigo e reduz tudo ao tamanho final, e o `gerar_assets_efeitos.py`, que desenha por código os 22 ícones de status, as animações de status, os 12 efeitos visuais de combate, a interface de combate e os elementos de exploração (Figura 5). Ao todo, foram 178 arquivos de imagem.
+
+![Antes e depois das imagens geradas com o Gemini](assets/subgrupo02_marcos_assets_gemini.png)
+
+<p align="center">Figura 4: Imagens geradas pelo Gemini (esquerda) e o resultado depois do processamento por script (direita), ampliado para visualização. Fonte: Gemini (Google), a partir de prompts e referências indicados por Marcos, com processamento por script gerado pelo Claude (Anthropic), 2026.</p>
+
+![Assets desenhados por script com o Claude](assets/subgrupo02_marcos_assets_claude.png)
+
+<p align="center">Figura 5: Ícones de status, animações de status, efeitos visuais de combate, interface de combate e elementos de exploração desenhados por código, ampliados para visualização. Fonte: Claude (Anthropic), por meio de script gerado a pedido de Marcos, 2026.</p>
+
+O uso exigiu conferência constante, porque nenhuma das duas ferramentas acertou tudo de primeira:
+
+1. **O Gemini não entrega pixel art pronta para o jogo.** As imagens vieram em JPEG com fundo magenta em vez de transparência, com cada "pixel" do desenho ocupando dezenas de pixels reais, quadros fora de uma grade regular e escalas diferentes entre folhas do mesmo inimigo (o Gólem da animação de dano veio com quase o dobro do tamanho). Algumas instruções também foram ignoradas: duas folhas do Gólem vieram viradas para a direita, a entrada da caverna veio com fundo branco, a animação de dano do Cogumelo veio com quatro quadros em vez de dois e a de derrota não mostra o cogumelo derretendo, como pedido. Descartei duas tentativas do Cogumelo e uma do Morcego antes de chegar às versões usadas.
+2. **O script do Claude também errou e precisou de correção.** Na primeira versão, a separação dos quadros juntou dois quadros da derrota do Gólem e cortou as chamas do Sopro do Dragão, e a redução de cores apagou cores pouco frequentes, como os cristais roxos do mapa e o brilho laranja do Gólem. Só percebi esses problemas conferindo prévias ampliadas de cada imagem.
+3. **Uma decisão da IA não combinava com o jogo.** O Claude desenhou as animações de combate do jogador a partir do personagem substituto do projeto, e não do personagem do pacote TinyPixel usado na versão publicada, porque a licença do pacote impede versionar artes derivadas dele. Ao comparar, percebi que eram personagens completamente diferentes. Descartamos essas animações e decidimos que o combate usa os mesmos quadros da exploração, com as ações animadas no código.
+
+A IA acelerou muito a parte artística, que não é o foco da disciplina e que eu não teria como desenhar no prazo. Em compensação, cada saída precisou ser verificada visualmente: confiar no resultado sem olhar teria levado para o jogo inimigos cortados, cores erradas e um personagem de combate diferente do que o jogador conhece.
 
 ## Referências
 
@@ -126,5 +147,6 @@ Usei duas ferramentas: o **Claude** (Anthropic), pelo Claude Code integrado ao V
 | 1.1 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de Marcelo de Araújo Lopes | [Marcelo de Araújo Lopes](https://github.com/MatielloAL) | |
 | 1.2 | 16/10/2026 | Adição das lições aprendidas e do uso de IA Generativa de João Victor da Silva Batista de Farias | [João Victor da Silva Batista de Farias](https://github.com/beyondmagic) | |
 | 1.3 | 17/10/2026 | Humanização e detalhamento crítico das lições aprendidas e do uso de IA Generativa de João Victor da Silva Batista de Farias | [João Victor da Silva Batista de Farias](https://github.com/beyondmagic) | [Marcelo de Araújo Lopes](https://github.com/MatielloAL) |
+| 1.4 | 17/10/2026 | Adição do uso de IA Generativa de Marcos Vinícius Gündel da Silva, com as figuras dos assets gerados | [Marcos Vinícius Gündel da Silva](https://github.com/MarcosViniciusG) | |
 
 <p align="center">Tabela 3: Histórico de versão.</p>
