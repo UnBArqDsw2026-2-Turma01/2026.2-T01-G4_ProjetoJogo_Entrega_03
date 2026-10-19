@@ -269,13 +269,15 @@ RESULTADO: 37 verificações, 0 falha(s)
 
 #### Vídeo
 
-O vídeo mostra o padrão State em execução no combate por turnos.
+O vídeo mostra o padrão State em execução no combate por turnos: os testes automáticos, a demonstração com roteiro fixo, que passa por todos os estados, e uma partida interativa no terminal.
 
 <div style="max-width:960px;margin:0 auto;">
-  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_03/assets/state_combate_video.mp4"></video>
+  <div style="position:relative;width:100%;padding-top:56.25%;">
+    <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/RrThwYyhvLQ" title="Padrão State em execução no combate por turnos" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
 </div>
 
-<p align="center">Vídeo 1: Padrão State aplicado ao combate por turnos, em execução. Fonte: SOUZA, Carlos; SANCHEZ, Pedro; REIS, Renan (2026). <a href="Base/Relatórios/SubEquipe_03/assets/state_combate_video.mp4" target="_blank">Link direto para o vídeo</a>.</p>
+<p align="center">Vídeo 1: Padrão State aplicado ao combate por turnos, em execução. Fonte: SOUZA, Carlos; SANCHEZ, Pedro; REIS, Renan (2026). <a href="https://youtu.be/RrThwYyhvLQ" target="_blank">Link direto para o vídeo</a>.</p>
 
 ### Rastreabilidade
 
