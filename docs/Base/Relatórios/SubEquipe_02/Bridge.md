@@ -114,7 +114,7 @@ Jogador --> ControladorJogador : usa
 | ConcreteImplementor | `EntradaTeclado`, `EntradaControle`, `EntradaIA` | Traduzem uma origem de intenção (teclado, analógico, IA) para o contrato. |
 | Client | `Jogador` | Monta o controlador com uma fonte e usa o resultado no movimento. |
 
-<p align="center">Tabela 1: Participantes do padrão Bridge. Fonte: (João Igor)[https://github.com/JoaoPC10] com base em Gamma et al. (2000) e Refactoring.Guru (2026). O papel Client é descrito pelo Refactoring.Guru (2026).</p>
+<p align="center">Tabela 1: Participantes do padrão Bridge. Fonte: Elaborado pelo autor com base em Gamma et al. (2000) e Refactoring.Guru (2026). O papel Client é descrito pelo Refactoring.Guru (2026).</p>
 
 ### 5. Aplicabilidade
 
@@ -182,7 +182,7 @@ inline Direcao normalizar(Direcao d) {
 } // namespace bridge
 ```
 
-**`src/estrutural/bridge/fonte_de_entrada.hpp`** (Implementor)
+**`src/estrutural/bridge/fonte_de_entrada.hpp`** 
 
 ```cpp
 #pragma once
@@ -201,7 +201,7 @@ public:
 } // namespace bridge
 ```
 
-**`src/estrutural/bridge/controlador_movimento.hpp`** (Abstraction)
+**`src/estrutural/bridge/controlador_movimento.hpp`** 
 
 ```cpp
 #pragma once
@@ -239,7 +239,7 @@ protected:
 } // namespace bridge
 ```
 
-**`src/estrutural/bridge/controlador_jogador.hpp`** (RefinedAbstraction)
+**`src/estrutural/bridge/controlador_jogador.hpp`** 
 
 ```cpp
 #pragma once
@@ -354,69 +354,6 @@ Execução:
 ```bash
 g++ -std=c++17 -Wall -Wextra -I src/estrutural/bridge \
     src/estrutural/bridge/tests/test_bridge.cpp -o test_bridge && ./test_bridge
-```
-
-#### 7.2 Implementações concretas (Godot, C++)
-
-**`native/src/jogo/entrada/entrada_godot.h`** (ConcreteImplementors)
-
-```cpp
-#pragma once
-#include "bridge/fonte_de_entrada.hpp"
-#include <godot_cpp/classes/input.hpp>
-#include <cmath>
-
-namespace jogo {
-
-// Usa as ações já definidas em Mundo::criarAcoes(), então WASD e setas
-// continuam funcionando sem alteração.
-class EntradaTeclado : public bridge::FonteDeEntrada {
-public:
-    bridge::Direcao lerDirecao() const override {
-        const godot::Vector2 v = godot::Input::get_singleton()->get_vector(
-                "mover_esquerda", "mover_direita", "mover_cima", "mover_baixo");
-        return {v.x, v.y};
-    }
-};
-
-// Analógico esquerdo do controle, com zona morta.
-class EntradaControle : public bridge::FonteDeEntrada {
-public:
-    explicit EntradaControle(int dispositivo = 0) : dispositivo(dispositivo) {}
-
-    bridge::Direcao lerDirecao() const override {
-        godot::Input *in = godot::Input::get_singleton();
-        return {zona(in->get_joy_axis(dispositivo, godot::JOY_AXIS_LEFT_X)),
-                zona(in->get_joy_axis(dispositivo, godot::JOY_AXIS_LEFT_Y))};
-    }
-
-private:
-    static double zona(double v) { return std::fabs(v) < 0.2 ? 0.0 : v; }
-    int dispositivo;
-};
-
-} // namespace jogo
-```
-
-**`native/src/jogo/entrada/entrada_ia.h`** (ConcreteImplementor, esqueleto para RF08)
-
-```cpp
-#pragma once
-#include "bridge/fonte_de_entrada.hpp"
-
-namespace jogo {
-
-// Uma IA simples devolve uma direção a cada quadro, por exemplo,
-// andar em direção ao jogador quando ele estiver perto.
-// [Implementar: patrulha ou perseguição.]
-class EntradaIA : public bridge::FonteDeEntrada {
-public:
-    bridge::Direcao lerDirecao() const override {
-        return {0.0, 0.0};
-    }
-};
-
-} // namespace jogo
 ```
 
 ### 8. Prós e contras
