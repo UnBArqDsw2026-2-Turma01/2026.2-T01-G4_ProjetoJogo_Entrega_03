@@ -1,0 +1,25 @@
+Singleton — verificação em 19/10/2026
+C++17 / g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+
+$ make -C src/criacional/singleton test
+OK  Compilador recusa criar ou copiar uma Partida fora da classe
+OK  Todas as chamadas de instancia() devolvem o mesmo objeto
+OK  Clientes independentes alteram a mesma partida
+OK  Salvamento reúne o progresso feito por todos os clientes
+OK  Salvamento antigo não muda com o progresso posterior
+OK  Novo jogo recomeça o progresso na mesma instância
+OK  Salvar e sair encerra a partida e recusa novas ações
+OK  Entradas vazias são recusadas sem alterar o progresso
+OK  Oito threads diferentes recebem a mesma instância
+8/8 testes aprovados.
+
+$ g++ -std=c++17 -fsyntax-only -Isrc tests/nao_compila.cpp   (esperado: falhar)
+tests/nao_compila.cpp:7:13: error: ‘Partida::Partida()’ is private within this context
+tests/nao_compila.cpp:7:13: error: ‘Partida::~Partida()’ is private within this context
+tests/nao_compila.cpp:8:40: error: use of deleted function ‘Partida::Partida(const Partida&)’
+tests/nao_compila.cpp:8:40: error: ‘Partida::~Partida()’ is private within this context
+
+AddressSanitizer + UndefinedBehaviorSanitizer: 8/8 testes aprovados. Nenhum diagnóstico.
+ThreadSanitizer: 8/8 testes aprovados. Nenhum aviso de condição de corrida.
+
+Visualização (Google Chrome / Playwright): 8 passos sem erros de console; larguras 390 e 1280 sem rolagem horizontal.
