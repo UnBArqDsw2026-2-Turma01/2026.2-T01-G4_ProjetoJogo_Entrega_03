@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Singleton: partida única</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="pagina">
+  <header class="topo">
+    <div>
+      <p class="rotulo">GoF criacional · Singleton · C++17</p>
+      <h1>Uma única partida para o jogo inteiro</h1>
+    </div>
+    <div class="controles" role="group" aria-label="Controles do roteiro">
+      <button type="button" id="anterior" aria-label="Passo anterior">◀</button>
+      <button type="button" id="reproduzir" class="principal">▶ Reproduzir</button>
+      <button type="button" id="proximo" aria-label="Próximo passo">▶|</button>
+      <button type="button" id="reiniciar" aria-label="Reiniciar roteiro">↺</button>
+    </div>
+  </header>
+
+  <section class="cena" aria-label="Clientes chamando Partida::instancia()">
+    <svg class="fios" aria-hidden="true"></svg>
+
+    <article class="cliente" data-cliente="Exploracao">
+      <img src="assets/bau_fechado_48x48.png" alt="">
+      <div>
+        <h2>Exploracao</h2>
+        <p>muda a área atual</p>
+        <code class="chamada">—</code>
+      </div>
+    </article>
+    <article class="cliente" data-cliente="BancadaDeAlquimia">
+      <img src="assets/pocao_flamejante.png" alt="">
+      <div>
+        <h2>BancadaDeAlquimia</h2>
+        <p>registra poções criadas</p>
+        <code class="chamada">—</code>
+      </div>
+    </article>
+
+    <article class="partida" id="partida" aria-live="polite">
+      <div class="fundo" id="fundo"></div>
+      <div class="partida-conteudo">
+        <p class="estereotipo">«Singleton»</p>
+        <h2>Partida</h2>
+        <p class="endereco">Partida::instancia() = <strong id="endereco">—</strong></p>
+        <dl class="dados">
+          <div><dt>Jogador</dt><dd id="jogador">—</dd></div>
+          <div><dt>Área</dt><dd id="area">—</dd></div>
+          <div><dt>Poções</dt><dd id="pocoes">0</dd></div>
+          <div><dt>Vitórias</dt><dd id="vitorias">0</dd></div>
+          <div class="largo"><dt>Estado</dt><dd id="estado">não iniciada</dd></div>
+        </dl>
+        <h3>Salvamentos</h3>
+        <ol class="salvamentos" id="salvamentos"><li class="vazio">nenhum</li></ol>
+      </div>
+    </article>
+
+    <article class="cliente" data-cliente="Combate">
+      <img src="assets/cogumelo.png" alt="" id="sprite-combate">
+      <div>
+        <h2>Combate</h2>
+        <p>registra inimigos derrotados</p>
+        <code class="chamada">—</code>
+      </div>
+    </article>
+    <article class="cliente" data-cliente="MenuDePausa">
+      <img src="assets/pena_de_corvo.png" alt="">
+      <div>
+        <h2>MenuDePausa</h2>
+        <p>salva o progresso (RF03)</p>
+        <code class="chamada">—</code>
+      </div>
+    </article>
+  </section>
+
+  <section class="painel">
+    <div class="explicacao">
+      <p class="passo" id="passo">Passo 0 de 0</p>
+      <p id="legenda">Use ▶ Reproduzir ou as setas do teclado para acompanhar a execução.</p>
+      <ul class="contadores">
+        <li>Chamadas a <code>instancia()</code>: <strong id="chamadas">0</strong></li>
+        <li>Endereços distintos devolvidos: <strong id="distintos">0</strong></li>
+      </ul>
+    </div>
+    <div class="terminal-caixa">
+      <p class="terminal-titulo">Saída real de <code>./bin/singleton --roteiro</code></p>
+      <pre class="terminal" id="terminal" tabindex="0"></pre>
+    </div>
+  </section>
+
+  <section class="hipotese" aria-labelledby="titulo-hipotese">
+    <h2 id="titulo-hipotese">E se cada parte criasse a sua própria partida?</h2>
+    <p>Ilustração do cenário que o Singleton impede: as mesmas ações do roteiro, mas cada parte com a sua partida, todas iniciadas na Floresta. Não é executada, porque o compilador recusa <code>Partida outra;</code> fora da classe.</p>
+    <div class="copias">
+      <div><h3>Exploracao</h3><p>Caverna · 0 poções · 0 vitórias</p></div>
+      <div><h3>BancadaDeAlquimia</h3><p>Floresta · 1 poção · 0 vitórias</p></div>
+      <div><h3>Combate</h3><p>Floresta · 0 poções · 2 vitórias</p></div>
+      <div class="perda"><h3>MenuDePausa salva</h3><p>Floresta · 0 poções · 0 vitórias</p></div>
+    </div>
+    <pre class="compilador">error: 'Partida::Partida()' is private within this context
+    7 |     Partida outra;
+error: use of deleted function 'Partida::Partida(const Partida&amp;)'
+    8 |     Partida copia = Partida::instancia();</pre>
+  </section>
+</main>
+<script src="roteiro.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
