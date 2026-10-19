@@ -4,7 +4,7 @@
 
 | Data | Horário de Início | Horário de Término | Local | Projeto | Redator |
 | :--: | :---------------: | :----------------: | :---: | :-----: | :-----: |
-| 17/10/2026 | 20:33 | 22:57 | Google Meet | RPG Didático | Gemini PRO 3.1 |
+| 17/10/2026 | 20:33 | 23:26 | Google Meet | G4_ProjetoJogo | Pedro Teixeira Moriel Sanchez, com apoio do Gemini 3.1 Pro |
 
 <p align="center">Tabela 1: Identificação da reunião. Fonte: transcrição automática da reunião, 2026.</p>
 
@@ -13,7 +13,7 @@
 | Convocados | Presente (Sim/Não) |
 | :--------- | :----------------: |
 | Carlos Henrique Brasil de Souza | Sim |
-| Pedro Teixeira | Sim |
+| Pedro Teixeira Moriel Sanchez | Sim |
 | Renan Pereira Reis | Sim |
 
 <p align="center">Tabela 2: Participantes da reunião. Fonte: transcrição automática da reunião, 2026.</p>
@@ -45,7 +45,6 @@
 | 2 | Com base na avaliação da docente, a equipe decidiu aplicar correções arquiteturais no diagrama de classes. Foram ajustadas as enumerações (utilizando dependência tracejada), incluída a declaração correta das classes abstratas (usando aspas francesas) e corrigidos acoplamentos indevidos em associações de criação. | 2 |
 | 3 | A equipe alinhou um cronograma focado na correção do modelo e início da discussão sobre o código da entrega 3 (que exige código, diagrama UML e vídeo), deixando a gravação e a documentação final do GitHub para o dia seguinte. | 3 |
 | 4 | Foram relatadas e superadas dificuldades técnicas no uso da ferramenta Draw.io através do Drive, devido a problemas de sincronização do projeto, o que atrasou ligeiramente as correções mas foi resolvido em chamada. | 1 |
-| 5 | Os integrantes compartilharam experiências sobre processos seletivos e programação competitiva, analisando a complexidade de algoritmos cobrados recentemente em relação às exigências do trabalho da faculdade. | 1 |
 
 <p align="center">Tabela 5: Assuntos tratados. Fonte: transcrição automática da reunião, 2026.</p>
 
@@ -75,6 +74,7 @@ Foi agendada uma nova sessão para o dia seguinte a fim de gravar a demonstraç�
 
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
-| 1.0 | 18/10/2026 | Criação da ata com base na transcrição automática da reunião gerada via Meet | Gemini PRO 3.1 | Pedro Teixeira Moriel Sanchez |
+| 1.0 | 18/10/2026 | Criação da ata a partir da transcrição automática do Google Meet, com resumo gerado pelo Gemini 3.1 Pro | Pedro Teixeira Moriel Sanchez | |
+| 1.1 | 19/10/2026 | Correção do nome do projeto, do redator, do nome completo dos participantes e do horário de término (pela duração da transcrição); remoção de um assunto fora da pauta; inclusão da ata na barra lateral | Renan Pereira Reis | Pedro Teixeira Moriel Sanchez |
 
 <p align="center">Tabela 7: Histórico de versão.</p>
