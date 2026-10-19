@@ -466,10 +466,6 @@ void Jogador::setPodeAndar(bool p) {
 
 **`src/estrutural/SConstruct`** (inclusão do núcleo no build)
 
-```python
-# acrescente bridge/ ao CPPPATH, junto com decorator/
-env.Append(CPPPATH=["bridge", "decorator"])
-```
 
 ### 8. Prós e contras
 
