@@ -19,6 +19,7 @@
         - [1.1 Composite (João Victor)](/Base/Relatórios/SubEquipe_02/Composite.md)
         - [1.2 Decorator (Marcos Vinícius)](/Base/Relatórios/SubEquipe_02/Decorator.md)
         - [1.3 Facade (Marcelo)](/Base/Relatórios/SubEquipe_02/Facade.md)
+        - [1.4 Bridge (João Igor)](/Base/Relatórios/SubEquipe_02/Bridge.md)
       - [2. IA Generativa](/Base/Relatórios/SubEquipe_02/IAGenerativa.md)
     - O · SubEquipe 03
       - [1. GoF Comportamental](/Base/Relatórios/SubEquipe_03/GoFComportamental.md)
