@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">UML: Prototype na criação de inimigos</title>
+  <desc id="desc">InimigoElemental herda de Inimigo e compõe ataques. CatalogoDeInimigos possui protótipos privados de Inimigo e delega a criação a clonar. app.js usa o catálogo e manipula as cópias.</desc>
+  <defs>
+    <marker id="triangle" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M1 1 L13 7 L1 13 Z" fill="#fff" stroke="#35483e"/></marker>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#35483e"/></marker>
+    <style>text{font-family:system-ui,sans-serif;fill:#24372c} .box{fill:#fff;stroke:#35483e;stroke-width:2} .role{font-size:13px;fill:#5d704c} .name{font-size:18px;font-weight:650} .code{font-family:monospace;font-size:14px} .label{font-size:13px} .line{stroke:#35483e;stroke-width:2;fill:none} .note{font-size:14px;fill:#4b594d}</style>
+  </defs>
+  <rect width="1200" height="760" fill="#f5f6ef" rx="12"/>
+  <text x="40" y="42" font-size="24" font-weight="650">Prototype · criação de inimigos</text>
+  <text x="40" y="68" font-size="14" fill="#536849">Diagrama de classes e dependências · Yogi Nam de Souza Barbosa, 2026</text>
+
+  <rect class="box" x="40" y="120" width="435" height="160" rx="4"/>
+  <text class="role" x="257" y="145" text-anchor="middle">«Registry / Client»</text>
+  <text class="name" x="257" y="172" text-anchor="middle">CatalogoDeInimigos</text>
+  <path class="line" d="M40 185 H475 M40 222 H475"/>
+  <text class="code" x="54" y="209">− modelos: Map&lt;string, Inimigo&gt;</text>
+  <text class="code" x="54" y="246">+ registrar(chave, prototipo): void</text>
+  <text class="code" x="54" y="269">+ criar(chave: string): Inimigo</text>
+
+  <rect class="box" x="730" y="120" width="375" height="132" rx="4"/>
+  <text class="role" x="917" y="145" text-anchor="middle">«Prototype»</text>
+  <text class="name" x="917" y="174" text-anchor="middle" font-style="italic">Inimigo</text>
+  <path class="line" d="M730 188 H1105"/>
+  <text class="code" x="751" y="224" font-style="italic">+ clonar(): Inimigo {abstrato}</text>
+  <path class="line" d="M499 198 H730"/>
+  <path d="M475 198 L487 190 L499 198 L487 206 Z" fill="#35483e"/>
+  <text class="label" x="506" y="179">1</text><text class="label" x="690" y="179">0..*</text>
+  <text class="label" x="536" y="225">modelos privados</text>
+
+  <rect class="box" x="650" y="365" width="500" height="235" rx="4"/>
+  <text class="role" x="900" y="389" text-anchor="middle">«ConcretePrototype»</text>
+  <text class="name" x="900" y="416" text-anchor="middle">InimigoElemental</text>
+  <path class="line" d="M650 431 H1150 M650 471 H1150"/>
+  <text class="code" x="666" y="457">− estado: dados do inimigo</text>
+  <text class="code" x="666" y="499">+ clonar(): InimigoElemental</text>
+  <text class="code" x="666" y="524">+ dados(): objeto</text>
+  <text class="code" x="666" y="549">+ receberDano(quantidade: inteiro): void</text>
+  <text class="code" x="666" y="574">+ fortalecerAtaque(indice, aumento): void</text>
+  <path class="line" d="M917 365 V254" marker-end="url(#triangle)"/>
+  <text class="label" x="935" y="310">generalização</text>
+
+  <rect class="box" x="55" y="363" width="330" height="90" rx="4"/>
+  <text class="role" x="220" y="387" text-anchor="middle">«artifact»</text>
+  <text class="name" x="220" y="414" text-anchor="middle">app.js</text>
+  <text class="label" x="220" y="438" text-anchor="middle">Cliente visual</text>
+  <path class="line" stroke-dasharray="7 5" d="M220 363 V282" marker-end="url(#arrow)"/>
+  <text class="label" x="240" y="325">criar(chave)</text>
+  <path class="line" stroke-dasharray="7 5" d="M385 408 H648" marker-end="url(#arrow)"/>
+  <text class="label" x="401" y="362">inspecionar, alterar</text>
+  <text class="label" x="401" y="384">e clonar uma cópia</text>
+
+  <rect class="box" x="55" y="510" width="330" height="138" rx="4"/>
+  <text class="role" x="220" y="535" text-anchor="middle">«objeto de valor»</text>
+  <text class="name" x="220" y="562" text-anchor="middle">Ataque</text>
+  <path class="line" d="M55 575 H385"/>
+  <text class="code" x="75" y="603">+ nome: string</text>
+  <text class="code" x="75" y="628">+ dano: inteiro</text>
+  <path class="line" d="M626 566 H385"/>
+  <path d="M650 566 L638 558 L626 566 L638 574 Z" fill="#35483e"/>
+  <text class="label" x="603" y="549">1</text><text class="label" x="397" y="549">1..*</text>
+  <text class="label" x="442" y="591">estado.ataques</text>
+
+  <text class="note" x="55" y="680">Ataque é um objeto JavaScript,</text>
+  <text class="note" x="55" y="702">sem classe própria na implementação.</text>
+  <text class="note" x="650" y="634">Estado: nome, sprite, fraqueza, vidaMaxima, vida, ataques.</text>
+  <text class="note" x="650" y="657">Cada cópia possui sua lista e seus objetos de ataque.</text>
+  <text class="note" x="650" y="680">Losango preenchido: composição. Tracejado: dependência.</text>
+  <text class="note" x="650" y="703">Triângulo vazio: herança. + público / − privado.</text>
+</svg>

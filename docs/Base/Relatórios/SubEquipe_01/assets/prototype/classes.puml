@@ -1,0 +1,44 @@
+@startuml
+title Prototype na criação de inimigos
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+hide circle
+
+abstract class Inimigo <<Prototype>> {
+  {abstract} + clonar(): Inimigo
+}
+class InimigoElemental <<ConcretePrototype>> {
+  - estado: dados do inimigo
+  + clonar(): InimigoElemental
+  + dados(): objeto
+  + receberDano(quantidade: inteiro): void
+  + fortalecerAtaque(indice: inteiro, aumento: inteiro): void
+}
+class CatalogoDeInimigos <<Registry / Client>> {
+  - modelos: Map<string, Inimigo>
+  + registrar(chave: string, prototipo: Inimigo): void
+  + criar(chave: string): Inimigo
+}
+class Ataque <<objeto de valor>> {
+  + nome: string
+  + dano: inteiro
+}
+artifact "app.js\nCliente visual" as UI
+
+InimigoElemental --|> Inimigo
+CatalogoDeInimigos "1" *-- "0..*" Inimigo : modelos privados
+InimigoElemental "1" *-- "1..*" Ataque : estado.ataques
+UI ..> CatalogoDeInimigos : criar(chave)
+UI ..> InimigoElemental : inspecionar / alterar / clonar
+
+note bottom of InimigoElemental
+  Estado: nome, sprite, fraqueza,
+  vidaMaxima, vida e ataques.
+  Cada cópia possui sua própria lista
+  e seus próprios objetos Ataque.
+end note
+note bottom of Ataque
+  Representado por objeto JavaScript,
+  não por uma classe no código.
+end note
+@enduml

@@ -2,11 +2,11 @@
 
 ## Descrição
 
-Artefato do **FOCO_01: GoFs Criacionais & IA Generativa**, sob responsabilidade da SubEquipe_01. Documenta a aplicação de um padrão de projeto GoF Criacional ao **G4_ProjetoJogo**, com o contexto do problema, a modelagem na notação UML, o código e o vídeo com o padrão em execução.
+Artefato do **FOCO_01: GoFs Criacionais & IA Generativa**, sob responsabilidade da SubEquipe_01. Reúne as aplicações de padrões criacionais ao **G4_ProjetoJogo**, com contexto do problema, modelagem UML, código e vídeo com os padrões em execução.
 
 Os padrões criacionais abstraem o processo de criação de objetos, tornando o sistema independente de como seus objetos são criados, compostos e representados (GAMMA et al., 2000). Pertencem a essa categoria os padrões Abstract Factory, Builder, Factory Method, Prototype e Singleton.
 
-> **Página em elaboração.** A estrutura segue o [Artefato Padrão](/Guias/ArtefatoPadrao.md) e as seções exigidas pelo modelo da disciplina. Substitua cada trecho marcado com *A preencher* e remova esta nota quando o artefato estiver concluído.
+**Artefatos do foco:** [Builder, de Gabriel Andrade Magioli](#padrão-escolhido), documentado nesta página, e [Prototype, de Yogi Nam de Souza Barbosa](Prototype.md), com demonstração interativa, UML, vídeo e testes em página própria.
 
 ## Objetivo
 
@@ -14,7 +14,7 @@ Atender à entrega mínima do foco: **um GoF Criacional, com modelo, código e v
 
 ## Metodologia
 
-*A preencher: como ocorreu o trabalho em equipe neste foco.* Registre as reuniões realizadas, com link para as [atas do Subgrupo 01](/Atas/SubEquipe_01.md), os critérios usados para escolher o padrão, as ferramentas de modelagem e de desenvolvimento, a divisão de tarefas e a forma de revisão. Vídeos das reuniões ajudam a evidenciar o processo.
+O foco está organizado por contribuições individuais. Gabriel Andrade Magioli documentou o Builder para montar personagens por etapas. Yogi Nam de Souza Barbosa desenvolveu o [Prototype](Prototype.md) para criar inimigos a partir de modelos e comparar visualmente a independência das cópias. Cada artefato relaciona modelo, código e execução; os pontos de vista sobre as ferramentas utilizadas estão no [relatório de IA Generativa](IAGenerativa.md).
 
 ## Conteúdo
 
@@ -166,9 +166,9 @@ O Vídeo 1 mostra o programa rodando com `make run`: o usuário inclui o nome, o
 
 | Artefato relacionado | Elo com este padrão |
 |----------------------|---------------------|
-| [Diagrama de Classes da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_01/DiagramaClasses) | *A preencher: classes, fluxos ou decisões reaproveitados.* |
+| [Diagrama de Classes da Entrega 02](https://unbarqdsw2026-2-turma01.github.io/2026.2-T01-G4_ProjetoJogo_Entrega_02/#/Base/Relatórios/SubEquipe_01/DiagramaClasses) | O domínio de personagens e inimigos fornece o contexto para a construção por etapas e para a clonagem. A correspondência específica do Prototype está em seu relatório. |
 | [Ata Geral 04](/Atas/AtaGeral04.md) | Decisão do grupo que atribuiu o padrão criacional ao Subgrupo 01. |
-| [Atas do Subgrupo 01](/Atas/SubEquipe_01.md) | *A preencher: decisões que originaram o artefato.* |
+| [Prototype](Prototype.md) | Criação de inimigos por clonagem, como aplicação adicional de um GoF criacional, com UML, código, vídeo e testes próprios. |
 
 <p align="center">Tabela 3: Elos com outros artefatos. Fonte: Autores, 2026.</p>
 
@@ -184,11 +184,11 @@ O Vídeo 1 mostra o programa rodando com `make run`: o usuário inclui o nome, o
 
 ## Nível de Contribuição dos Integrantes
 
-| Nome | % de Contribuição |
+| Nome | Participação registrada |
 |------|-------------------|
 | Cibelly Lourenço Ferreira | *A preencher* |
 | Gabriel Andrade Magioli | 33% |
-| Yogi Nam de Souza Barbosa | *A preencher* |
+| Yogi Nam de Souza Barbosa | Autoria do [artefato Prototype](Prototype.md), demonstração visual, UML, testes, vídeo e documentação. |
 
 <p align="center">Tabela 4: Contribuição dos integrantes.</p>
 
@@ -198,5 +198,6 @@ O Vídeo 1 mostra o programa rodando com `make run`: o usuário inclui o nome, o
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 17/10/2026 | Inclusão do padrão Builder: contexto, modelagem UML, código C++ interativo e instruções de execução e testes | Gabriel Andrade Magioli | |
 | 1.1 | 17/10/2026 | Inclusão do vídeo do padrão Builder em execução | Gabriel Andrade Magioli | |
+| 1.2 | 19/10/2026 | Inclusão do Prototype no foco, organização da metodologia e elos com os artefatos individuais. | Yogi Nam de Souza Barbosa | — |
 
 <p align="center">Tabela 5: Histórico de versão.</p>
