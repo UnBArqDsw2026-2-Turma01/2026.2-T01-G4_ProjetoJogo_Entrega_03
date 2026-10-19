@@ -18,7 +18,7 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 
 | Nome do Membro | Lições Aprendidas | Uso da IA Generativa (senso crítico) |
 |----------------|-------------------|--------------------------------------|
-| João Igor Pereira da Costa | *A preencher* | *A preencher* |
+| João Igor Pereira da Costa | Aprendi a aplicar o padrão Bridge em C++17, separando o controlador de movimento da fonte de entrada, além de compreender sua integração com o Decorator e a importância de testes independentes. | Utilizei o ChatGPT (GPT-6) para analisar compatibilidades, sugerir correções e criar testes; apesar da agilidade, foi necessário considerar suas limitações pela ausência dos arquivos completos do Godot e validar a integração manualmente. |
 | João Victor da Silva Batista de Farias | Separação entre árvore de apresentação (Composite) e regras de domínio (Facade); reuso de painéis de UI entre combate e mochila | Uso do Antigravity (Gemini) com a skill `grill-me` para sabatinar o design arquitetural; apoio na compilação nativa (Linux .so) e scripts de automação; correção crítica de erros de exportação web e carregamento de assets |
 | Marcelo de Araújo Lopes | Facade como interface única de um subsistema; fronteira C++/Godot com GDExtension; layout de diagramas UML legíveis | Claude e Gemini para entender o Facade, gerar assets, apoiar o C++, depurar e organizar a documentação; falhas no diagrama e na versão web corrigidas após testes |
 | Marcos Vinícius Gündel da Silva | Decorator como um efeito que é e tem um personagem; consulta pelo topo da cadeia; nem todo efeito deve virar decorador; cooperação com a Facade | Claude para analisar o encaixe das poções no Decorator, modelar, implementar, documentar e gerar assets por script; Gemini para inimigos, cenários e efeitos; saídas conferidas no jogo e corrigidas |
@@ -29,11 +29,21 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 
 #### Lições Aprendidas
 
-*A preencher.*
+Durante o desenvolvimento do padrão GoF Bridge, aprendi a importância de separar responsabilidades que variam de forma independente, desacoplando o controlador de movimento da fonte de entrada. Essa abordagem permite que diferentes dispositivos, como teclado e controle, ou fontes de intenção, como uma inteligência artificial, sejam utilizados sem exigir alterações na lógica principal de movimentação.
+
+Também aprofundei meus conhecimentos sobre composição, abstração e implementação em C++17, compreendendo como o padrão Bridge pode reduzir a quantidade de classes necessárias quando existem diferentes combinações entre personagens e fontes de entrada. Além disso, explorei a integração entre padrões de projeto, especialmente a relação com o Decorator, que permite utilizar atributos modificados por efeitos para definir a velocidade do personagem.
+
+Por fim, compreendi a importância de realizar testes independentes da engine para verificar a lógica central do padrão, além de identificar que a integração com o Godot exige validações adicionais para garantir a compatibilidade com as classes e interfaces existentes no projeto.
 
 #### Uso da IA Generativa (senso crítico)
 
-*A preencher: ferramenta e modelo utilizados, finalidade, vantagens, limitações observadas e evidências, como o histórico da conversa.*
+Foi utilizada a ferramenta **ChatGPT, da OpenAI, modelo GPT-6**, como apoio ao desenvolvimento e à revisão do padrão Bridge. A ferramenta foi empregada para analisar a compatibilidade entre os códigos do padrão Decorator e a proposta de implementação do Bridge, identificar possíveis incompatibilidades, auxiliar na organização dos arquivos e desenvolver testes para verificar o funcionamento do núcleo do padrão em C++17.
+
+Entre as vantagens observadas, destacam-se a agilidade na identificação de dependências, a sugestão de melhorias na estrutura do código e o apoio à elaboração de testes para situações como deslocamento, normalização do movimento diagonal, troca da fonte de entrada e desativação do controlador. Os testes do núcleo implementado foram executados com sucesso, conforme registrado na conversa com a ferramenta.
+
+Entretanto, a utilização da IA também apresentou limitações. A ferramenta não tinha acesso aos arquivos específicos de integração com o Godot, como as implementações completas de `Jogador` e `Mundo`. Por isso, não foi possível confirmar integralmente a compatibilidade da solução com o projeto original, apenas pelos prompts enviados.
+
+Os resultados gerados foram tratados como apoio ao desenvolvimento, sendo necessário distinguir os testes efetivamente executados das funcionalidades que ainda dependem de integração e validação no ambiente Godot.
 
 ### João Victor da Silva Batista de Farias
 
