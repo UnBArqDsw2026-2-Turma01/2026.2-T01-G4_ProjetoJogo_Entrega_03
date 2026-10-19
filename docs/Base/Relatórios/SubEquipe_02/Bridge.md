@@ -419,51 +419,6 @@ public:
 } // namespace jogo
 ```
 
-#### 7.3 Integração com o `Jogador` (Client)
-
-**`native/src/jogo/jogador.h`** (acréscimos)
-
-```cpp
-#include "bridge/controlador_jogador.hpp"
-#include <memory>
-
-// dentro da classe Jogador:
-private:
-    std::shared_ptr<bridge::ControladorJogador> controlador;
-```
-
-**`native/src/jogo/jogador.cpp`** (acréscimos e substituições)
-
-```cpp
-#include "jogo/entrada/entrada_godot.h"
-
-void Jogador::_ready() {
-    // ... código existente ...
-    controlador = std::make_shared<bridge::ControladorJogador>(
-            std::make_shared<jogo::EntradaTeclado>(), bridge::ControladorJogador::BASE);
-}
-
-void Jogador::_physics_process(double delta) {
-    if (delta <= 0.0 || !controlador) return;
-
-    // [Verificar] Acesso real ao atributo de velocidade da cadeia de decoradores.
-    controlador->aplicarAtributoVelocidade(personagem().atributo(Atributo::VELOCIDADE));
-
-    // Substitui a leitura direta do Input. move_and_slide mantém as colisões
-    // com os StaticBody2D do mundo.
-    const bridge::Direcao d = controlador->deslocamento(delta);
-    set_velocity(godot::Vector2(d.x, d.y) / delta);
-    move_and_slide();
-}
-
-// Mundo::iniciarCombate e Mundo::aoTerminarCombate continuam chamando setPodeAndar,
-// sem alteração em Mundo.
-void Jogador::setPodeAndar(bool p) {
-    podeAndar = p;
-    if (controlador) controlador->ativar(p);
-}
-```
-
 ### 8. Prós e contras
 
 Os itens abaixo seguem as vantagens e desvantagens descritas pelo Refactoring.Guru (2026), aplicadas ao projeto.
