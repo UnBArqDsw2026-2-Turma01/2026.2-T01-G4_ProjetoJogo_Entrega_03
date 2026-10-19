@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 
 #include "character_builder.h"
 
@@ -13,7 +14,7 @@ void CharacterBuilder::SetType(const string& value) {
 }
 
 void CharacterBuilder::SetHealthPoints(float value) {
-    if (value <= 0) {
+    if (!std::isfinite(value) || value <= 0) {
         throw invalid_argument("Os pontos de vida devem ser maiores que zero");
     }
     health_points = value;

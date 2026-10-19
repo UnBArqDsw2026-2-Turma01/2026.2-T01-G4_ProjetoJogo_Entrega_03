@@ -1,119 +1,104 @@
-/* Cliente visual. Não reconstrói inimigos: pede cópias ao catálogo ou à instância. */
-(() => {
-  'use strict';
-  const catalogo = criarCatalogo();
-  const chaves = ['cogumelo', 'golem', 'morcego'];
-  const originais = new Map(chaves.map(chave => [chave, catalogo.criar(chave).dados()]));
-  let instancias = [];
-  let proximoId = 1;
+/* Apresentação: as operações e o estado dos inimigos pertencem ao módulo C++. */
+(async () => {
   const $ = id => document.getElementById(id);
-  const limite = 6;
-
-  function elemento(tag, classe, texto) {
+  const criar = (tag, texto, classe) => {
     const node = document.createElement(tag);
-    if (classe) node.className = classe;
     if (texto !== undefined) node.textContent = texto;
+    if (classe) node.className = classe;
     return node;
-  }
+  };
+  try {
+    const modulo = await CriarPrototype();
+    const comando = modulo.cwrap('comando', 'string', ['number', 'number']);
+    const estado = modulo.cwrap('estado', 'string', []);
+    let atual;
+    let quadro = 1;
+    const movimentoReduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function ficha(dados) {
-    const raiz = elemento('div', 'creature');
-    const retrato = elemento('div', 'portrait');
-    const imagem = elemento('img');
-    imagem.src = `assets/${dados.sprite}.png`;
-    imagem.alt = ''; // O nome já aparece no título da ficha.
-    retrato.append(imagem);
-    raiz.append(retrato, elemento('h3', '', dados.nome), elemento('p', 'weakness', `Fraqueza: ${dados.fraqueza}`));
-    const legenda = elemento('div', 'health-label', 'Vida');
-    legenda.append(elemento('strong', 'vida', `${dados.vida} / ${dados.vidaMaxima}`));
-    const barra = elemento('progress');
-    barra.max = dados.vidaMaxima;
-    barra.value = dados.vida;
-    barra.setAttribute('aria-label', `Vida de ${dados.nome}`);
-    raiz.append(legenda, barra);
-    for (const ataque of dados.ataques) {
-      const linha = elemento('div', 'attack', ataque.nome);
-      linha.append(elemento('strong', 'dano', `${ataque.dano} de dano`));
-      raiz.append(linha);
-    }
-    return raiz;
-  }
-
-  function registrar(mensagem) {
-    $('mensagem').textContent = mensagem;
-    $('historico').prepend(elemento('li', '', mensagem));
-    if ($('historico').children.length > 20) $('historico').lastChild.remove();
-  }
-
-  function adicionar(inimigo, chave, origem) {
-    if (instancias.length >= limite) return;
-    const id = proximoId++;
-    instancias.push({ id, inimigo, chave });
-    const dados = inimigo.dados();
-    registrar(`#${id} criado de ${origem}: ${dados.vida}/${dados.vidaMaxima} de vida e ataque ${dados.ataques[0].dano}. É um novo objeto.`);
-    renderizar();
-  }
-
-  function renderizar() {
-    const foco = document.activeElement.id;
-    const chave = $('especie').value;
-    $('modelo').replaceChildren(ficha(catalogo.criar(chave).dados()));
-    $('instancias').replaceChildren();
-    $('contador').textContent = `${instancias.length} / ${limite}`;
-    $('vazio').hidden = instancias.length > 0;
-    $('clonar').disabled = instancias.length >= limite;
-
-    for (const instancia of instancias) {
-      const { id, inimigo, chave } = instancia;
-      const dados = inimigo.dados();
-      const alterado = JSON.stringify(dados) !== JSON.stringify(originais.get(chave));
-      const card = elemento('article', `instance${alterado ? ' changed' : ''}`);
-      card.dataset.id = id;
-      card.setAttribute('aria-label', `Inimigo ${id}`);
-      const identificacao = elemento('div', 'instance-label', `CÓPIA #${id}`);
-      identificacao.append(elemento('em', '', alterado ? 'ALTERADA' : 'IGUAL AO MODELO'));
-      card.append(identificacao, ficha(dados));
-      const botoes = elemento('div', 'actions');
-      const acoes = [
-        ['dano', '−7 de vida', () => {
-          inimigo.receberDano(7);
-          registrar(`#${id} recebeu 7 de dano: vida ${inimigo.dados().vida}/${dados.vidaMaxima}. O dano foi aplicado apenas a esta instância.`);
-        }],
-        ['ataque', '+2 no ataque', () => {
-          inimigo.fortalecerAtaque(0, 2);
-          registrar(`#${id}: ataque passou de ${dados.ataques[0].dano} para ${inimigo.dados().ataques[0].dano}. A lista de ataques também é independente.`);
-        }],
-        ['copiar', 'Clonar esta cópia', () => adicionar(inimigo.clonar(), chave, `#${id} (estado atual)`)]
-      ];
-      for (const [acao, texto, executar] of acoes) {
-        const botao = elemento('button', acao === 'copiar' ? 'copy' : '', texto);
-        botao.id = `${acao}-${id}`;
-        botao.setAttribute('aria-label', `${texto} do inimigo ${id}`);
-        botao.disabled = (acao === 'dano' && dados.vida === 0) || (acao === 'copiar' && instancias.length >= limite);
-        botao.addEventListener('click', () => { executar(); renderizar(); });
-        botoes.append(botao);
+    function executar(acao, argumento = 0) {
+      const anterior = atual.selecionada;
+      const erro = comando(acao, argumento);
+      renderizar();
+      if (erro) $('mensagem').textContent = erro;
+      else if (acao === 4 || acao === 5) {
+        const alvo = document.querySelector(`[data-copia="${anterior}"]`);
+        const efeito = criar('span', acao === 4 ? '−7' : '+2', 'efeito');
+        alvo.append(efeito);
+        setTimeout(() => efeito.remove(), 700);
       }
-      card.append(botoes);
-      $('instancias').append(card);
     }
 
-    const preservados = chaves.filter(chave => JSON.stringify(catalogo.criar(chave).dados()) === JSON.stringify(originais.get(chave))).length;
-    $('integridade').textContent = `Catálogo preservado: ${preservados} de ${chaves.length} modelos. Conferência feita após cada operação.`;
-    if (foco && $(foco) && !$(foco).disabled) $(foco).focus({ preventScroll: true });
-  }
+    function linha(rotulo, dados, classe) {
+      const tr = criar('tr', undefined, classe);
+      tr.append(criar('td', rotulo), criar('td', dados.nome));
+      const vida = criar('td', `${dados.vida} / ${dados.vidaMaxima}`, dados.vida < dados.vidaMaxima ? 'alterado' : '');
+      tr.append(vida, criar('td', `${dados.ataques[0].nome}: ${dados.ataques[0].dano}`));
+      return tr;
+    }
 
-  $('clonar').addEventListener('click', () => {
-    const chave = $('especie').value;
-    adicionar(catalogo.criar(chave), chave, 'modelo do catálogo');
-  });
-  $('especie').addEventListener('change', renderizar);
-  $('reiniciar').addEventListener('click', () => {
-    instancias = [];
-    proximoId = 1;
-    $('especie').value = 'cogumelo';
-    $('historico').replaceChildren();
-    registrar('Demonstração reiniciada. O catálogo continua com seus três modelos originais.');
+    function renderizar() {
+      const foco = document.activeElement.id;
+      atual = JSON.parse(estado());
+      $('especie').value = ['cogumelo', 'golem', 'morcego'].indexOf(atual.chave);
+      $('modelo-sprite').src = `assets/${atual.modelo.sprite}-1.png`;
+      $('modelo-vida').textContent = `${atual.modelo.vida} / ${atual.modelo.vidaMaxima}`;
+      $('modelo-ataque').textContent = atual.modelo.ataques[0].dano;
+      $('modelo-fraqueza').textContent = atual.modelo.fraqueza;
+      $('quantidade').textContent = `${atual.copias.length} / 4`;
+      $('palco').classList.toggle('caverna', atual.chave === 'morcego');
+      $('vazio').hidden = atual.copias.length > 0;
+      $('inimigos').replaceChildren();
+      $('estados').replaceChildren(linha('Modelo do catálogo', atual.modelo, 'modelo-linha'));
+      atual.copias.forEach((inimigo, i) => {
+        const button = criar('button', undefined, `inimigo${i === atual.selecionada ? ' selecionado' : ''}${inimigo.vida === 0 ? ' derrotado' : ''}`);
+        button.id = `copia-${i}`;
+        button.dataset.copia = i;
+        button.setAttribute('aria-label', `Selecionar cópia ${i + 1}, ${inimigo.nome}`);
+        button.setAttribute('aria-pressed', i === atual.selecionada);
+        const img = criar('img');
+        img.dataset.sprite = inimigo.sprite;
+        img.src = `assets/${inimigo.sprite}-${quadro}.png`;
+        img.alt = '';
+        const barra = criar('progress');
+        barra.max = inimigo.vidaMaxima;
+        barra.value = inimigo.vida;
+        barra.setAttribute('aria-label', `Vida da cópia ${i + 1}`);
+        button.append(criar('span', `Cópia ${i + 1}`), img, criar('span', `${inimigo.vida} / ${inimigo.vidaMaxima}`, 'hp'), barra);
+        button.addEventListener('click', () => executar(3, i));
+        $('inimigos').append(button);
+        const tr = linha(`Cópia ${i + 1}`, inimigo, i === atual.selecionada ? 'ativa' : '');
+        tr.dataset.linha = i;
+        $('estados').append(tr);
+      });
+      const alvo = atual.copias[atual.selecionada];
+      $('selecionado').textContent = alvo ? `Cópia ${atual.selecionada + 1} · ${alvo.nome}` : 'Selecione um inimigo na cena';
+      $('criar').disabled = atual.copias.length === 4;
+      $('dano').disabled = !alvo || alvo.vida === 0;
+      $('fortalecer').disabled = !alvo;
+      $('clonar').disabled = !alvo || atual.copias.length === 4;
+      $('mensagem').textContent = atual.mensagem;
+      if (foco && $(foco) && !$(foco).disabled) $(foco).focus({ preventScroll: true });
+    }
+
+    $('reiniciar').addEventListener('click', () => executar(7));
+    $('especie').addEventListener('change', event => executar(1, Number(event.target.value)));
+    $('criar').addEventListener('click', () => executar(2));
+    $('dano').addEventListener('click', () => executar(4));
+    $('fortalecer').addEventListener('click', () => executar(5));
+    $('clonar').addEventListener('click', () => executar(6));
+    $('reiniciar').disabled = false;
+    $('especie').disabled = false;
     renderizar();
-  });
-  renderizar();
+    if (!movimentoReduzido) setInterval(() => {
+      if (document.hidden) return;
+      quadro = quadro % 4 + 1;
+      document.querySelectorAll('.inimigo:not(.derrotado) img').forEach(img => {
+        img.src = `assets/${img.dataset.sprite}-${quadro}.png`;
+      });
+    }, 220);
+    document.documentElement.dataset.pronto = 'true';
+  } catch (erro) {
+    $('mensagem').textContent = 'Não foi possível carregar a demonstração. Recarregue a página.';
+    console.error(erro);
+  }
 })();

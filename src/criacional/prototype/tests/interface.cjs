@@ -1,4 +1,3 @@
-// Dependência opcional de desenvolvimento: playwright. A demonstração não precisa dela.
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 const { resolve } = require('node:path');
@@ -7,85 +6,88 @@ const { mkdir } = require('node:fs/promises');
 
 (async () => {
   const gravar = process.argv.includes('--gravar');
-  const saida = resolve(__dirname, '../../../../docs/Base/Relatórios/SubEquipe_01/assets/prototype');
-  await mkdir(saida, { recursive: true });
-  const browser = await chromium.launch({ headless: true });
+  const assets = resolve(__dirname, '../../../../docs/Base/Relatórios/SubEquipe_01/assets/prototype');
+  const url = process.env.PROTOTYPE_URL || pathToFileURL(resolve(__dirname, '../../../../docs/Base/Relatórios/SubEquipe_01/prototype/index.html')).href;
+  const browser = await chromium.launch();
   try {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 960 },
-      ...(gravar ? { recordVideo: { dir: '/tmp/prototype-video', size: { width: 1440, height: 960 } } } : {}) });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 },
+      ...(gravar ? { recordVideo: { dir: '/tmp/prototype-video-v2', size: { width: 1280, height: 900 } } } : { reducedMotion: 'reduce' }) });
     const page = await context.newPage();
     const erros = [];
     page.on('pageerror', error => erros.push(error.message));
-    const url = process.env.PROTOTYPE_URL || pathToFileURL(resolve(__dirname, '../../../../docs/Base/Relatórios/SubEquipe_01/prototype/index.html')).href;
     await page.goto(url);
-    await page.locator('#clonar').waitFor();
-    await page.evaluate(() => Promise.all([...document.images].map(i => i.decode())));
-    const pausa = async () => { if (gravar) await page.waitForTimeout(4500); };
-    const clicar = async seletor => { await page.locator(seletor).click(); await pausa(); };
-    const vida = id => page.locator(`[data-id="${id}"] .vida`).textContent();
-    const ataque = id => page.locator(`[data-id="${id}"] .dano`).textContent();
-    await pausa();
-    await clicar('#clonar');
-    await clicar('#clonar');
+    await page.waitForSelector('html[data-pronto="true"]');
+    await page.evaluate(() => document.fonts.ready);
+    const pausa = ms => gravar ? page.waitForTimeout(ms) : Promise.resolve();
+    const clicar = async (seletor, ms = 3500) => {
+      const alvo = page.locator(seletor);
+      await alvo.scrollIntoViewIfNeeded();
+      const box = await alvo.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: gravar ? 16 : 1 });
+      if (gravar) await page.waitForTimeout(350);
+      await alvo.click();
+      await pausa(ms);
+    };
+    const vida = i => page.locator(`[data-linha="${i}"] td`).nth(2).textContent();
+    const ataque = i => page.locator(`[data-linha="${i}"] td`).nth(3).textContent();
+    await pausa(3000);
+    await clicar('#criar');
+    await clicar('#criar');
+    await clicar('#copia-0', 1500);
+    await clicar('#dano');
+    assert.equal(await vida(0), '17 / 24');
     assert.equal(await vida(1), '24 / 24');
+    await clicar('#fortalecer');
+    assert.equal(await ataque(0), 'Investida: 7');
+    assert.equal(await ataque(1), 'Investida: 5');
+    await clicar('#criar');
     assert.equal(await vida(2), '24 / 24');
-    await clicar('#dano-1');
-    assert.equal(await vida(1), '17 / 24');
-    assert.equal(await vida(2), '24 / 24');
-    await clicar('#ataque-1');
-    assert.equal(await ataque(1), '7 de dano');
-    assert.equal(await ataque(2), '5 de dano');
+    assert.equal(await page.locator('#modelo-vida').textContent(), '24 / 24');
+    await mkdir(assets, { recursive: true });
+    await page.screenshot({ path: `${assets}/demonstracao.png`, fullPage: true });
+    await clicar('#copia-0', 1500);
     await clicar('#clonar');
-    assert.equal(await vida(3), '24 / 24');
-    assert.equal(await ataque(3), '5 de dano');
-    assert.equal(await page.locator('#modelo .vida').textContent(), '24 / 24');
-    assert.equal(await page.locator('#modelo .dano').textContent(), '5 de dano');
-    await page.screenshot({ path: `${saida}/demonstracao.png`, fullPage: true });
-    await clicar('#copiar-1');
-    assert.equal(await vida(4), '17 / 24');
-    assert.equal(await ataque(4), '7 de dano');
-    await clicar('#dano-4');
-    assert.equal(await vida(4), '10 / 24');
-    assert.equal(await vida(1), '17 / 24');
-    await page.selectOption('#especie', 'golem');
-    await clicar('#clonar');
-    assert.equal(await vida(5), '36 / 36');
-    await page.selectOption('#especie', 'morcego');
-    await clicar('#clonar');
-    assert.equal(await vida(6), '18 / 18');
+    assert.equal(await vida(3), '17 / 24');
+    assert.equal(await ataque(3), 'Investida: 7');
+    await clicar('#dano');
+    assert.equal(await vida(3), '10 / 24');
+    assert.equal(await vida(0), '17 / 24');
+    assert.ok(await page.locator('#criar').isDisabled());
     assert.ok(await page.locator('#clonar').isDisabled());
-    assert.ok(await page.locator('#copiar-1').isDisabled());
-    assert.match(await page.locator('#integridade').textContent(), /3 de 3/);
-    assert.deepEqual(erros, []);
+    await clicar('summary', 5500);
     const video = page.video();
     await context.close();
-    if (gravar) console.log(`Vídeo bruto: ${await video.path()}`);
-    const verificacao = await browser.newContext({ viewport: { width: 390, height: 844 } });
-    const mobile = await verificacao.newPage();
-    mobile.on('pageerror', error => erros.push(error.message));
-    await mobile.goto(url);
-    await mobile.locator('#clonar').click();
-    for (let i = 0; i < 4; i++) await mobile.locator('#dano-1').click();
-    assert.equal(await mobile.locator('[data-id="1"] .vida').textContent(), '0 / 24');
-    assert.ok(await mobile.locator('#dano-1').isDisabled());
-    await mobile.locator('#copiar-1').click();
-    assert.equal(await mobile.locator('[data-id="2"] .vida').textContent(), '0 / 24');
-    for (const width of [360, 390, 768, 1440]) {
-      await mobile.setViewportSize({ width, height: 960 });
-      assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Overflow em ${width}px`);
+    if (gravar) console.log(`Vídeo: ${await video.path()}`);
+
+    const checks = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    const p = await checks.newPage();
+    p.on('pageerror', error => erros.push(error.message));
+    await p.goto(url);
+    await p.waitForSelector('html[data-pronto="true"]');
+    await p.selectOption('#especie', '1'); await p.locator('#criar').click();
+    assert.match(await p.locator('#estados').textContent(), /Gólem de Enxofre/);
+    await p.selectOption('#especie', '2'); await p.locator('#criar').click();
+    assert.match(await p.locator('#estados').textContent(), /Morcego da Caverna/);
+    for (let i = 0; i < 3; ++i) await p.locator('#dano').click();
+    assert.ok(await p.locator('#dano').isDisabled());
+    await p.locator('#clonar').click();
+    assert.match(await p.locator('[data-linha="2"]').textContent(), /0 \/ 18/);
+    for (const width of [360, 390, 768, 1280]) {
+      await p.setViewportSize({ width, height: 900 });
+      assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Rolagem horizontal em ${width}`);
     }
-    await mobile.setViewportSize({ width: 390, height: 844 });
-    await mobile.screenshot({ path: '/tmp/prototype-mobile.png', fullPage: true });
-    await mobile.locator('#reiniciar').click();
-    assert.equal(await mobile.locator('.instance').count(), 0);
-    assert.ok(await mobile.locator('#vazio').isVisible());
-    await mobile.locator('#clonar').focus();
-    await mobile.keyboard.press('Enter');
-    assert.equal(await mobile.locator('.instance').count(), 1);
-    assert.deepEqual(erros, []);
-    await verificacao.close();
-    console.log('Interface OK: clones independentes, cópia alterada, três modelos, limite, derrota, reinício, teclado e quatro larguras.');
-  } finally {
-    await browser.close();
-  }
-})().catch(error => { console.error(error); process.exitCode = 1; });
+    await p.setViewportSize({ width: 390, height: 844 });
+    await p.screenshot({ path: '/tmp/prototype-v2-mobile.png', fullPage: true });
+    await p.locator('#reiniciar').click();
+    assert.equal(await p.locator('[data-copia]').count(), 0);
+    await p.locator('#criar').focus(); await p.keyboard.press('Enter');
+    assert.equal(await p.locator('[data-copia]').count(), 1);
+    const imagens = await p.evaluate(async () => {
+      await Promise.all([...document.images].map(i => i.decode()));
+      return [...document.images].every(i => i.naturalWidth > 0);
+    });
+    assert.ok(imagens); assert.deepEqual(erros, []);
+    await checks.close();
+    console.log('Interface aprovada: clonagem, estado alterado, três modelos, derrota, limite, reinício, teclado e quatro larguras.');
+  } finally { await browser.close(); }
+})().catch(erro => { console.error(erro); process.exitCode = 1; });

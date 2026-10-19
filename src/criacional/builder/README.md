@@ -1,12 +1,12 @@
 # GoF Criacional: Builder na criação de personagens
 
-Programa de terminal em C++17 da SubEquipe 01. O jogador escolhe, atributo por atributo, o que entra no personagem (1 inclui, 0 deixa de fora), e o `CharacterBuilder` monta o `Character` por partes até o `Build()`. A modelagem está em [GoFCriacional.md](../../../docs/Base/Relatórios/SubEquipe_01/GoFCriacional.md).
+Programa de terminal em C++17 da SubEquipe 01. O jogador escolhe, atributo por atributo, o que entra no personagem (1 inclui, 0 deixa de fora), e o `CharacterBuilder` monta o `Character` por partes até o `Build()`. A modelagem está em [Builder.md](../../../docs/Base/Relatórios/SubEquipe_01/Builder.md).
 
 ## Onde está cada participante do padrão
 
 | Participante | Arquivo |
 |--------------|---------|
-| Builder (interface) | [`src/builder.h`](src/builder.h) |
+| Builder (classe abstrata) | [`src/builder.h`](src/builder.h) |
 | ConcreteBuilder | [`src/character_builder.h`](src/character_builder.h) e [`.cpp`](src/character_builder.cpp) |
 | Product | [`src/character.h`](src/character.h) e [`.cpp`](src/character.cpp) |
 | Parte do produto | [`src/attack_action.h`](src/attack_action.h) e [`.cpp`](src/attack_action.cpp) |
@@ -72,6 +72,12 @@ cd src/criacional/builder
 make test
 ```
 
-Os testes cobrem o `CharacterBuilder` (montagem completa, parcial, reinício após o `Build()` e validação dos pontos de vida), os comportamentos do `Character` e o menu, alimentado por uma entrada simulada. A saída termina com `27/27 verificacoes passaram`, e o programa retorna código 0 quando tudo passa.
+Os testes cobrem o `CharacterBuilder` (montagem completa, parcial, reinício após o `Build()` e validação dos pontos de vida, incluindo infinito e NaN), os comportamentos do `Character` e o menu, alimentado por uma entrada simulada. A saída termina com `32/32 verificacoes passaram`, e o programa retorna código 0 quando tudo passa.
 
 Para apagar os binários: `make clean`.
+
+## Histórico de versão
+
+| Versão | Data | Descrição | Autor |
+|--------|------|-----------|-------|
+| 1.1 | 19/10/2026 | Link para a página própria e atualização das verificações após revisão de valores finitos. | Yogi Nam de Souza Barbosa |

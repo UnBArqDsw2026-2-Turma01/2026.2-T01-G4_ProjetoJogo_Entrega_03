@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prototype · G4 Projeto Jogo</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="motor.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<main>
+  <header><span class="elemento" aria-hidden="true">H</span><div><h1>Criação de inimigos</h1><p>GoF Prototype · G4 Projeto Jogo</p></div><button id="reiniciar" disabled>Reiniciar</button></header>
+  <section class="bestiario" aria-label="Demonstração do Prototype">
+    <aside aria-labelledby="titulo-catalogo">
+      <h2 id="titulo-catalogo">Catálogo</h2>
+      <label for="especie">Modelo de inimigo</label>
+      <select id="especie" disabled><option value="0">Cogumelo Andante</option><option value="1">Gólem de Enxofre</option><option value="2">Morcego da Caverna</option></select>
+      <div class="retrato"><img id="modelo-sprite" src="assets/cogumelo-1.png" alt=""></div>
+      <dl id="modelo-dados"><dt>Vida</dt><dd id="modelo-vida">24 / 24</dd><dt>Ataque</dt><dd id="modelo-ataque">5</dd><dt>Fraqueza</dt><dd id="modelo-fraqueza">fogo</dd></dl>
+      <button id="criar" class="principal" disabled>Criar do modelo</button>
+      <p class="ajuda">Crie duas instâncias. Selecione uma na cena para alterar seus atributos.</p>
+    </aside>
+    <div class="encontro">
+      <div class="titulo-cena"><h2>Inimigos em cena</h2><span id="quantidade">0 / 4</span></div>
+      <div id="palco" class="palco" aria-label="Selecione uma cópia"><p id="vazio">Crie um inimigo pelo catálogo.</p><div id="inimigos"></div></div>
+      <div class="comandos"><span id="selecionado">Nenhum inimigo selecionado</span><div><button id="dano" disabled>Aplicar 7 de dano</button><button id="fortalecer" disabled>Ataque +2</button><button id="clonar" disabled>Clonar selecionado</button></div></div>
+    </div>
+  </section>
+  <section class="comparacao" aria-labelledby="titulo-comparacao"><h2 id="titulo-comparacao">Estado dos objetos</h2><div class="tabela"><table><thead><tr><th scope="col">Objeto</th><th scope="col">Inimigo</th><th scope="col">Vida</th><th scope="col">Ataque</th></tr></thead><tbody id="estados"></tbody></table></div></section>
+  <p id="mensagem" role="status" aria-live="polite">Carregando a demonstração…</p>
+  <details><summary>Código C++ da clonagem</summary><pre><code>std::unique_ptr&lt;Inimigo&gt; InimigoElemental::clonar() const {
+    return std::make_unique&lt;InimigoElemental&gt;(*this);
+}</code></pre><p>O construtor de cópia preserva o estado. Cada instância possui sua própria lista de ataques.</p></details>
+</main>
+</body>
+</html>

@@ -1,55 +1,68 @@
 # Prototype na criação de inimigos
 
-**Responsável: Yogi Nam de Souza Barbosa.** Demonstração do GoF criacional Prototype no G4_ProjetoJogo. Um catálogo mantém inimigos configurados e cria instâncias independentes chamando `clonar()`.
+**Responsável: Yogi Nam de Souza Barbosa.** Aplicação do GoF criacional Prototype em C++17. Um catálogo mantém inimigos configurados e produz objetos independentes pelo método virtual `clonar()`.
 
-## Executar
+## Executar em C++
 
-Abra [`index.html`](index.html) no navegador. Funciona offline, com os arquivos desta pasta juntos. Também há uma cópia publicada em [`docs/Base/Relatórios/SubEquipe_01/prototype/`](../../../docs/Base/Relatórios/SubEquipe_01/prototype/index.html).
+Com GCC/Clang com suporte a C++17 e Make, na raiz do repositório:
 
-Para servir o site inteiro, na raiz do repositório:
+```bash
+make -C src/criacional/prototype run
+make -C src/criacional/prototype test
+```
+
+O menu permite escolher um modelo, criar inimigos, selecionar uma instância, aplicar dano, fortalecer seu ataque e clonar seu estado atual. `bin/prototype --roteiro` imprime oito estados em JSON usados na comparação entre a versão nativa e a versão web.
+
+## Demonstração visual
+
+Abra o [HTML publicado](../../../docs/Base/Relatórios/SubEquipe_01/prototype/index.html) no navegador. Funciona offline: o WebAssembly e a fonte estão incluídos nos arquivos publicados. A interface usa o mesmo núcleo C++ do terminal, compilado com Emscripten; o JavaScript envia comandos e desenha o estado retornado pelo módulo.
+
+1. Clique duas vezes em **Criar do modelo**: ambas as cópias começam com vida 24 e ataque 5.
+2. Selecione a cópia 1. Aplique **Aplicar 7 de dano** e **Ataque +2**. Compare seus valores 17 e 7 com o modelo e a cópia 2, que mantêm 24 e 5.
+3. Clone o modelo novamente. A cópia 3 começa com os valores originais.
+4. Selecione a cópia 1 e use **Clonar selecionado**. A cópia 4 herda vida 17 e ataque 7.
+5. Cause dano na cópia 4: a cópia 1 mantém seu estado.
+
+O limite de quatro instâncias mantém a cena legível. Os números identificam as instâncias na demonstração; não fazem parte do estado do inimigo.
+
+Para abrir dentro do site, na raiz:
 
 ```bash
 python3 -m http.server 8000 --directory docs
 ```
 
-Abra `http://localhost:8000/#/Base/Relatórios/SubEquipe_01/Prototype.md` para ler o relatório ou `http://localhost:8000/Base/Relatórios/SubEquipe_01/prototype/index.html` para a demonstração.
-
-## Experimento de um minuto
-
-1. Clique duas vezes em **Clonar modelo**. As duas cópias começam com vida 24 e ataque 5.
-2. Na cópia 1, clique em **−7 de vida** e **+2 no ataque**. Ela fica com vida 17 e ataque 7. Confira o modelo e a cópia 2: ambos permanecem com vida 24 e ataque 5.
-3. Clone o modelo novamente. A cópia 3 nasce com os dados originais.
-4. Clique em **Clonar esta cópia** na cópia 1. A cópia 4 nasce com vida 17 e ataque 7: Prototype copia o estado atual do objeto escolhido.
-5. Cause dano na cópia 4 e confira que a cópia 1 permanece intacta.
-
-O limite de seis instâncias mantém a comparação legível. Os identificadores são rótulos da interface; o estado do inimigo é copiado integralmente.
+Acesse `http://localhost:8000/#/Base/Relatórios/SubEquipe_01/Prototype.md`.
 
 ## Organização
 
 | Arquivo | Responsabilidade |
 |---------|------------------|
-| [`modelo.js`](modelo.js) | `Inimigo` (Prototype), `InimigoElemental` (ConcretePrototype) e `CatalogoDeInimigos` (registro e cliente de `clonar`). |
-| [`catalogo.js`](catalogo.js) | Configuração inicial dos três modelos. |
-| [`app.js`](app.js) | Cliente visual: pede cópias, aplica operações e exibe os dados. |
-| [`index.html`](index.html), [`style.css`](style.css) | Interface responsiva, com controles nativos de teclado e anúncios de estado. |
-| [`tests/modelo.test.cjs`](tests/modelo.test.cjs) | Testes de isolamento, cópia do estado, polimorfismo e limites. |
-| [`tests/interface.cjs`](tests/interface.cjs) | Execução no navegador, captura e gravação opcional. |
-| [`publicar.mjs`](publicar.mjs) | Copia os arquivos para o GitPages e confere igualdade byte a byte. |
+| `src/inimigo.hpp` e `.cpp` | Contrato abstrato `Inimigo`, implementação `InimigoElemental` e objeto de valor `Ataque`. |
+| `src/catalogo.hpp` e `.cpp` | Registro de protótipos e configuração dos três modelos. |
+| `src/demonstracao.hpp` e `.cpp` | Estado da cena, comandos e leitura dos objetos. |
+| `src/main.cpp` | Cliente de terminal e roteiro reproduzível. |
+| `src/web.cpp` | Duas funções C exportadas para a interface web. |
+| `web/` | HTML, CSS, apresentação JavaScript e assets locais. |
+| `tests/testes.cpp` | 13 casos nativos: cópia, independência, polimorfismo, catálogo, validações e cena. |
+| `tests/paridade.cjs` | Comparação de oito estados entre executável nativo e WebAssembly. |
+| `tests/interface.cjs` | Testes de interface, captura e gravação da execução. |
+| `publicar.py` | Publicação, comparação byte a byte e manifesto SHA-256 dos fontes C++ e módulo compilado. |
 
-JavaScript puro, sem dependências para executar a demonstração. Scripts clássicos permitem abrir o HTML diretamente pelo sistema de arquivos. O mesmo modelo é carregado pelos testes do Node.js.
+## Compilar para o navegador
 
-## Testar
-
-Com Node.js 20 ou superior, a partir da raiz:
+A compilação publicada usa **Emscripten 4.0.23**. Instale o [SDK oficial](https://emscripten.org/docs/getting_started/downloads.html) e ative seu ambiente. Depois:
 
 ```bash
-node src/criacional/prototype/tests/modelo.test.cjs
-node src/criacional/prototype/publicar.mjs --check
+make -C src/criacional/prototype publish
+make -C src/criacional/prototype check
+node src/criacional/prototype/tests/paridade.cjs
 ```
 
-O primeiro comando executa 12 testes usando `node:test` e retorna erro se uma asserção falhar. O segundo verifica se a versão do site corresponde ao código-fonte.
+Se o compilador estiver fora do PATH, use `make -C src/criacional/prototype publish EMXX=/caminho/emsdk/upstream/emscripten/em++`. A versão nativa não depende desse SDK. O alvo `publish` gera `bin/motor.js` com o WebAssembly embutido e publica junto com a interface em `docs/.../prototype/`. Edite os fontes nesta pasta e publique novamente. `check` exige o módulo compilado e verifica a correspondência dos arquivos e hashes.
 
-Para testar a interface e gravar, instale a dependência de desenvolvimento em uma pasta temporária:
+## Testar a interface e gravar
+
+Node.js e Playwright são ferramentas de verificação, não dependências do programa C++. Instalação isolada de desenvolvimento:
 
 ```bash
 npm install --prefix /tmp/prototype-validacao playwright@1.62.1
@@ -57,41 +70,29 @@ PLAYWRIGHT_BROWSERS_PATH=/tmp/prototype-browsers /tmp/prototype-validacao/node_m
 PLAYWRIGHT_MODULE=/tmp/prototype-validacao/node_modules/playwright PLAYWRIGHT_BROWSERS_PATH=/tmp/prototype-browsers node src/criacional/prototype/tests/interface.cjs
 ```
 
-Acrescente `--gravar` ao último comando para obter uma gravação WebM em `/tmp/prototype-video`. O roteiro usa cliques reais na interface, com pausas para leitura; também salva uma captura no relatório. Para testar por HTTP, defina `PROTOTYPE_URL` com a URL da demonstração. O WebM pode ser reproduzido diretamente no navegador. Para uma conversão opcional para MP4, use uma instalação do FFmpeg com o encoder libx264:
-
-```bash
-ffmpeg -i /tmp/prototype-video/ARQUIVO.webm -c:v libx264 -crf 24 -pix_fmt yuv420p -movflags +faststart gravacao-prototype.mp4
-```
-
-## Atualizar a versão publicada
-
-Edite os arquivos desta pasta e execute, na raiz:
-
-```bash
-node src/criacional/prototype/publicar.mjs
-node src/criacional/prototype/publicar.mjs --check
-```
-
-Os arquivos em `docs/.../prototype/` são cópias de publicação. A implementação e os testes ficam nesta pasta.
+Acrescente `--gravar` ao último comando para salvar o vídeo WebM em `/tmp/prototype-video-v2/`. O roteiro executa as operações acima, com pausas de leitura, e imprime o caminho do vídeo. Também atualiza a captura do relatório. Use `PROTOTYPE_URL` para verificar a demonstração servida por HTTP. A verificação inclui teclado, imagens, reinício, limite de cópias, estado derrotado e larguras de 360, 390, 768 e 1280 pixels.
 
 ## Decisões de cópia
 
-- `clonar()` devolve uma nova instância do mesmo tipo e preserva o estado atual, inclusive a vida de um inimigo ferido ou derrotado.
-- O construtor copia a lista de ataques **e cada objeto da lista**. A política cobre os campos do modelo: números, strings e uma lista de objetos com nome e dano.
-- `dados()` também devolve uma cópia, para que alterações feitas pela interface não alcancem o estado interno.
-- O catálogo guarda uma cópia do objeto registrado e devolve novas cópias a cada criação. Alterar o objeto usado no registro não modifica o catálogo.
-- As espécies são configurações da mesma classe. Uma nova classe só se justifica quando houver comportamento diferente. O teste com `OutroInimigo` demonstra que o catálogo aceita outro protótipo sem escolher seu construtor.
+- `clonar()` devolve `std::unique_ptr<Inimigo>` contendo uma nova instância do mesmo tipo concreto e com o estado atual, inclusive vida reduzida ou zero.
+- `std::vector<Ataque>` e `std::string` são membros por valor. O construtor de cópia padrão copia seus valores para armazenamento próprio; não é preciso escrever um laço manual de cópia. Isso seria diferente com ponteiros para ataques mutáveis compartilhados.
+- O catálogo clona o objeto recebido no registro. A consulta do modelo retorna `const Inimigo&`; a criação retorna outro objeto, sob responsabilidade do cliente.
+- A destruição virtual e `unique_ptr` permitem liberar as instâncias pela interface base. Não há `new`/`delete` manual.
+- Espécies são configurações de uma classe. Um protótipo adicional no teste verifica que o catálogo trabalha pelo contrato virtual, sem selecionar construtores concretos.
+
+Essas decisões seguem a intenção do Prototype em Gamma et al. (2000), a discussão de clonagem em [Nystrom](https://gameprogrammingpatterns.com/prototype.html) e a recomendação [C.130 das C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c130-for-making-deep-copies-of-polymorphic-classes-prefer-a-virtual-clone-function-instead-of-public-copy-constructionassignment).
 
 ## Origem dos dados e das imagens
 
-Os nomes, os PV (24, 36 e 18), a força 5 do cogumelo e do morcego e o Bafo Sulfuroso de dano 9 vêm de [`src/estrutural/data/inimigos.json`](../../estrutural/data/inimigos.json), na revisão `9c4e632` da Entrega 03. A fraqueza elétrica do gólem corresponde ao multiplicador 1,5 registrado ali. As fraquezas a fogo do cogumelo e a luz do morcego, assim como os nomes Investida e Mordida, são escolhas didáticas desta demonstração. A fraqueza é exibida como atributo; o botão de dano sempre aplica sete pontos para facilitar a comparação.
+Nomes, PV (24, 36 e 18), força 5 do cogumelo e do morcego e Bafo Sulfuroso de dano 9 vêm de [`src/estrutural/data/inimigos.json`](../../estrutural/data/inimigos.json), revisão `9c4e632`. A fraqueza elétrica do gólem corresponde ao multiplicador 1,5 ali registrado. Fogo para o cogumelo, luz para o morcego e os nomes Investida e Mordida são escolhas didáticas. A fraqueza é exibida; o botão de dano aplica sete pontos para facilitar a comparação.
 
-Os três PNGs são cópias, sem edição, de `idle_l_frame_1.png` dos diretórios `cogumelo_andante`, `golem_de_enxofre` e `morcego_da_caverna` em [`src/estrutural/assets/combate/inimigos/`](../../estrutural/assets/combate/inimigos/). A procedência da produção desses assets está documentada por Marcos Vinícius Gündel da Silva no [relato de IA da SubEquipe 02](../../../docs/Base/Relatórios/SubEquipe_02/IAGenerativa.md). A reutilização mantém a identidade visual do projeto; a autoria desta contribuição se refere ao Prototype, à interface e à documentação.
+Cenários floresta/caverna e quatro quadros `idle_l_frame` de cada inimigo foram copiados sem edição de [`src/estrutural/assets/combate/`](../../estrutural/assets/combate/). A produção desses assets está registrada por Marcos Vinícius Gündel da Silva no [relato da SubEquipe 02](../../../docs/Base/Relatórios/SubEquipe_02/IAGenerativa.md). A fonte Pixelify Sans segue a tipografia do site; sua licença OFL acompanha `web/assets/`. A autoria desta contribuição refere-se ao Prototype, à interface e à documentação.
 
 ## Documentação
 
-[Relatório com UML, análise, referências, vídeo e rastreabilidade](../../../docs/Base/Relatórios/SubEquipe_01/Prototype.md).
+[Relatório com UML, referências, análise crítica, vídeo e rastreabilidade](../../../docs/Base/Relatórios/SubEquipe_01/Prototype.md).
 
 | Versão | Data | Descrição | Autor |
 |--------|------|-----------|-------|
-| 1.0 | 19/10/2026 | Implementação do Prototype, demonstração visual, testes e instruções de reprodução. | Yogi Nam de Souza Barbosa |
+| 1.0 | 19/10/2026 | Implementação inicial, demonstração visual e testes. | Yogi Nam de Souza Barbosa |
+| 1.1 | 19/10/2026 | Núcleo C++17, execução nativa e WebAssembly, interface com assets do jogo e validação de paridade. | Yogi Nam de Souza Barbosa |
