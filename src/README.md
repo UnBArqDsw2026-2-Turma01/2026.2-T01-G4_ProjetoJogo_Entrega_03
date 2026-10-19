@@ -7,3 +7,4 @@ Esta pasta reúne o código dos padrões de projeto implementados pelo Grupo 04 
 | [`estrutural/`](estrutural/) | Facade, no sistema de alquimia (Godot 4.7 + C++ GDExtension) | SubEquipe 02 |
 | [`estrutural/composite/`](estrutural/composite/) | Composite, na interface de combate e da mochila (C++17 e GDScript) | SubEquipe 02 |
 | [`estrutural/decorator/`](estrutural/decorator/) | Decorator, nos efeitos das poções sobre os personagens (C++17, ligado ao jogo pela fachada) | SubEquipe 02 |
+| [`comportamental/state/`](comportamental/state/) | State, nos turnos do combate (C++17, programa de terminal) | SubEquipe 03 |
