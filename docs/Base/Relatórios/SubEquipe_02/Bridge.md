@@ -464,9 +464,6 @@ void Jogador::setPodeAndar(bool p) {
 }
 ```
 
-**`src/estrutural/SConstruct`** (inclusão do núcleo no build)
-
-
 ### 8. Prós e contras
 
 Os itens abaixo seguem as vantagens e desvantagens descritas pelo Refactoring.Guru (2026), aplicadas ao projeto.
@@ -536,3 +533,4 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 | 1.0 | 18/10/2026 | Criação do artefato Bridge: contexto, modelagem, código e rastreabilidade | [João Igor](https://github.com/JoaoPC10) | [preencher] |
 | 1.1 | 18/10/2026 | Reestruturação do documento: metodologia, intenção, aplicabilidade, implementação passo a passo, status de verificação, prós e contras, relações com outros padrões, limitações e rastreabilidade ampliada | [João Igor](https://github.com/JoaoPC10) | |
 | 1.2 | 18/10/2026 | Revisão das referências: citações no texto, correção da atribuição dos termos Abstração/Implementação, ajuste ao formato ABNT e remoção de referência não citada | [João Igor](https://github.com/JoaoPC10) | |
+| 1.3 | 18/10/2026 | Utilização da IA para comentários mais explicativos nos códigos | [João Igor](https://github.com/JoaoPC10) | |
