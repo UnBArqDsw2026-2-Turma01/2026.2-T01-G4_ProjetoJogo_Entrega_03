@@ -505,7 +505,7 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 - `EntradaIA` está como esqueleto e não tem lógica de patrulha ou perseguição (RF08).
 - A troca automática entre teclado e controle, quando um controle é conectado ou desconectado, não está implementada. A escolha é feita uma vez em `_ready()`.
 - As constantes de ação (`mover_esquerda` etc.) podem virar um arquivo de constantes compartilhado, para eliminar o acoplamento por string.
-- O núcleo ainda não foi compilado nem testado. Esse é o primeiro passo antes da entrega.
+- O núcleo em C++17 foi compilado e testado. Como as fontes de entrada reais (teclado e controle) dependem do Godot e só funcionam com o jogo em execução, os testes automatizados usam uma `FonteFalsa`, que simula a direção informada por um dispositivo. Com ela foram verificados o cálculo do deslocamento, a normalização da diagonal, a troca de fonte em tempo de execução, a desativação do movimento e o efeito do atributo de velocidade. A integração com o Godot (`EntradaTeclado`, `EntradaControle` e o `Jogador`) ainda depende de teste manual no jogo.
 
 ### 11. Rastreabilidade
 
