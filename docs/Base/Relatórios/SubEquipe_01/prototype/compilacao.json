@@ -1,0 +1,11 @@
+{
+  "src/catalogo.cpp": "e05c92bfd1b03ab41af344c1ac3b3b52b1234ea4470b7602e150d0abc357c276",
+  "src/demonstracao.cpp": "ab0657a8bfdbdd1a2dccc4689b6940ef12c23f085dacb81fcb63b7b87c50bf32",
+  "src/inimigo.cpp": "96757e7b7c05f03cd4c83f51f8deb26d305e76fa6dd2b7a2c5af9460150bea24",
+  "src/main.cpp": "2c2aeb96dd83b3af363fe18c853ecc3b4a1625396be79f2020fa6a7a9c65d4cd",
+  "src/web.cpp": "6fb041e8d2e1042417a8169f4529e3e457f48c99226bcdb4c0726ff55de9f541",
+  "src/catalogo.hpp": "86d4682e817f14952b83cb14e1d7b324e6b6b8966aa780e523195574ec66cf1c",
+  "src/demonstracao.hpp": "8bd8c409eaa59c82baaf8e90875e421dfbebdc6e8ac8475863094b1d18db9dfb",
+  "src/inimigo.hpp": "7762451ee0b769619658c128016d5ca0835e6d3c94bdf7ffee22d78a56a58486",
+  "motor.js": "280d73445772a7698647425184dbb5b92c303df3790e2af1ce1c7580dc0aa07f"
+}

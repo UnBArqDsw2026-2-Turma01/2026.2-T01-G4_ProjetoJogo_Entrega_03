@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <limits>
 
 #include "../src/character_builder.h"
 #include "../src/terminal_menu.h"
@@ -86,6 +87,24 @@ void TestCharacterActions() {
     Check(empty_out.str().find("nao possui acoes de ataque") != string::npos, "attack sem acoes avisa o jogador");
 }
 
+void TestNonFiniteNumbers() {
+    CharacterBuilder builder;
+    builder.SetHealthPoints(80);
+    for (float invalid : {numeric_limits<float>::infinity(), numeric_limits<float>::quiet_NaN()}) {
+        bool thrown = false;
+        try { builder.SetHealthPoints(invalid); }
+        catch (const invalid_argument&) { thrown = true; }
+        Check(thrown, "SetHealthPoints rejeita numero nao finito");
+    }
+    Check(builder.Build().GetHealthPoints() == 80.0f, "Recusa preserva os pontos de vida validos");
+    istringstream in("0\n0\n1\ninf\nnan\n70\n1\n1\nGolpe\ninf\n15\n");
+    ostringstream out;
+    TerminalMenu menu(in, out);
+    Character character = menu.CreateCharacter(builder);
+    Check(character.GetHealthPoints() == 70.0f, "Menu recusa inf e nan antes dos pontos de vida validos");
+    Check(character.GetAttackActions()[0].GetDamage() == 15.0f, "Menu recusa dano infinito");
+}
+
 void TestMenuSelectsAttributes() {
     istringstream in("1\nKael\n0\n1\n95\n1\n2\nCorte\n15\nChute\n10\n");
     ostringstream out;
@@ -133,6 +152,7 @@ int main() {
     TestBuilderResetsAfterBuild();
     TestInvalidHealthPoints();
     TestCharacterActions();
+    TestNonFiniteNumbers();
     TestMenuSelectsAttributes();
     TestMenuRejectsInvalidInput();
     TestMenuRunLoop();

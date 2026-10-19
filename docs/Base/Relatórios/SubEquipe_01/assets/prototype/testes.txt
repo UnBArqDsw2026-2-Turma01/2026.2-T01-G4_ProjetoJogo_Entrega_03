@@ -1,0 +1,26 @@
+Prototype — verificação em 19/10/2026
+C++17 / GCC 16.2.1 / Emscripten 4.0.23
+
+$ make -C src/criacional/prototype test
+OK  Identidade distinta, mesmo tipo concreto e atributos
+OK  Dano afeta apenas a cópia escolhida
+OK  Lista e cada ataque têm armazenamento independente
+OK  Clonagem preserva estado alterado e mantém isolamento
+OK  Valores fornecidos ao construtor são copiados
+OK  Catálogo isola o objeto recebido e as cópias produzidas
+OK  Catálogo aceita outro tipo pelo contrato de clonagem
+OK  Vida limita em zero e clone de derrotado permanece derrotado
+OK  Operações inválidas preservam o estado
+OK  Construtor rejeita vida, nomes e ataques inválidos
+OK  Catálogo rejeita chave vazia, repetida e desconhecida
+OK  Modelos configurados preservam os valores iniciais
+OK  Demonstração valida seleção, comando, limite e reinício
+13/13 testes aprovados.
+8 estados idênticos em C++ nativo e WebAssembly; recusas preservam o estado.
+
+AddressSanitizer e UndefinedBehaviorSanitizer: 13/13 casos aprovados, sem diagnóstico de memória ou comportamento indefinido.
+
+Interface (Chromium / Playwright 1.62.1):
+Clonagem, estado alterado, três modelos, derrota, limite de quatro cópias, reinício, teclado e larguras 360, 390, 768 e 1280 aprovados.
+
+Publicação: arquivos e manifesto SHA-256 conferidos com publicar.py --check.

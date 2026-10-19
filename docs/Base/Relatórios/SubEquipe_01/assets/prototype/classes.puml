@@ -1,0 +1,58 @@
+@startuml
+!pragma layout smetana
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam classBackgroundColor #F5F8FB
+skinparam classBorderColor #135B99
+skinparam ArrowColor #263746
+hide circle
+
+abstract class Inimigo <<Prototype>> {
+  - nome_: std::string
+  - sprite_: std::string
+  - fraqueza_: std::string
+  - vida_maxima_: int
+  - vida_: int
+  --
+  {abstract} + clonar() const: std::unique_ptr<Inimigo>
+  + receberDano(quantidade: int): void
+  + fortalecerAtaque(indice: std::size_t, aumento: int): void
+}
+class InimigoElemental <<ConcretePrototype>> {
+  + clonar() const: std::unique_ptr<Inimigo>
+}
+class CatalogoDeInimigos {
+  + registrar(chave: const std::string&, prototipo: const Inimigo&): void
+  + criar(chave: const std::string&) const: std::unique_ptr<Inimigo>
+  + modelo(chave: const std::string&) const: const Inimigo&
+}
+class Ataque <<struct>> {
+  + nome: std::string
+  + dano: int
+}
+
+InimigoElemental --|> Inimigo
+CatalogoDeInimigos "0..1" *-- "0..*" Inimigo : - modelos_
+Inimigo "0..1" *-- "1..*" Ataque : - ataques_
+
+note bottom of InimigoElemental
+  clonar() utiliza o construtor de cópia.
+  std::string e std::vector<Ataque>
+  mantêm o estado por valor.
+end note
+note top of CatalogoDeInimigos
+  Cliente do contrato de clonagem.
+  Cada modelo registrado pertence ao catálogo.
+  As cópias devolvidas pertencem ao chamador.
+end note
+legend bottom
+  Modelo de implementação em C++17; getters e construtores omitidos.
+  Prototype e ConcretePrototype identificam papéis GoF.
+  Triângulo vazio: generalização. Losango preenchido: composição.
+  + público; - privado. "0..1" permite inimigos fora do catálogo.
+endlegend
+@enduml

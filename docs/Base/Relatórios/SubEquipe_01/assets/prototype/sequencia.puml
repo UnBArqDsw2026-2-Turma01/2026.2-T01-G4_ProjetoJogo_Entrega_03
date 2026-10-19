@@ -1,0 +1,41 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #F5F8FB
+skinparam sequenceParticipantBorderColor #135B99
+skinparam sequenceArrowColor #263746
+skinparam sequenceLifeLineBorderColor #637587
+hide footbox
+participant "cliente : Demonstracao" as cliente
+participant "catalogo : CatalogoDeInimigos" as catalogo
+participant "modelo : InimigoElemental" as modelo
+cliente -> catalogo : criar("cogumelo")
+activate catalogo
+catalogo -> modelo : clonar()
+activate modelo
+create participant "copia : InimigoElemental" as copia
+modelo --> copia : <<create>>\nInimigoElemental(*this)
+activate copia
+copia --> modelo : nova instância
+ deactivate copia
+modelo --> catalogo : unique_ptr<Inimigo>
+deactivate modelo
+catalogo --> cliente : unique_ptr<Inimigo>
+deactivate catalogo
+note over cliente, copia
+O cliente passa a possuir a cópia.
+Modelo e cópia começam com os mesmos valores.
+end note
+cliente -> copia : receberDano(7)
+activate copia
+copia -> copia : vida_ = max(0, vida_ - 7)
+copia --> cliente : retorno
+deactivate copia
+note over modelo, copia
+modelo.vida() = 24
+copia.vida() = 17
+end note
+@enduml

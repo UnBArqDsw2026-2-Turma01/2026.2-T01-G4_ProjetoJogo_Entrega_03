@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 
 #include "terminal_menu.h"
 
@@ -50,7 +51,7 @@ float TerminalMenu::AskPositiveNumber(const string& prompt) {
         try {
             size_t read = 0;
             float value = stof(answer, &read);
-            if (read == answer.size() && value > 0) {
+            if (read == answer.size() && std::isfinite(value) && value > 0) {
                 return value;
             }
         } catch (const logic_error&) {

@@ -1,0 +1,68 @@
+@startuml
+!pragma layout smetana
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam classBackgroundColor #F5F8FB
+skinparam classBorderColor #135B99
+skinparam ArrowColor #263746
+hide circle
+abstract class Builder <<Builder>> {
+  {abstract} + SetName(name: const string&): void
+  {abstract} + SetType(type: const string&): void
+  {abstract} + SetHealthPoints(health_points: float): void
+  {abstract} + SetAttackActions(attack_actions: const vector<AttackAction>&): void
+  {abstract} + Build(): Character
+}
+class CharacterBuilder <<ConcreteBuilder>> {
+  - type: optional<string>
+  - name: optional<string>
+  - health_points: optional<float>
+  - attack_actions: vector<AttackAction>
+  --
+  + SetName(name: const string&): void
+  + SetType(type: const string&): void
+  + SetHealthPoints(health_points: float): void
+  + SetAttackActions(attack_actions: const vector<AttackAction>&): void
+  + Build(): Character
+  - Reset(): void
+}
+class Character <<Product>> {
+  - type: optional<string>
+  - name: optional<string>
+  - health_points: optional<float>
+  --
+  + attack(out: ostream&) const: void
+  + defend(out: ostream&) const: void
+  + Describe(out: ostream&) const: void
+}
+class AttackAction {
+  - damage: float
+  - name: string
+  --
+  + attack(out: ostream&) const: void
+}
+class TerminalMenu <<Client>> {
+  + CreateCharacter(builder: Builder&): Character
+  + Run(builder: Builder&): void
+}
+CharacterBuilder --|> Builder
+TerminalMenu ..> Builder : usa os passos
+CharacterBuilder ..> Character : <<create>>
+Character "0..1" *-- "0..*" AttackAction : - attack_actions
+note bottom of CharacterBuilder
+  Build() copia os valores para Character
+  e chama Reset(). Os produtos anteriores
+  conservam seus dados.
+end note
+legend bottom
+  Classes e assinaturas correspondentes ao C++17.
+  Getters, construtores e leitura de entrada omitidos.
+  Generalização: linha contínua e triângulo vazio.
+  Dependência de criação: linha tracejada.
+  Cada AttackAction do produto é armazenado por valor.
+endlegend
+@enduml
