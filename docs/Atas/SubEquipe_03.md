@@ -28,7 +28,8 @@ Toda reunião é registrada em uma ata própria, seguindo o modelo definido em [
 
 | Ata | Data | Assunto | Redator | Link |
 |:---:|:----:|---------|---------|:----:|
-| — | — | Nenhuma reunião registrada nesta entrega até o momento. | — | — |
+| 1 | 17/10 | Correção dos Diagramas de Classe e Atividade, Modelagem no padrão de projeto State. | Pedro Teixeira Moriel Sanchez | [AtaSub03_01](AtaSub03_01.md) |
+| 2 | 18/10 | Término da modelagem e discussão de decisões sobre o código. | Pedro Teixeira Moriel Sanchez | [AtaSub03_02](AtaSub03_02.md) |
 
 <p align="center">Tabela 2: Registro de reuniões.</p>
 

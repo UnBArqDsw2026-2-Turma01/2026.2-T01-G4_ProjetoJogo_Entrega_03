@@ -37,3 +37,5 @@
   - [Subgrupo 02](/Atas/SubEquipe_02.md)
     - [Ata 01: 16/10/2026](/Atas/AtaSub02_01.md)
   - [Subgrupo 03](/Atas/SubEquipe_03.md)
+    - [Ata 01: 17/10/2026](/Atas/AtaSub03_01.md)
+    - [Ata 02: 18/10/2026](/Atas/AtaSub03_02.md)
