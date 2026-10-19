@@ -25,9 +25,9 @@ Cada integrante registra, em uma subseção própria, as lições aprendidas e u
 
 <p align="center">Tabela 1: Síntese dos pontos de vista dos participantes no Foco_02. Fonte: Autores, 2026.</p>
 
-**### João Igor Pereira da Costa**
+### João Igor Pereira da Costa
 
-**#### Lições Aprendidas**
+#### Lições Aprendidas
 
 Durante o desenvolvimento do padrão GoF Bridge, aprendi a importância de separar responsabilidades que variam de forma independente, desacoplando o controlador de movimento da fonte de entrada. Essa abordagem permite que diferentes dispositivos, como teclado e controle, ou fontes de intenção, como uma inteligência artificial, sejam utilizados sem exigir alterações na lógica principal de movimentação.
 
@@ -35,7 +35,7 @@ Também aprofundei meus conhecimentos sobre composição, abstração e implemen
 
 Por fim, compreendi a importância de realizar testes independentes da engine para verificar a lógica central do padrão, além de identificar que a integração com o Godot exige validações adicionais para garantir a compatibilidade com as classes e interfaces existentes no projeto.
 
-**#### Uso da IA Generativa (senso crítico)**
+#### Uso da IA Generativa (senso crítico)
 
 Foi utilizada a ferramenta **ChatGPT, da OpenAI, modelo GPT-6**, como apoio ao desenvolvimento e à revisão do padrão Bridge. A ferramenta foi empregada para analisar a compatibilidade entre os códigos do padrão Decorator e a proposta de implementação do Bridge, identificar possíveis incompatibilidades, auxiliar na organização dos arquivos e desenvolver testes para verificar o funcionamento do núcleo do padrão em C++17.
 
