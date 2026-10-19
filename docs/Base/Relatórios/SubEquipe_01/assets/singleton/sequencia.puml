@@ -1,0 +1,53 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #F5F8FB
+skinparam sequenceParticipantBorderColor #135B99
+skinparam sequenceArrowColor #263746
+skinparam sequenceLifeLineBorderColor #637587
+hide footbox
+participant ": Exploracao" as exploracao
+participant ": BancadaDeAlquimia" as bancada
+participant ": MenuDePausa" as menu
+participant "Partida" as classe <<class>>
+
+exploracao -> classe : instancia()
+activate classe
+alt primeira chamada no programa
+  create participant "unica : Partida" as unica
+  classe -> unica : <<create>>\nPartida()
+end
+classe --> exploracao : unica
+deactivate classe
+exploracao -> unica : mudarArea("Caverna")
+activate unica
+unica --> exploracao
+deactivate unica
+
+bancada -> classe : instancia()
+activate classe
+classe --> bancada : unica
+deactivate classe
+note right of bancada : mesmo objeto, sem nova criação
+bancada -> unica : registrarPocao("Poção Flamejante")
+activate unica
+unica --> bancada
+deactivate unica
+
+menu -> classe : instancia()
+activate classe
+classe --> menu : unica
+deactivate classe
+menu -> unica : salvar("Menu de pausa")
+activate unica
+unica -> unica : salvamentos_.push_back(...)
+unica --> menu : Salvamento {Caverna, 1 poção}
+deactivate unica
+note over exploracao, unica
+O salvamento pedido pelo menu contém a área definida pela exploração
+e a poção registrada pela bancada: os três clientes usaram a mesma partida.
+end note
+@enduml

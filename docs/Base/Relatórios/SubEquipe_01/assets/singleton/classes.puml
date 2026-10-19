@@ -1,0 +1,85 @@
+@startuml
+!pragma layout smetana
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam classBackgroundColor #F5F8FB
+skinparam classBorderColor #135B99
+skinparam ArrowColor #263746
+hide circle
+hide empty members
+
+class Partida <<Singleton>> {
+  - estado_: EstadoDaPartida
+  - jogador_: std::string
+  - area_: std::string
+  - pocoesCriadas_: int
+  - inimigosDerrotados_: int
+  --
+  + {static} instancia(): Partida&
+  - Partida()
+  - ~Partida()
+  + Partida(outra: const Partida&) = delete
+  + operator=(outra: const Partida&) = delete
+  + iniciar(jogador: const std::string&, areaInicial: const std::string&): void
+  + mudarArea(area: const std::string&): void
+  + registrarPocao(pocao: const std::string&): void
+  + registrarVitoria(inimigo: const std::string&): void
+  + salvar(origem: const std::string&): Salvamento
+  + sair(): void
+}
+
+enum EstadoDaPartida <<enumeration>> {
+  NaoIniciada
+  EmAndamento
+  Encerrada
+}
+
+class Salvamento <<struct>> {
+  + jogador: std::string
+  + area: std::string
+  + pocoesCriadas: int
+  + inimigosDerrotados: int
+  + origem: std::string
+}
+
+class Exploracao {
+  + entrarEm(area: const std::string&): void
+}
+class BancadaDeAlquimia {
+  + criarPocao(pocao: const std::string&): void
+}
+class Combate {
+  + derrotar(inimigo: const std::string&): void
+}
+class MenuDePausa {
+  + salvar(): Salvamento
+  + salvarESair(): Salvamento
+}
+
+Exploracao ..> Partida : <<use>>
+BancadaDeAlquimia ..> Partida : <<use>>
+Combate ..> Partida : <<use>>
+MenuDePausa ..> Partida : <<use>>
+Partida "1" *-- "0..*" Salvamento : - salvamentos_
+Partida --> "1" EstadoDaPartida
+
+note right of Partida
+  instancia() guarda o objeto em uma
+  variável estática local (static Partida unica):
+  criado na primeira chamada, único até o
+  fim do programa. Construtor e destrutor
+  privados; cópia e atribuição removidas.
+end note
+legend bottom
+  Modelo de implementação em C++17; consultas (getters) omitidas.
+  Sublinhado: operação de classe (static). «Singleton» identifica o papel GoF.
+  Seta tracejada «use»: dependência; o cliente obtém a partida por Partida::instancia(),
+  sem recebê-la por parâmetro nem guardá-la como atributo.
+  "= delete": operação removida em C++, que nenhum código consegue chamar.
+  Losango preenchido: composição. + público; - privado.
+endlegend
+@enduml

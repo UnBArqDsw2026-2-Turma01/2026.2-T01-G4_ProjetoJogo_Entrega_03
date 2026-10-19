@@ -6,7 +6,7 @@ Relatório do **FOCO_01: GoFs Criacionais & IA Generativa** do **G4_ProjetoJogo*
 
 ## Objetivo
 
-Relacionar os problemas de criação de personagens e inimigos com os padrões adotados, reunindo UML, código C++, execução, justificativas e evidências de participação.
+Relacionar os problemas de criação de personagens, inimigos e da partida com os padrões adotados, reunindo UML, código C++, execução, justificativas e evidências de participação.
 
 ## Metodologia
 
@@ -18,10 +18,13 @@ O foco foi desenvolvido por contribuições individuais. Cada artefato apresenta
 |----------------------|------------------|--------------------------|
 | **[Builder — Gabriel Andrade Magioli](Builder.md)** | Montar um personagem por etapas, escolhendo os atributos desejados. | UML, código C++17, menu no terminal, 32 verificações e vídeo. |
 | **[Prototype — Yogi Nam de Souza Barbosa](Prototype.md)** | Criar inimigos a partir de objetos configurados e manter o estado de cada cópia independente. | UML de classes e sequência, C++17, demonstração visual em WebAssembly, 13 casos nativos, comparação entre versões e vídeo. |
+| **[Singleton — Cibelly Lourenço Ferreira](Singleton.md)** | Manter uma única partida em execução, acessível pela exploração, alquimia, combate e menu de pausa, para que o salvamento reúna todo o progresso (RF03). | UML de classes e sequência, C++17, 8 testes, garantia em tempo de compilação, visualização do roteiro executado e vídeo. |
 
-<p align="center">Tabela 1: Aplicações criacionais documentadas. Fonte: Gabriel Andrade Magioli e Yogi Nam de Souza Barbosa, 2026.</p>
+<p align="center">Tabela 1: Aplicações criacionais documentadas. Fonte: Gabriel Andrade Magioli, Yogi Nam de Souza Barbosa e Cibelly Lourenço Ferreira, 2026.</p>
 
 O **Builder** define as partes antes de entregar um objeto. O **Prototype** parte de um objeto pronto e copia seu estado. São decisões complementares: um objeto montado por etapas poderia se tornar um protótipo, embora cada aplicação aqui permita estudar seu mecanismo separadamente.
+
+O **Singleton** responde a outra pergunta: não *como* criar, mas *quantas* instâncias podem existir. Enquanto o Prototype multiplica inimigos independentes, o Singleton impede que surja uma segunda partida. Os três padrões controlam a criação de formas diferentes: por etapas, por cópia e por restrição.
 
 ### Rastreabilidade
 
@@ -44,6 +47,7 @@ O **Builder** define as partes antes de entregar um objeto. O **Prototype** part
 |------|------------------------|
 | Gabriel Andrade Magioli | Builder: modelagem, código, testes, vídeo, documentação e relato de IA. |
 | Yogi Nam de Souza Barbosa | Prototype: modelagem, código, testes, demonstração, vídeo, documentação e relato de IA; organização das páginas e revisão técnica do Builder. |
+| Cibelly Lourenço Ferreira | Singleton: escolha do problema a partir da classe `Partida` da Entrega 02, modelagem, código, testes, visualização, vídeo, documentação e relato de IA. |
 
 <p align="center">Tabela 3: Contribuições vinculadas aos artefatos individuais.</p>
 
@@ -55,5 +59,6 @@ O **Builder** define as partes antes de entregar um objeto. O **Prototype** part
 | 1.1 | 17/10/2026 | Inclusão do vídeo do Builder. | Gabriel Andrade Magioli | — |
 | 1.2 | 19/10/2026 | Inclusão do Prototype, metodologia e elos com artefatos individuais. | Yogi Nam de Souza Barbosa | — |
 | 1.3 | 19/10/2026 | Organização da visão geral e das páginas individuais de Builder e Prototype. | Yogi Nam de Souza Barbosa | — |
+| 1.4 | 19/10/2026 | Inclusão do Singleton na tabela de aplicações, comparação entre os três criacionais e contribuição de Cibelly. | Cibelly Lourenço Ferreira | — |
 
 <p align="center">Tabela 4: Histórico de versão.</p>
