@@ -1,20 +1,26 @@
-✔ clonar mantém o tipo, todos os dados e os comportamentos, com outra identidade (1.858193ms)
-✔ dano em uma cópia não muda o original nem a outra cópia (0.145828ms)
-✔ cada objeto da lista de ataques é independente, inclusive o segundo ataque (0.161147ms)
-✔ clonar uma instância alterada preserva o estado atual e continua independente (0.107837ms)
-✔ entrada do construtor e dados de leitura não expõem referências internas (0.107716ms)
-✔ catálogo isola o modelo recebido e gera novas instâncias intactas (0.142042ms)
-✔ catálogo delega a clonar sem depender da classe concreta InimigoElemental (0.09942ms)
-✔ dano para em zero; clonar um derrotado não ressuscita a instância (0.062651ms)
-✔ entradas inválidas não modificam o inimigo (0.527226ms)
-✔ construtor recusa estados inválidos (0.240395ms)
-✔ catálogo recusa chave ausente, duplicada e protótipo sem contrato (0.760441ms)
-✔ três modelos da demonstração preservam suas configurações entre criações (0.118664ms)
-ℹ tests 12
-ℹ suites 0
-ℹ pass 12
-ℹ fail 0
-ℹ cancelled 0
-ℹ skipped 0
-ℹ todo 0
-ℹ duration_ms 10.094208
+Prototype — verificação em 19/10/2026
+C++17 / GCC 16.2.1 / Emscripten 4.0.23
+
+$ make -C src/criacional/prototype test
+OK  Identidade distinta, mesmo tipo concreto e atributos
+OK  Dano afeta apenas a cópia escolhida
+OK  Lista e cada ataque têm armazenamento independente
+OK  Clonagem preserva estado alterado e mantém isolamento
+OK  Valores fornecidos ao construtor são copiados
+OK  Catálogo isola o objeto recebido e as cópias produzidas
+OK  Catálogo aceita outro tipo pelo contrato de clonagem
+OK  Vida limita em zero e clone de derrotado permanece derrotado
+OK  Operações inválidas preservam o estado
+OK  Construtor rejeita vida, nomes e ataques inválidos
+OK  Catálogo rejeita chave vazia, repetida e desconhecida
+OK  Modelos configurados preservam os valores iniciais
+OK  Demonstração valida seleção, comando, limite e reinício
+13/13 testes aprovados.
+8 estados idênticos em C++ nativo e WebAssembly; recusas preservam o estado.
+
+AddressSanitizer e UndefinedBehaviorSanitizer: 13/13 casos aprovados, sem diagnóstico de memória ou comportamento indefinido.
+
+Interface (Chromium / Playwright 1.62.1):
+Clonagem, estado alterado, três modelos, derrota, limite de quatro cópias, reinício, teclado e larguras 360, 390, 768 e 1280 aprovados.
+
+Publicação: arquivos e manifesto SHA-256 conferidos com publicar.py --check.

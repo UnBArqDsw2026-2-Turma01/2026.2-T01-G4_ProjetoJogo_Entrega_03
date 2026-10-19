@@ -1,44 +1,58 @@
 @startuml
-title Prototype na criação de inimigos
-skinparam classAttributeIconSize 0
+!pragma layout smetana
 skinparam shadowing false
+skinparam roundcorner 0
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam BackgroundColor #FFFFFF
+skinparam classBackgroundColor #F5F8FB
+skinparam classBorderColor #135B99
+skinparam ArrowColor #263746
 hide circle
 
 abstract class Inimigo <<Prototype>> {
-  {abstract} + clonar(): Inimigo
+  - nome_: std::string
+  - sprite_: std::string
+  - fraqueza_: std::string
+  - vida_maxima_: int
+  - vida_: int
+  --
+  {abstract} + clonar() const: std::unique_ptr<Inimigo>
+  + receberDano(quantidade: int): void
+  + fortalecerAtaque(indice: std::size_t, aumento: int): void
 }
 class InimigoElemental <<ConcretePrototype>> {
-  - estado: dados do inimigo
-  + clonar(): InimigoElemental
-  + dados(): objeto
-  + receberDano(quantidade: inteiro): void
-  + fortalecerAtaque(indice: inteiro, aumento: inteiro): void
+  + clonar() const: std::unique_ptr<Inimigo>
 }
-class CatalogoDeInimigos <<Registry / Client>> {
-  - modelos: Map<string, Inimigo>
-  + registrar(chave: string, prototipo: Inimigo): void
-  + criar(chave: string): Inimigo
+class CatalogoDeInimigos {
+  + registrar(chave: const std::string&, prototipo: const Inimigo&): void
+  + criar(chave: const std::string&) const: std::unique_ptr<Inimigo>
+  + modelo(chave: const std::string&) const: const Inimigo&
 }
-class Ataque <<objeto de valor>> {
-  + nome: string
-  + dano: inteiro
+class Ataque <<struct>> {
+  + nome: std::string
+  + dano: int
 }
-artifact "app.js\nCliente visual" as UI
 
 InimigoElemental --|> Inimigo
-CatalogoDeInimigos "1" *-- "0..*" Inimigo : modelos privados
-InimigoElemental "1" *-- "1..*" Ataque : estado.ataques
-UI ..> CatalogoDeInimigos : criar(chave)
-UI ..> InimigoElemental : inspecionar / alterar / clonar
+CatalogoDeInimigos "0..1" *-- "0..*" Inimigo : - modelos_
+Inimigo "0..1" *-- "1..*" Ataque : - ataques_
 
 note bottom of InimigoElemental
-  Estado: nome, sprite, fraqueza,
-  vidaMaxima, vida e ataques.
-  Cada cópia possui sua própria lista
-  e seus próprios objetos Ataque.
+  clonar() utiliza o construtor de cópia.
+  std::string e std::vector<Ataque>
+  mantêm o estado por valor.
 end note
-note bottom of Ataque
-  Representado por objeto JavaScript,
-  não por uma classe no código.
+note top of CatalogoDeInimigos
+  Cliente do contrato de clonagem.
+  Cada modelo registrado pertence ao catálogo.
+  As cópias devolvidas pertencem ao chamador.
 end note
+legend bottom
+  Modelo de implementação em C++17; getters e construtores omitidos.
+  Prototype e ConcretePrototype identificam papéis GoF.
+  Triângulo vazio: generalização. Losango preenchido: composição.
+  + público; - privado. "0..1" permite inimigos fora do catálogo.
+endlegend
 @enduml

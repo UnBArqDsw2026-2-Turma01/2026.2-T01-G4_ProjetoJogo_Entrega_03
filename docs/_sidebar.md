@@ -12,8 +12,9 @@
   - [Visão do Módulo](/Base/1.PadroesDeProjeto.md)
   - Relatórios
     - H · SubEquipe 01
-      - [1. GoF Criacional](/Base/Relatórios/SubEquipe_01/GoFCriacional.md)
-        - [1.1 Prototype (Yogi)](/Base/Relatórios/SubEquipe_01/Prototype.md)
+      - [1. GoF Criacional (Visão Geral)](/Base/Relatórios/SubEquipe_01/GoFCriacional.md)
+        - [1.1 Builder (Gabriel)](/Base/Relatórios/SubEquipe_01/Builder.md)
+        - [1.2 Prototype (Yogi)](/Base/Relatórios/SubEquipe_01/Prototype.md)
       - [2. IA Generativa](/Base/Relatórios/SubEquipe_01/IAGenerativa.md)
     - C · SubEquipe 02
       - [1. GoF Estrutural (Visão Geral)](/Base/Relatórios/SubEquipe_02/GoFEstrutural.md)
