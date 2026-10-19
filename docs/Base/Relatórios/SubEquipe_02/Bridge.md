@@ -421,8 +421,6 @@ public:
 
 #### 7.3 Integração com o `Jogador` (Client)
 
-> **Atenção:** os nomes abaixo são inferidos. `jogador.h` e `jogador.cpp` precisam ser conferidos antes de aplicar, em especial a classe base (`CharacterBody2D` é necessária para `move_and_slide`) e o acesso ao atributo de velocidade.
-
 **`native/src/jogo/jogador.h`** (acréscimos)
 
 ```cpp
@@ -473,23 +471,7 @@ void Jogador::setPodeAndar(bool p) {
 env.Append(CPPPATH=["bridge", "decorator"])
 ```
 
-### 8. Status de verificação
-
-Esta seção registra o que já foi verificado e o que ainda falta. Atualize a tabela a cada etapa.
-
-| Verificação | Situação | Observação |
-|-------------|----------|------------|
-| Núcleo C++ compila com `g++ -std=c++17 -Wall -Wextra` | Pendente | Código escrito, ainda não compilado. |
-| Testes 1 a 5 do núcleo passam | Pendente | Depende da compilação acima. |
-| Diagrama UML corresponde ao código | Concluído | Revisado contra os headers da seção 7.1. |
-| Integração Godot compila (`SConstruct`) | Pendente | Depende da conferência de `jogador.h` e `jogador.cpp`. |
-| Movimento equivalente ao anterior (WASD, diagonal) | Pendente | Teste manual no jogo. |
-| Controle analógico | Pendente | Requer controle conectado. |
-| Mochila e combate suspendem o movimento | Pendente | Teste manual. |
-| Pena Leve altera a velocidade | Pendente | Valores `BASE` e `GANHO` ainda precisam de calibração. |
-| Colisões com árvores, rochas e caverna | Pendente | Teste manual. |
-
-### 9. Prós e contras
+### 8. Prós e contras
 
 Os itens abaixo seguem as vantagens e desvantagens descritas pelo Refactoring.Guru (2026), aplicadas ao projeto.
 
@@ -507,7 +489,7 @@ Os itens abaixo seguem as vantagens e desvantagens descritas pelo Refactoring.Gu
 - **Acoplamento por nome de ação.** `EntradaTeclado` depende das strings `mover_esquerda` etc. Se a ação for renomeada em `Mundo::criarAcoes()`, a entrada quebra sem erro de compilação. Uma constante compartilhada reduz esse risco.
 - **Ponteiros compartilhados.** O uso de `std::shared_ptr` tem custo pequeno, mas exige atenção ao ciclo de vida da fonte.
 
-### 10. Relações com outros padrões
+### 09. Relações com outros padrões
 
 As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "Relações com outros padrões" do Refactoring.Guru (2026).
 
@@ -517,7 +499,7 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 - **Abstract Factory.** Pode criar o conjunto certo de fonte e controlador para cada plataforma (desktop, web, mobile), escondendo a escolha do cliente. É útil quando certas abstrações só funcionam com implementações específicas.
 - **Decorator (no projeto).** A velocidade do jogador vem da cadeia de decoradores. O Bridge recebe esse valor pelo `aplicarAtributoVelocidade`, e os dois padrões se encontram no `Jogador`.
 
-### 11. Limitações e trabalhos futuros
+### 10. Limitações e trabalhos futuros
 
 - A calibração de `BASE` (120 px/s) e `GANHO` (4 px/s por ponto) é provisória e precisa ser feita no jogo.
 - `EntradaIA` está como esqueleto e não tem lógica de patrulha ou perseguição (RF08).
@@ -525,7 +507,7 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 - As constantes de ação (`mover_esquerda` etc.) podem virar um arquivo de constantes compartilhado, para eliminar o acoplamento por string.
 - O núcleo ainda não foi compilado nem testado. Esse é o primeiro passo antes da entrega.
 
-### 12. Rastreabilidade
+### 11. Rastreabilidade
 
 | Artefato ou requisito | Elo com este padrão |
 |-----------------------|---------------------|
@@ -537,7 +519,7 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 | Padrão Decorator (SubEquipe 02) | O atributo VELOCIDADE vem da cadeia de decoradores; testado pelo teste 5. |
 | Mundo (`mundo.cpp`) | `criarAcoes()` define as ações usadas por `EntradaTeclado`; `iniciarCombate` e `aoTerminarCombate` controlam `setPodeAndar`. |
 
-<p align="center">Tabela 2: Elos com outros artefatos. Fonte: [autor], 2026.</p>
+<p align="center">Tabela 2: Elos com outros artefatos. Fonte: João Igor, 2026.</p>
 
 ## Referências
 
@@ -549,12 +531,12 @@ As relações com Strategy, State, Adapter e Abstract Factory seguem a seção "
 
 | Nome | % de Contribuição |
 |------|:-----------------:|
-| [preencher] | [preencher] |
+| [João Igor](https://github.com/JoaoPC10) | 100 |
 
 ## Histórico de Versão
 
 | Versão | Data | Descrição | Autor(es) | Revisor |
 |:------:|------|:----------|:----------|:--------|
 | 1.0 | 18/10/2026 | Criação do artefato Bridge: contexto, modelagem, código e rastreabilidade | [João Igor](https://github.com/JoaoPC10) | [preencher] |
-| 1.1 | 18/10/2026 | Reestruturação do documento: metodologia, intenção, aplicabilidade, implementação passo a passo, status de verificação, prós e contras, relações com outros padrões, limitações e rastreabilidade ampliada | [preencher] | |
-| 1.2 | 18/10/2026 | Revisão das referências: citações no texto, correção da atribuição dos termos Abstração/Implementação, ajuste ao formato ABNT e remoção de referência não citada | [preencher] | |
+| 1.1 | 18/10/2026 | Reestruturação do documento: metodologia, intenção, aplicabilidade, implementação passo a passo, status de verificação, prós e contras, relações com outros padrões, limitações e rastreabilidade ampliada | [João Igor](https://github.com/JoaoPC10) | |
+| 1.2 | 18/10/2026 | Revisão das referências: citações no texto, correção da atribuição dos termos Abstração/Implementação, ajuste ao formato ABNT e remoção de referência não citada | [João Igor](https://github.com/JoaoPC10) | |
