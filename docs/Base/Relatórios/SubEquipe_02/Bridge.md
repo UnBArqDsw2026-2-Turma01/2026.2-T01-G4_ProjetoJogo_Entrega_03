@@ -356,6 +356,11 @@ g++ -std=c++17 -Wall -Wextra -I src/estrutural/bridge \
     src/estrutural/bridge/tests/test_bridge.cpp -o test_bridge && ./test_bridge
 ```
 
+### Video de Demonstração
+<div style="max-width:960px;margin:0 auto;">
+  <video controls preload="metadata" style="width:100%;border-radius:6px;background:#000;" src="Base/Relatórios/SubEquipe_02/assets/video_bridge.mp4"></video>
+</div>
+
 ### 8. Prós e contras
 
 Os itens abaixo seguem as vantagens e desvantagens descritas pelo Refactoring.Guru (2026), aplicadas ao projeto.
